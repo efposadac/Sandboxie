@@ -154,7 +154,7 @@ _FX BOOLEAN File_Init(void)
     File_ProxyPipes = Dll_Alloc(sizeof(ULONG) * 256);
     memzero(File_ProxyPipes, sizeof(ULONG) * 256);
 
-    SbieDll_MatchPath(L'f', (const WCHAR *)-1); //File_InitPathList();
+    SbDll_MatchPath(L'f', (const WCHAR *)-1); //File_InitPathList();
 
     File_DriveAddSN = SbieApi_QueryConfBool(NULL, L"UseVolumeSerialNumbers", FALSE);
 
@@ -178,47 +178,47 @@ _FX BOOLEAN File_Init(void)
     NtQueryDirectoryFileEx = GetProcAddress(Dll_Ntdll, "NtQueryDirectoryFileEx");
     if (NtQueryDirectoryFileEx) {
 
-        SBIEDLL_HOOK(File_, NtQueryDirectoryFileEx);
+        SBDLL_HOOK(File_, NtQueryDirectoryFileEx);
     }
 
-    SBIEDLL_HOOK(File_,NtCreateFile);
-    SBIEDLL_HOOK(File_,NtOpenFile);
-    SBIEDLL_HOOK(File_,NtQueryAttributesFile);
-    SBIEDLL_HOOK(File_,NtQueryFullAttributesFile);
-    SBIEDLL_HOOK(File_,NtQueryInformationFile);
-    SBIEDLL_HOOK(File_,NtQueryDirectoryFile);
-    SBIEDLL_HOOK(File_,NtSetInformationFile);
-    SBIEDLL_HOOK(File_,NtDeleteFile);
-    SBIEDLL_HOOK(File_,NtClose);
-    SBIEDLL_HOOK(File_,NtCreateNamedPipeFile);
-    SBIEDLL_HOOK(File_,NtCreateMailslotFile);
-    SBIEDLL_HOOK(File_,NtReadFile);
-    SBIEDLL_HOOK(File_,NtWriteFile);
-    SBIEDLL_HOOK(File_,NtFsControlFile);
+    SBDLL_HOOK(File_,NtCreateFile);
+    SBDLL_HOOK(File_,NtOpenFile);
+    SBDLL_HOOK(File_,NtQueryAttributesFile);
+    SBDLL_HOOK(File_,NtQueryFullAttributesFile);
+    SBDLL_HOOK(File_,NtQueryInformationFile);
+    SBDLL_HOOK(File_,NtQueryDirectoryFile);
+    SBDLL_HOOK(File_,NtSetInformationFile);
+    SBDLL_HOOK(File_,NtDeleteFile);
+    SBDLL_HOOK(File_,NtClose);
+    SBDLL_HOOK(File_,NtCreateNamedPipeFile);
+    SBDLL_HOOK(File_,NtCreateMailslotFile);
+    SBDLL_HOOK(File_,NtReadFile);
+    SBDLL_HOOK(File_,NtWriteFile);
+    SBDLL_HOOK(File_,NtFsControlFile);
 
     if (File_IsBlockedNetParam(NULL)) {
-        SBIEDLL_HOOK(File_,NtDeviceIoControlFile);
+        SBDLL_HOOK(File_,NtDeviceIoControlFile);
     }
 
     RtlGetFullPathName_UEx =
         GetProcAddress(Dll_Ntdll, "RtlGetFullPathName_UEx");
     if (RtlGetFullPathName_UEx) {
-        SBIEDLL_HOOK(File_,RtlGetFullPathName_UEx);
+        SBDLL_HOOK(File_,RtlGetFullPathName_UEx);
     } else {
-        SBIEDLL_HOOK(File_,RtlGetFullPathName_U);
+        SBDLL_HOOK(File_,RtlGetFullPathName_U);
     }
 
-    SBIEDLL_HOOK(File_,RtlGetCurrentDirectory_U);
-    SBIEDLL_HOOK(File_,RtlSetCurrentDirectory_U);
+    SBDLL_HOOK(File_,RtlGetCurrentDirectory_U);
+    SBDLL_HOOK(File_,RtlSetCurrentDirectory_U);
 
-    SBIEDLL_HOOK(File_,NtQueryVolumeInformationFile);
+    SBDLL_HOOK(File_,NtQueryVolumeInformationFile);
 
     //
     // intercept KERNEL32 entry points
     //
 
-    SBIEDLL_HOOK(File_,MoveFileWithProgressW);
-    SBIEDLL_HOOK(File_,ReplaceFileW);
+    SBDLL_HOOK(File_,MoveFileWithProgressW);
+    SBDLL_HOOK(File_,ReplaceFileW);
 
     if (1) {
 
@@ -226,7 +226,7 @@ _FX BOOLEAN File_Init(void)
             GetProcAddress(Dll_KernelBase ? Dll_KernelBase : Dll_Kernel32,
                 "DefineDosDeviceW");
         if (DefineDosDeviceW) {
-            SBIEDLL_HOOK(File_,DefineDosDeviceW);
+            SBDLL_HOOK(File_,DefineDosDeviceW);
         }
     }
 
@@ -236,7 +236,7 @@ _FX BOOLEAN File_Init(void)
             GetProcAddress(Dll_KernelBase ? Dll_KernelBase : Dll_Kernel32,
                 "GetFinalPathNameByHandleW");
         if (GetFinalPathNameByHandleW) {
-            SBIEDLL_HOOK(File_,GetFinalPathNameByHandleW);
+            SBDLL_HOOK(File_,GetFinalPathNameByHandleW);
         }
     }
 
@@ -244,7 +244,7 @@ _FX BOOLEAN File_Init(void)
         // see File_GetTempPathW in file file_misc.c
         GetTempPathW = GetProcAddress(Dll_KernelBase, "GetTempPathW");
         if (GetTempPathW) {
-            SBIEDLL_HOOK(File_,GetTempPathW);
+            SBDLL_HOOK(File_,GetTempPathW);
         }
     }
 
@@ -258,7 +258,7 @@ _FX BOOLEAN File_Init(void)
             GetProcAddress(Dll_KernelBase ? Dll_KernelBase : Dll_Kernel32,
                 "GetVolumeInformationW");
 
-        SBIEDLL_HOOK(File_,GetVolumeInformationW);
+        SBDLL_HOOK(File_,GetVolumeInformationW);
     }
 
 
@@ -268,7 +268,7 @@ _FX BOOLEAN File_Init(void)
             GetProcAddress(Dll_KernelBase ? Dll_KernelBase : Dll_Kernel32,
                 "WriteProcessMemory");
 
-        SBIEDLL_HOOK(File_, WriteProcessMemory);
+        SBDLL_HOOK(File_, WriteProcessMemory);
     }
 
     return TRUE;
@@ -328,7 +328,7 @@ _FX BOOLEAN File_IsBlockedNetParam(const WCHAR *BoxName)
 //    if (handle)
 //        NtClose(handle);
 //
-//    SbieDll_MatchPath(L'f', (const WCHAR *)-1);
+//    SbDll_MatchPath(L'f', (const WCHAR *)-1);
 //}
 
 
@@ -1642,7 +1642,7 @@ _FX void File_GetSetDeviceMap(WCHAR *DeviceMap96)
     //
     // a sandboxed process starting under the SYSTEM account does not
     // have the local DosDevices directory that it parent, Start.exe,
-    // had.  but SbieDll may have recorded the directory, and we
+    // had.  but SbDll may have recorded the directory, and we
     // can now restore it
     //
     // note:  the new processes initially inherits the device map of
@@ -1679,7 +1679,7 @@ _FX void File_GetSetDeviceMap(WCHAR *DeviceMap96)
             req.h.msgid = MSGID_PROCESS_OPEN_DEVICE_MAP;
             req.DirectoryHandlePtr = (ULONG_PTR)&info.Set.DirectoryHandle;
             wcscpy(req.DirectoryName, DeviceMap96);
-            rpl = SbieDll_CallServer(&req.h);
+            rpl = SbDll_CallServer(&req.h);
             if (rpl) {
                 status = rpl->status;
                 Dll_Free(rpl);
@@ -1709,7 +1709,7 @@ _FX void File_GetSetDeviceMap(WCHAR *DeviceMap96)
                 req.h.msgid = MSGID_PROCESS_SET_DEVICE_MAP;
                 req.DirectoryHandle =
                             (ULONG64)(ULONG_PTR)info.Set.DirectoryHandle;
-                rpl = SbieDll_CallServer(&req.h);
+                rpl = SbDll_CallServer(&req.h);
                 if (! rpl)
                     status = STATUS_SERVER_DISABLED;
                 else {
@@ -1794,7 +1794,7 @@ _FX void File_InitSnapshots(void)
 	WCHAR ShapshotsIni[MAX_PATH] = { 0 };
 	wcscpy(ShapshotsIni, Dll_BoxFilePath);
 	wcscat(ShapshotsIni, L"\\Snapshots.ini");
-	SbieDll_TranslateNtToDosPath(ShapshotsIni);
+	SbDll_TranslateNtToDosPath(ShapshotsIni);
 
 	WCHAR Shapshot[16] = { 0 };
 	GetPrivateProfileStringW(L"Current", L"Snapshot", L"", Shapshot, 16, ShapshotsIni);

@@ -73,7 +73,7 @@ typedef struct _COM_IUNKNOWN {
 // Functions
 //---------------------------------------------------------------------------
 
-BOOLEAN SbieDll_IsWow64();
+BOOLEAN SbDll_IsWow64();
 
 static BOOLEAN Com_IsFirewallClsid(REFCLSID rclsid, const WCHAR *BoxName);
 
@@ -342,7 +342,7 @@ _FX void Com_LoadClsidList(const WCHAR* setting, GUID** pClsids, ULONG* pNumClsi
         WCHAR* ptr = wcschr(buf, L',');
         if (ptr) {
             *ptr = L'\0';
-            if (ImageName && !SbieDll_MatchImage(buf, ImageName, BoxName))
+            if (ImageName && !SbDll_MatchImage(buf, ImageName, BoxName))
                 continue;
             buf = ptr + 1;
         }
@@ -373,7 +373,7 @@ _FX void Com_LoadClsidList(const WCHAR* setting, GUID** pClsids, ULONG* pNumClsi
             WCHAR* ptr = wcschr(buf, L',');
             if (ptr) {
                 *ptr = L'\0';
-                if (ImageName && !SbieDll_MatchImage(buf, ImageName, BoxName))
+                if (ImageName && !SbDll_MatchImage(buf, ImageName, BoxName))
                     continue;
                 buf = ptr + 1;
             }
@@ -407,11 +407,11 @@ _FX void Com_LoadClsidList(const WCHAR* setting, GUID** pClsids, ULONG* pNumClsi
 
 
 //---------------------------------------------------------------------------
-// SbieDll_IsOpenClsid
+// SbDll_IsOpenClsid
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_IsOpenClsid(
+_FX BOOLEAN SbDll_IsOpenClsid(
     REFCLSID rclsid, ULONG clsctx, const WCHAR *BoxName)
 {
     static const GUID CLSID_WinMgmt = {
@@ -607,7 +607,7 @@ _FX HRESULT Com_CoGetClassObject(
         return E_ACCESSDENIED;
     }
 
-    if (!Ipc_OpenCOM && (! pServerInfo) && SbieDll_IsOpenClsid(rclsid, clsctx, NULL)) {
+    if (!Ipc_OpenCOM && (! pServerInfo) && SbDll_IsOpenClsid(rclsid, clsctx, NULL)) {
 
         hr = Com_IClassFactory_New(rclsid, NULL, ppv);
 
@@ -650,7 +650,7 @@ _FX HRESULT Com_CoGetObject(
     if (!Ipc_OpenCOM) {
         if (_wcsnicmp(pszName, L"Elevation:Administrator!new:", 28) == 0) {
             if (__sys_IIDFromString(pszName + 28, &clsid) == 0) {
-                if (SbieDll_IsOpenClsid(&clsid, CLSCTX_LOCAL_SERVER, NULL))
+                if (SbDll_IsOpenClsid(&clsid, CLSCTX_LOCAL_SERVER, NULL))
                     IsOpenClsid = TRUE;
             }
         }
@@ -716,7 +716,7 @@ _FX HRESULT Com_CoCreateInstance(
             IClassFactory_Release(pFactory);
         }
 
-    } else*/ if (!Ipc_OpenCOM && SbieDll_IsOpenClsid(rclsid, clsctx, NULL)) {
+    } else*/ if (!Ipc_OpenCOM && SbDll_IsOpenClsid(rclsid, clsctx, NULL)) {
 
         hr = Com_IClassFactory_New(rclsid, NULL, (void **)&pFactory);
 
@@ -805,7 +805,7 @@ _FX HRESULT Com_CoCreateInstanceEx(
     // otherwise normal processing
     //
 
-    if (!Ipc_OpenCOM && SbieDll_IsOpenClsid(rclsid, clsctx, NULL)) {
+    if (!Ipc_OpenCOM && SbDll_IsOpenClsid(rclsid, clsctx, NULL)) {
 
         hr = Com_IClassFactory_New(rclsid, NULL, (void **)&pFactory);
         if (SUCCEEDED(hr)) {
@@ -886,7 +886,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
 
     P_CoUnmarshalInterface_W10 CoUnmarshalInterface_W10 = (P_CoUnmarshalInterface_W10)GetProcAddress(GetModuleHandle(L"combase.dll"), "CoUnmarshalInterface");
     if (CoUnmarshalInterface_W10) {
-        SBIEDLL_HOOK(Com_, CoUnmarshalInterface_W10);
+        SBDLL_HOOK(Com_, CoUnmarshalInterface_W10);
         return TRUE;
     }
 
@@ -899,7 +899,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
             LONG_PTR jump_target = (LONG_PTR)code + (*(LONG *)(code + 0x19)) + 0x1d;
             P_CoUnmarshalInterface_W8 CoUnmarshalInterface_W8 =
                 (P_CoUnmarshalInterface_W8)jump_target;
-            SBIEDLL_HOOK(Com_, CoUnmarshalInterface_W8);
+            SBDLL_HOOK(Com_, CoUnmarshalInterface_W8);
             return TRUE;
         }
     }
@@ -910,7 +910,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
             LONG_PTR jump_target = (LONG_PTR)code + (*(LONG *)(code + 0x21)) + 0x25;
             P_CoUnmarshalInterface_W8 CoUnmarshalInterface_W8 =
                 (P_CoUnmarshalInterface_W8)jump_target;
-            SBIEDLL_HOOK(Com_, CoUnmarshalInterface_W8);
+            SBDLL_HOOK(Com_, CoUnmarshalInterface_W8);
             return TRUE;
         }
     }
@@ -923,7 +923,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
         P_CoUnmarshalInterface_W8 CoUnmarshalInterface_W8 =
             (P_CoUnmarshalInterface_W8) jump_target;
 
-        SBIEDLL_HOOK(Com_,CoUnmarshalInterface_W8);
+        SBDLL_HOOK(Com_,CoUnmarshalInterface_W8);
 
         return TRUE;
     }
@@ -936,7 +936,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
         P_CoUnmarshalInterface_W8 CoUnmarshalInterface_W8 =
             (P_CoUnmarshalInterface_W8) jump_target;
 
-        SBIEDLL_HOOK(Com_,CoUnmarshalInterface_W8);
+        SBDLL_HOOK(Com_,CoUnmarshalInterface_W8);
 
         return TRUE;
     }
@@ -950,7 +950,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
         P_CoUnmarshalInterface_W8 CoUnmarshalInterface_W8 =
             (P_CoUnmarshalInterface_W8) jump_target;
 
-        SBIEDLL_HOOK(Com_,CoUnmarshalInterface_W8);
+        SBDLL_HOOK(Com_,CoUnmarshalInterface_W8);
 
         return TRUE;
     }
@@ -963,7 +963,7 @@ _FX BOOLEAN Com_Hook_CoUnmarshalInterface_W8(UCHAR *code)
         P_CoUnmarshalInterface_W81 CoUnmarshalInterface_W81 =
             (P_CoUnmarshalInterface_W81) jump_target;
 
-        SBIEDLL_HOOK(Com_,CoUnmarshalInterface_W81);
+        SBDLL_HOOK(Com_,CoUnmarshalInterface_W81);
 
         return TRUE;
     }
@@ -1243,7 +1243,7 @@ _FX HRESULT Com_CoUnmarshalInterface_Common(
     // can invoke the remote interface unmarshalled in SbieSvc
     //
 
-    rpl = (COM_UNMARSHAL_INTERFACE_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (COM_UNMARSHAL_INTERFACE_RPL *)SbDll_CallServer(&req->h);
 
     Com_Free(req);
 
@@ -1326,7 +1326,7 @@ static HRESULT Com_CoMarshalInterface(
         req.destctx = dwDestContext;
         req.mshlflags = mshlflags;
 
-        rpl = (COM_MARSHAL_INTERFACE_RPL *)SbieDll_CallServer(&req.h);
+        rpl = (COM_MARSHAL_INTERFACE_RPL *)SbDll_CallServer(&req.h);
 
         if (rpl) {
             hr = rpl->h.status;
@@ -1383,17 +1383,17 @@ _FX BOOLEAN Com_Init_ComBase(HMODULE module)
     GETPROCADDR_SYS(CoTaskMemAlloc);
     GETPROCADDR_SYS(IIDFromString);
 
-    if (SbieDll_IsOpenCOM()
+    if (SbDll_IsOpenCOM()
     // DisableComProxy BEGIN
     || SbieApi_QueryConfBool(NULL, L"DisableComProxy", FALSE))
     // DisableComProxy END
         Ipc_OpenCOM = TRUE;
     
     
-    SBIEDLL_HOOK(Com_, CoGetClassObject);
+    SBDLL_HOOK(Com_, CoGetClassObject);
     if (!Dll_SkipHook(L"cocreate")) {
-        SBIEDLL_HOOK(Com_, CoCreateInstance);
-        SBIEDLL_HOOK(Com_, CoCreateInstanceEx);
+        SBDLL_HOOK(Com_, CoCreateInstance);
+        SBDLL_HOOK(Com_, CoCreateInstanceEx);
     }
 
     if (!Ipc_OpenCOM) {
@@ -1403,18 +1403,18 @@ _FX BOOLEAN Com_Init_ComBase(HMODULE module)
                 return FALSE;
         }
         else {
-            SBIEDLL_HOOK(Com_, CoUnmarshalInterface);
+            SBDLL_HOOK(Com_, CoUnmarshalInterface);
         }
 
-        SBIEDLL_HOOK(Com_, CoMarshalInterface);
-        SbieDll_IsOpenClsid(&IID_IUnknown, CLSCTX_LOCAL_SERVER, NULL); // trigger list loading
+        SBDLL_HOOK(Com_, CoMarshalInterface);
+        SbDll_IsOpenClsid(&IID_IUnknown, CLSCTX_LOCAL_SERVER, NULL); // trigger list loading
     }
 
     if (Dll_OsBuild >= 8400) { // win8 and above
         __sys_WindowsGetStringRawBuffer = (P_WindowsGetStringRawBuffer)GetProcAddress(module, "WindowsGetStringRawBuffer");
         P_RoGetActivationFactory RoGetActivationFactory = (P_RoGetActivationFactory)GetProcAddress(module, "RoGetActivationFactory");
         if (RoGetActivationFactory) {
-            SBIEDLL_HOOK(Com_, RoGetActivationFactory);
+            SBDLL_HOOK(Com_, RoGetActivationFactory);
         }
     }
 
@@ -1452,7 +1452,7 @@ _FX BOOLEAN Com_Init_Ole32(HMODULE module)
     // other functions are still in ole32, even on Windows 8
     //
 
-    SBIEDLL_HOOK(Com_,CoGetObject);
+    SBDLL_HOOK(Com_,CoGetObject);
 
     return TRUE;
 }
@@ -1701,7 +1701,7 @@ _FX HRESULT Com_CreateTypeInfo(REFIID riid, ITypeInfo **pTypeInfo)
 #ifndef _WIN64
 
     // 32-bit app can read x64 registry related to interface and typelib.
-    if (rc == ERROR_FILE_NOT_FOUND && SbieDll_IsWow64())
+    if (rc == ERROR_FILE_NOT_FOUND && SbDll_IsWow64())
     {
         rc = __sys_RegOpenKeyExW(HKEY_CLASSES_ROOT, path, 0, KEY_READ | KEY_WOW64_64KEY, &hkey);
     }
@@ -1773,7 +1773,7 @@ _FX HRESULT Com_CreateTypeInfo(REFIID riid, ITypeInfo **pTypeInfo)
 #ifndef _WIN64
 
         // 32-bit app can read x64 registry related to interface and typelib.
-        if (rc == ERROR_FILE_NOT_FOUND && SbieDll_IsWow64())
+        if (rc == ERROR_FILE_NOT_FOUND && SbDll_IsWow64())
         {
             rc = __sys_RegOpenKeyExW(HKEY_CLASSES_ROOT, path, 0, KEY_READ | KEY_WOW64_64KEY, &hkey);
 
@@ -1849,11 +1849,11 @@ _FX HRESULT Com_CreateTypeInfo(REFIID riid, ITypeInfo **pTypeInfo)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_ComCreateProxy
+// SbDll_ComCreateProxy
 //---------------------------------------------------------------------------
 
 
-_FX HRESULT SbieDll_ComCreateProxy(
+_FX HRESULT SbDll_ComCreateProxy(
     REFIID riid, void *pUnkOuter, void *pChannel, void **ppUnknown)
 {
     HRESULT hr;
@@ -1977,7 +1977,7 @@ _FX HRESULT Com_CreateProxy(
 
             if (SUCCEEDED(hr)) {
 
-                hr = SbieDll_ComCreateProxy(
+                hr = SbDll_ComCreateProxy(
                             riid, pUnkOuter, pChannel, ppUnknown);
 
                 if (pChannel)
@@ -2018,11 +2018,11 @@ _FX HRESULT Com_CreateProxy(
 
 
 //---------------------------------------------------------------------------
-// SbieDll_ComCreateStub
+// SbDll_ComCreateStub
 //---------------------------------------------------------------------------
 
 
-_FX HRESULT SbieDll_ComCreateStub(
+_FX HRESULT SbDll_ComCreateStub(
     REFIID riid, void *pUnknown, void **ppStub, void **ppChannel)
 {
     HRESULT hr;
@@ -2140,7 +2140,7 @@ _FX void Com_IUnknown_Add_Ref_Release(COM_IUNKNOWN *This, UCHAR op)
     req->objidx = This->ObjIdx;
     req->op = op;
 
-    rpl = (COM_ADD_REF_RELEASE_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (COM_ADD_REF_RELEASE_RPL *)SbDll_CallServer(&req->h);
 
     Com_Free(req);
 
@@ -2281,7 +2281,7 @@ _FX HRESULT Com_IClassFactory_CreateInstance(
     req->objidx = This->ObjIdx;
     memcpy(&req->iid, riid, sizeof(GUID));
 
-    rpl = (COM_CREATE_INSTANCE_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (COM_CREATE_INSTANCE_RPL *)SbDll_CallServer(&req->h);
 
     Com_Free(req);
 
@@ -2350,7 +2350,7 @@ _FX HRESULT Com_IClassFactory_New(
     memcpy(&req->iid, &IID_IClassFactory, sizeof(GUID));
     req->elevate = (StringGUID != NULL);
 
-    rpl = (COM_GET_CLASS_OBJECT_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (COM_GET_CLASS_OBJECT_RPL *)SbDll_CallServer(&req->h);
 
     Com_Free(req);
 
@@ -2439,7 +2439,7 @@ _FX HRESULT Com_OuterIUnknown_QueryInterface(
         // IGlobalInterfaceTable::RegisterInterfaceInGlobal and
         // perhaps other places.  if we issue a "query interface"
         // request to SbieSvc for this interface, it fails during
-        // SbieDll_ComCreateStub and might mess up the proxy object.
+        // SbDll_ComCreateStub and might mess up the proxy object.
         //
 
         return E_NOINTERFACE;
@@ -2454,7 +2454,7 @@ _FX HRESULT Com_OuterIUnknown_QueryInterface(
     req->objidx = This->ObjIdx;
     memcpy(&req->iid, riid, sizeof(GUID));
 
-    rpl = (COM_QUERY_INTERFACE_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (COM_QUERY_INTERFACE_RPL *)SbDll_CallServer(&req->h);
 
     Com_Free(req);
 
@@ -2625,7 +2625,7 @@ _FX HRESULT Com_IRpcChannelBuffer_SendReceive(
     req->BufferLength = pMessage->BufferLength;
     memcpy(req->Buffer, pMessage->Buffer, pMessage->BufferLength);
 
-    rpl = (COM_INVOKE_METHOD_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (COM_INVOKE_METHOD_RPL *)SbDll_CallServer(&req->h);
 
     Com_Free(req);
 
@@ -2664,7 +2664,7 @@ _FX HRESULT Com_IRpcChannelBuffer_SendReceive(
 
 
 //---------------------------------------------------------------------------
-// SbieDll_IRpcChannelBuffer_New
+// SbDll_IRpcChannelBuffer_New
 //---------------------------------------------------------------------------
 
 
@@ -2770,7 +2770,7 @@ _FX HRESULT Com_IMarshal_MarshalInterface(
     req.destctx = dwDestContext;
     req.mshlflags = mshlflags;
 
-    rpl = (COM_MARSHAL_INTERFACE_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (COM_MARSHAL_INTERFACE_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl) {
         hr = rpl->h.status;
@@ -2912,7 +2912,7 @@ _FX HRESULT Com_IClientSecurity_QueryBlanket(
     req.h.msgid = MSGID_COM_QUERY_BLANKET;
     req.objidx = This->ObjIdx;
 
-    rpl = (COM_QUERY_BLANKET_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (COM_QUERY_BLANKET_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl) {
         hr = rpl->h.status;
@@ -2997,7 +2997,7 @@ _FX HRESULT Com_IClientSecurity_SetBlanket(
         req.ServerPrincName[copy_len / sizeof(WCHAR)] = L'\0';
     }
 
-    rpl = (COM_SET_BLANKET_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (COM_SET_BLANKET_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl) {
         hr = rpl->h.status;
@@ -3035,7 +3035,7 @@ _FX HRESULT Com_IClientSecurity_CopyProxy(
     req.h.msgid = MSGID_COM_COPY_PROXY;
     req.objidx = This->ObjIdx;
 
-    rpl = (COM_COPY_PROXY_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (COM_COPY_PROXY_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl) {
         hr = rpl->h.status;
@@ -3453,7 +3453,7 @@ _FX void Com_LoadRTList(const WCHAR* setting, WCHAR** pNames)
         WCHAR* ptr = wcschr(buf, L',');
         if (ptr) {
             *ptr = L'\0';
-            if (ImageName && !SbieDll_MatchImage(buf, ImageName, NULL))
+            if (ImageName && !SbDll_MatchImage(buf, ImageName, NULL))
                 continue;
             buf = ptr + 1;
         }
@@ -3482,7 +3482,7 @@ _FX void Com_LoadRTList(const WCHAR* setting, WCHAR** pNames)
         WCHAR* ptr = wcschr(buf, L',');
         if (ptr) {
             *ptr = L'\0';
-            if (ImageName && !SbieDll_MatchImage(buf, ImageName, NULL))
+            if (ImageName && !SbDll_MatchImage(buf, ImageName, NULL))
                 continue;
             buf = ptr + 1;
         }

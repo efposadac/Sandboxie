@@ -133,7 +133,7 @@ SBIE1213 '%3' nesne dizini oluşturulamadı %2
 .
 
 1214;pop;err;01
-SBIE1214 SbieDll %2 dahil edilemedi
+SBIE1214 SbDll %2 dahil edilemedi
 .
 
 1215;pop;err;01

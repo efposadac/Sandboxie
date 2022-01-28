@@ -133,7 +133,7 @@ SBIE1213 Ei suudetud luua objekti kausta '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Ei suudetud sisestada SbieDll'i %2
+SBIE1214 Ei suudetud sisestada SbDll'i %2
 .
 
 1215;pop;err;01

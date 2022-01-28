@@ -58,7 +58,7 @@
 //---------------------------------------------------------------------------
 
 
-SBIEDLL_EXPORT NTSTATUS Key_GetName(
+SBDLL_EXPORT NTSTATUS Key_GetName(
     HANDLE RootDirectory, UNICODE_STRING *ObjectName,
     WCHAR **OutTruePath, WCHAR **OutCopyPath, BOOLEAN *OutIsBoxedPath);
 
@@ -352,7 +352,7 @@ _FX BOOLEAN Key_Init(void)
 
     InitializeCriticalSection(&Key_Handles_CritSec);
 
-    SbieDll_MatchPath(L'k', (const WCHAR *)-1);
+    SbDll_MatchPath(L'k', (const WCHAR *)-1);
 
     Key_UseObjectNames = SbieApi_QueryConfBool(NULL, L"UseObjectNameForKeys", FALSE);
 
@@ -376,31 +376,31 @@ _FX BOOLEAN Key_Init(void)
     // intercept NTDLL entry points
     //
 
-    SBIEDLL_HOOK(Key_,NtCreateKey);
-    SBIEDLL_HOOK(Key_,NtOpenKey);
-    SBIEDLL_HOOK(Key_,NtDeleteKey);
-    SBIEDLL_HOOK(Key_,NtDeleteValueKey);
-    SBIEDLL_HOOK(Key_,NtSetValueKey);
-    SBIEDLL_HOOK(Key_,NtQueryKey);
-    SBIEDLL_HOOK(Key_,NtEnumerateKey);
-    SBIEDLL_HOOK(Key_,NtQueryValueKey);
-    SBIEDLL_HOOK(Key_,NtEnumerateValueKey);
-    SBIEDLL_HOOK(Key_,NtQueryMultipleValueKey);
-    SBIEDLL_HOOK(Key_,NtNotifyChangeKey);
-    SBIEDLL_HOOK(Key_,NtNotifyChangeMultipleKeys);
-    SBIEDLL_HOOK(Key_,NtSaveKey);
-    SBIEDLL_HOOK(Key_,NtLoadKey);
+    SBDLL_HOOK(Key_,NtCreateKey);
+    SBDLL_HOOK(Key_,NtOpenKey);
+    SBDLL_HOOK(Key_,NtDeleteKey);
+    SBDLL_HOOK(Key_,NtDeleteValueKey);
+    SBDLL_HOOK(Key_,NtSetValueKey);
+    SBDLL_HOOK(Key_,NtQueryKey);
+    SBDLL_HOOK(Key_,NtEnumerateKey);
+    SBDLL_HOOK(Key_,NtQueryValueKey);
+    SBDLL_HOOK(Key_,NtEnumerateValueKey);
+    SBDLL_HOOK(Key_,NtQueryMultipleValueKey);
+    SBDLL_HOOK(Key_,NtNotifyChangeKey);
+    SBDLL_HOOK(Key_,NtNotifyChangeMultipleKeys);
+    SBDLL_HOOK(Key_,NtSaveKey);
+    SBDLL_HOOK(Key_,NtLoadKey);
 
     Dll_OsBuild = 2000;                 // Windows 2000
 
     NtRenameKey = GetProcAddress(Dll_Ntdll, "NtRenameKey");
     if (NtRenameKey) {
-        SBIEDLL_HOOK(Key_,NtRenameKey);
+        SBDLL_HOOK(Key_,NtRenameKey);
     }
 
     NtOpenKeyEx = GetProcAddress(Dll_Ntdll, "NtOpenKeyEx");
     if (NtOpenKeyEx) {
-        SBIEDLL_HOOK(Key_, NtOpenKeyEx);
+        SBDLL_HOOK(Key_, NtOpenKeyEx);
     }
 
     Dll_OsBuild = GET_PEB_IMAGE_BUILD;
@@ -911,7 +911,7 @@ _FX NTSTATUS Key_FixNameWow64_2(WCHAR **OutTruePath, WCHAR **OutCopyPath)
     req->KeyPath_len = TruePath_len;
     memcpy(req->KeyPath, TruePath, TruePath_len);
 
-    rpl = (FILE_OPEN_WOW64_KEY_RPL *)SbieDll_CallServer((MSG_HEADER *)req);
+    rpl = (FILE_OPEN_WOW64_KEY_RPL *)SbDll_CallServer((MSG_HEADER *)req);
     if (! rpl)
         status = STATUS_INSUFFICIENT_RESOURCES;
     else {
@@ -1183,7 +1183,7 @@ _FX NTSTATUS Key_NtCreateKeyImpl(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'k', TruePath);
+    mp_flags = SbDll_MatchPath(L'k', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -1955,7 +1955,7 @@ _FX ULONG Key_CheckDepthForIsWritePath(const WCHAR *TruePath)
             break;
         *ptr = L'\0';
 
-        mp_flags = SbieDll_MatchPath(L'k', copy);
+        mp_flags = SbDll_MatchPath(L'k', copy);
         if (PATH_NOT_WRITE(mp_flags))
             break;
 
@@ -2291,7 +2291,7 @@ _FX NTSTATUS Key_NtDeleteValueKey(
     if (! NT_SUCCESS(status))
         __leave;
 
-    mp_flags = SbieDll_MatchPath(L'k', TruePath);
+    mp_flags = SbDll_MatchPath(L'k', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -4032,7 +4032,7 @@ _FX HANDLE Key_GetTrueHandle(HANDLE KeyHandle, BOOLEAN *pIsOpenPath)
         // check if this is an open or closed path
         //
 
-        ULONG mp_flags = SbieDll_MatchPath(L'k', TruePath);
+        ULONG mp_flags = SbDll_MatchPath(L'k', TruePath);
 
         if (PATH_IS_OPEN(mp_flags) && pIsOpenPath)
             *pIsOpenPath = TRUE;
@@ -4140,12 +4140,12 @@ _FX NTSTATUS Key_NtLoadKey(
         if (! NT_SUCCESS(status))
             __leave;
 
-        status = SbieDll_GetHandlePath(FileHandle, WorkPath, NULL);
+        status = SbDll_GetHandlePath(FileHandle, WorkPath, NULL);
 
         if (! NT_SUCCESS(status))
             __leave;
 
-        if (! SbieDll_TranslateNtToDosPath(WorkPath)) {
+        if (! SbDll_TranslateNtToDosPath(WorkPath)) {
             status = STATUS_ACCESS_DENIED;
             __leave;
         }
@@ -4187,7 +4187,7 @@ _FX NTSTATUS Key_NtLoadKey(
 
     if (NT_SUCCESS(status)) {
 
-        MSG_HEADER *rpl = SbieDll_CallServer(&req->h);
+        MSG_HEADER *rpl = SbDll_CallServer(&req->h);
         if (rpl) {
             status = rpl->status;
             Dll_Free(rpl);

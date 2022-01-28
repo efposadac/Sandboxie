@@ -216,7 +216,7 @@ _FX int Dump_Init(void)
     /*if (_wcsicmp(Dll_ImageName, L"WerFault.exe") == 0) // fre experimenting only
     {
         P_MiniDumpWriteDump MiniDumpWriteDump = (P_MiniDumpWriteDump)GetProcAddress(Dump_DbgHelpMod, "MiniDumpWriteDump");
-        SBIEDLL_HOOK(Dump_, MiniDumpWriteDump);
+        SBDLL_HOOK(Dump_, MiniDumpWriteDump);
         return 1;
     }*/
 
@@ -238,7 +238,7 @@ _FX int Dump_Init(void)
     // See also: "SetUnhandledExceptionFilter" and VC8 (and later)
     // http://blog.kalmbachnet.de/?postid=75
 
-    SBIEDLL_HOOK(Dump_, SetUnhandledExceptionFilter);
+    SBDLL_HOOK(Dump_, SetUnhandledExceptionFilter);
 
     //SbieApi_MonitorPut2(MONITOR_OTHER | MONITOR_TRACE, L"Minidump enabled", FALSE);
     return 1;

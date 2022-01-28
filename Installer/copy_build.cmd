@@ -85,8 +85,8 @@ ECHO Copying Sandboxie
 
 copy /y %sbiePath%\SbieSvc.exe %instPath%\
 copy /y %sbiePath%\SbieSvc.pdb %instPath%\
-copy /y %sbiePath%\SbieDll.dll %instPath%\
-copy /y %sbiePath%\SbieDll.pdb %instPath%\
+copy /y %sbiePath%\SbDll.dll %instPath%\
+copy /y %sbiePath%\SbDll.pdb %instPath%\
 
 copy /y %sbiePath%\SbieDrv.sys %instPath%\
 copy /y %sbiePath%\SbieDrv.pdb %instPath%\
@@ -117,7 +117,7 @@ copy /y %sbiePath%\SandboxieWUAU.pdb %instPath%\
 IF %archPath% == x64 (
   mkdir %instPath%\32\
   copy /y %~dp0..\Sandboxie\Bin\Win32\SbieRelease\SbieSvc.exe %instPath%\32\
-  copy /y %~dp0..\Sandboxie\Bin\Win32\SbieRelease\SbieDll.dll %instPath%\32\
+  copy /y %~dp0..\Sandboxie\Bin\Win32\SbieRelease\SbDll.dll %instPath%\32\
 )
 
 copy /y %~dp0..\Sandboxie\install\Templates.ini %instPath%\

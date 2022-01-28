@@ -285,7 +285,7 @@ _FX const BOOLEAN File_InternetBlockade_ManualBypass()
 
 	req.msgid = MAN_INET_BLOCKADE;
 
-	rpl = SbieDll_CallServerQueue(INTERACTIVE_QUEUE_NAME, &req, sizeof(req), sizeof(*rpl));
+	rpl = SbDll_CallServerQueue(INTERACTIVE_QUEUE_NAME, &req, sizeof(req), sizeof(*rpl));
 	if (rpl)
 	{
 		ok = rpl->retval != 0;
@@ -782,7 +782,7 @@ _FX void *File_GetBoxedPipeName(
 // the token last used to communicate on the pipe, not the token used
 // to open the pipe.
 //
-// To work around these problems, the SbieDll will access these pipes via
+// To work around these problems, the SbDll will access these pipes via
 // a proxy in SbieSvc, which impersonates using a non-Administrator token.
 //
 //---------------------------------------------------------------------------
@@ -864,7 +864,7 @@ _FX NTSTATUS File_OpenProxyPipe(
     }
     req.create_options = CreateOptions;
 
-    rpl = (NAMED_PIPE_OPEN_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (NAMED_PIPE_OPEN_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         status = STATUS_OBJECT_NAME_NOT_FOUND;
     else {
@@ -907,7 +907,7 @@ _FX NTSTATUS File_CloseProxyPipe(HANDLE FileHandle)
     if (! req.handle)
         return STATUS_INVALID_HANDLE;
 
-    rpl = (NAMED_PIPE_CLOSE_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (NAMED_PIPE_CLOSE_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         status = STATUS_INVALID_HANDLE;
     else {
@@ -980,7 +980,7 @@ _FX NTSTATUS File_SetProxyPipe(
     req->data_len = Length;
     memcpy(req->data, FileInformation, Length);
 
-    rpl = (NAMED_PIPE_SET_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (NAMED_PIPE_SET_RPL *)SbDll_CallServer(&req->h);
     Dll_Free(req);
     if (! rpl)
         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1037,7 +1037,7 @@ _FX NTSTATUS File_NtReadFile(
 
     req.read_len = Length;
 
-    rpl = (NAMED_PIPE_READ_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (NAMED_PIPE_READ_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -1104,7 +1104,7 @@ _FX NTSTATUS File_NtWriteFile(
     req->data_len = Length;
     memcpy(req->data, Buffer, Length);
 
-    rpl = (NAMED_PIPE_WRITE_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (NAMED_PIPE_WRITE_RPL *)SbDll_CallServer(&req->h);
     Dll_Free(req);
     if (! rpl)
         status = STATUS_INSUFFICIENT_RESOURCES;

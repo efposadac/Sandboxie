@@ -558,7 +558,7 @@ import_fail:
         if (ok)
             ok = Gui_InitWinHooks();
 
-        SBIEDLL_HOOK_GUI(AttachThreadInput);
+        SBDLL_HOOK_GUI(AttachThreadInput);
     }
 
     return ok;
@@ -572,20 +572,20 @@ import_fail:
 
 _FX BOOLEAN Gui_Init2(void)
 {
-    SBIEDLL_HOOK_GUI(ExitWindowsEx);
-    SBIEDLL_HOOK_GUI(EndTask);
+    SBDLL_HOOK_GUI(ExitWindowsEx);
+    SBDLL_HOOK_GUI(EndTask);
     // NoSbieCons BEGIN
     if ((Dll_ProcessFlags & SBIE_FLAG_APP_COMPARTMENT) == 0 && !SbieApi_QueryConfBool(NULL, L"NoSandboxieConsole", FALSE))
 	// NoSbieCons END
     if (__sys_ConsoleControl) {
-        SBIEDLL_HOOK_GUI(ConsoleControl);
+        SBDLL_HOOK_GUI(ConsoleControl);
     }
 
     //if (Gui_RenameClasses) {
     if (! Dll_SkipHook(L"createwin")) {
 
-        SBIEDLL_HOOK_GUI(CreateWindowExA);
-        SBIEDLL_HOOK_GUI(CreateWindowExW);
+        SBDLL_HOOK_GUI(CreateWindowExA);
+        SBDLL_HOOK_GUI(CreateWindowExW);
     }
 
     if (! Dll_KernelBase) {
@@ -594,43 +594,43 @@ _FX BOOLEAN Gui_Init2(void)
         // see Gui_InitWindows7
         //
 
-        SBIEDLL_HOOK_GUI(DefWindowProcA);
-        SBIEDLL_HOOK_GUI(DefWindowProcW);
+        SBDLL_HOOK_GUI(DefWindowProcA);
+        SBDLL_HOOK_GUI(DefWindowProcW);
     }
 
 
-    SBIEDLL_HOOK_GUI(SetThreadDesktop);
-    SBIEDLL_HOOK_GUI(SwitchDesktop);
+    SBDLL_HOOK_GUI(SetThreadDesktop);
+    SBDLL_HOOK_GUI(SwitchDesktop);
 
-    SBIEDLL_HOOK_GUI(MessageBoxW);
-    SBIEDLL_HOOK_GUI(MessageBoxExW);
+    SBDLL_HOOK_GUI(MessageBoxW);
+    SBDLL_HOOK_GUI(MessageBoxExW);
 
     if (! Gui_OpenAllWinClasses) {
 
-        SBIEDLL_HOOK_GUI(UserHandleGrantAccess);
+        SBDLL_HOOK_GUI(UserHandleGrantAccess);
 
         if(Gui_UseProxyService) {
-            SBIEDLL_HOOK_GUI(IsWindow);
-            SBIEDLL_HOOK_GUI(IsWindowEnabled);
-            SBIEDLL_HOOK_GUI(IsWindowVisible);
-            SBIEDLL_HOOK_GUI(IsWindowUnicode);
-            SBIEDLL_HOOK_GUI(IsIconic);
-            SBIEDLL_HOOK_GUI(IsZoomed);
+            SBDLL_HOOK_GUI(IsWindow);
+            SBDLL_HOOK_GUI(IsWindowEnabled);
+            SBDLL_HOOK_GUI(IsWindowVisible);
+            SBDLL_HOOK_GUI(IsWindowUnicode);
+            SBDLL_HOOK_GUI(IsIconic);
+            SBDLL_HOOK_GUI(IsZoomed);
         }
 
-        SBIEDLL_HOOK_GUI(MoveWindow);
-        SBIEDLL_HOOK_GUI(SetWindowPos);
+        SBDLL_HOOK_GUI(MoveWindow);
+        SBDLL_HOOK_GUI(SetWindowPos);
         if (Gui_UseProxyService) {
-            SBIEDLL_HOOK_GUI(MapWindowPoints);
-            SBIEDLL_HOOK_GUI(ClientToScreen);
-            SBIEDLL_HOOK_GUI(ScreenToClient);
-            SBIEDLL_HOOK_GUI(GetClientRect);
-            SBIEDLL_HOOK_GUI(GetWindowRect);
-            SBIEDLL_HOOK_GUI(GetWindowInfo);
+            SBDLL_HOOK_GUI(MapWindowPoints);
+            SBDLL_HOOK_GUI(ClientToScreen);
+            SBDLL_HOOK_GUI(ScreenToClient);
+            SBDLL_HOOK_GUI(GetClientRect);
+            SBDLL_HOOK_GUI(GetWindowRect);
+            SBDLL_HOOK_GUI(GetWindowInfo);
         }
-        SBIEDLL_HOOK_GUI(AnimateWindow);
-        SBIEDLL_HOOK_GUI(WaitForInputIdle);
-        SBIEDLL_HOOK_GUI(ActivateKeyboardLayout);
+        SBDLL_HOOK_GUI(AnimateWindow);
+        SBDLL_HOOK_GUI(WaitForInputIdle);
+        SBDLL_HOOK_GUI(ActivateKeyboardLayout);
     }
 
     if (! Gui_InitMisc())
@@ -658,15 +658,15 @@ _FX BOOLEAN Gui_Init3(void)
     if (__sys_RegisterDeviceNotificationA ==
                                         __sys_RegisterDeviceNotificationW) {
 
-        SBIEDLL_HOOK_GUI(RegisterDeviceNotificationW);
+        SBDLL_HOOK_GUI(RegisterDeviceNotificationW);
 
     } else {
 
-        SBIEDLL_HOOK_GUI(RegisterDeviceNotificationA);
-        SBIEDLL_HOOK_GUI(RegisterDeviceNotificationW);
+        SBDLL_HOOK_GUI(RegisterDeviceNotificationA);
+        SBDLL_HOOK_GUI(RegisterDeviceNotificationW);
     }
 
-    SBIEDLL_HOOK_GUI(UnregisterDeviceNotification);
+    SBDLL_HOOK_GUI(UnregisterDeviceNotification);
 
     return TRUE;
 }
@@ -753,7 +753,7 @@ _FX void Gui_InitWindows7(void)
                 *pSourceFunc = *(ULONG_PTR *)target;
             }
 
-            *pSourceFunc = (ULONG_PTR)SbieDll_Hook(
+            *pSourceFunc = (ULONG_PTR)SbDll_Hook(
                 FuncName, (void *)(*pSourceFunc), DetourFunc);
         }
     }
@@ -1488,7 +1488,7 @@ _FX BOOLEAN Gui_CanForwardMsg(
 
     } else if (uMsg == WM_DEVICECHANGE) {
 
-        SbieDll_DeviceChange(wParam, lParam);
+        SbDll_DeviceChange(wParam, lParam);
 
     } else if (uMsg == WM_COPYDATA) {
 
@@ -1989,7 +1989,7 @@ _FX BOOL Gui_ConsoleControl(ULONG ctlcode, ULONG *data, ULONG_PTR unknown)
         // ctlcode 7 to terminate counterpart process.
         // data[0] specifies pid, data[1] specifies HWND
         //
-        BOOLEAN ok = SbieDll_KillOne(*data);
+        BOOLEAN ok = SbDll_KillOne(*data);
         if (ok)
             return STATUS_SUCCESS;
         //SbieApi_Log(2205, L"ConsoleControl"); // don't log when the process was already killed
@@ -2044,7 +2044,7 @@ _FX BOOL Gui_UnregisterDeviceNotification(ULONG_PTR Handle)
 _FX void Gui_AllowSetForegroundWindow(void)
 {
     //
-    // this function is typically used prior to calling SbieDll_CallServer
+    // this function is typically used prior to calling SbDll_CallServer
     // in a scenario where SbieSvc might display a pop up window and we
     // want to let this window go to the foreground
     //
@@ -2524,7 +2524,7 @@ _FX void *Gui_CallProxyEx(
         }
     }
 
-    status = SbieDll_QueuePutReq(_QueueName, req, req_len, &req_id, &event);
+    status = SbDll_QueuePutReq(_QueueName, req, req_len, &req_id, &event);
     if (NT_SUCCESS(status)) {
 
         if (msgwait) {
@@ -2597,7 +2597,7 @@ _FX void *Gui_CallProxyEx(
 
     if (status == 0) {
 
-        status = SbieDll_QueueGetRpl(_QueueName, req_id, &data, &data_len);
+        status = SbDll_QueueGetRpl(_QueueName, req_id, &data, &data_len);
 
         if (NT_SUCCESS(status)) {
 
@@ -2650,7 +2650,7 @@ _FX BOOLEAN ComDlg32_Init(HMODULE hModule)
     //if (_wcsicmp(Dll_ImageName, L"opera.exe") == 0)
     //{
         void *GetOpenFileNameW = GetProcAddress(hModule, "GetOpenFileNameW");
-        SBIEDLL_HOOK(ComDlg32_, GetOpenFileNameW);
+        SBDLL_HOOK(ComDlg32_, GetOpenFileNameW);
     //}
 
     return TRUE;

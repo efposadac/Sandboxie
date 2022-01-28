@@ -67,10 +67,10 @@ SC_HANDLE ScMgr;
 static ULONG LangParm = 0;
 
 //---------------------------------------------------------------------------
-// SbieDll_GetLanguage
+// SbDll_GetLanguage
 //---------------------------------------------------------------------------
 
-ULONG SbieDll_GetLanguage(BOOLEAN *rtl)
+ULONG SbDll_GetLanguage(BOOLEAN *rtl)
 {
     if (rtl) {
         if (LangParm == 1037 || LangParm == 1025)
@@ -81,9 +81,9 @@ ULONG SbieDll_GetLanguage(BOOLEAN *rtl)
     return LangParm;
 }
 
-#define SBIEDLL_FORMATMESSAGE_ONLY
+#define SBDLL_FORMATMESSAGE_ONLY
 
-#define SBIEDLL_GET_SBIE_MSG_DLL                        \
+#define SBDLL_GET_SBIE_MSG_DLL                        \
     WCHAR path[MAX_PATH + 8], *ptr;                     \
     memzero(path, sizeof(path));                        \
     GetModuleFileName(NULL, path, MAX_PATH);            \
@@ -112,7 +112,7 @@ void Display_Error(PWSTR SubFuncName, DWORD LastError)
 
     if (LastError == ERROR_SERVICE_MARKED_FOR_DELETE) {
 
-        wcscpy(Text, SbieDll_FormatMessage1(8101, SubFuncName));
+        wcscpy(Text, SbDll_FormatMessage1(8101, SubFuncName));
 
     } else if (LastError) {
 
@@ -658,9 +658,9 @@ BOOL Kmd_Stop_Service(
             else {
                 WCHAR Text[384];
 
-                wcscpy(Text, SbieDll_FormatMessage1(8102, Driver_Name));
+                wcscpy(Text, SbDll_FormatMessage1(8102, Driver_Name));
                 wcscat(Text, L"\n\n");
-                wcscat(Text, SbieDll_FormatMessage0(8102 + retries - 3));
+                wcscat(Text, SbDll_FormatMessage0(8102 + retries - 3));
 
                 MessageBox(NULL, Text, L"KmdUtil", MB_ICONEXCLAMATION | MB_OK);
             }

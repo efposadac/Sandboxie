@@ -804,18 +804,18 @@ _FX BOOLEAN WSA_Init(HMODULE module)
 
     WSAIoctl = (P_WSAIoctl)GetProcAddress(module, "WSAIoctl");
     if (WSAIoctl) {
-        SBIEDLL_HOOK(WSA_,WSAIoctl);
+        SBDLL_HOOK(WSA_,WSAIoctl);
     }
 
     WSANSPIoctl = (P_WSANSPIoctl)GetProcAddress(module, "WSANSPIoctl");
     if (WSANSPIoctl) {
-        SBIEDLL_HOOK(WSA_,WSANSPIoctl);
+        SBDLL_HOOK(WSA_,WSANSPIoctl);
     }
 
 
     /*bind = (P_WSANSPIoctl)GetProcAddress(module, "bind");
     if (bind) {
-        SBIEDLL_HOOK(WSA_,bind);
+        SBDLL_HOOK(WSA_,bind);
     }*/
 
 
@@ -836,50 +836,50 @@ _FX BOOLEAN WSA_Init(HMODULE module)
 
         WSASocketW = (P_WSASocketW)GetProcAddress(module, "WSASocketW");
         if (WSASocketW) {
-            SBIEDLL_HOOK(WSA_,WSASocketW);
+            SBDLL_HOOK(WSA_,WSASocketW);
         }
 
         // TCP
         connect = (P_connect)GetProcAddress(module, "connect");
         if (connect) {
-            SBIEDLL_HOOK(WSA_,connect);
+            SBDLL_HOOK(WSA_,connect);
         }
 
         WSAConnect = (P_WSAConnect)GetProcAddress(module, "WSAConnect");
         if (WSAConnect) {
-            SBIEDLL_HOOK(WSA_,WSAConnect);
+            SBDLL_HOOK(WSA_,WSAConnect);
         }
 
         /*accept = (P_accept)GetProcAddress(module, "accept");
         if (accept) {
-            SBIEDLL_HOOK(WSA_,accept);
+            SBDLL_HOOK(WSA_,accept);
         }
 
         WSAAccept = (P_WSAAccept)GetProcAddress(module, "WSAAccept");
         if (WSAAccept) {
-            SBIEDLL_HOOK(WSA_,WSAAccept);
+            SBDLL_HOOK(WSA_,WSAAccept);
         }*/
         //
 
         // UDP
         sendto = (P_sendto)GetProcAddress(module, "sendto");
         if (sendto) {
-            SBIEDLL_HOOK(WSA_,sendto);
+            SBDLL_HOOK(WSA_,sendto);
         }
 
         WSASendTo = (P_WSASendTo)GetProcAddress(module, "WSASendTo");
         if (WSASendTo) {
-            SBIEDLL_HOOK(WSA_,WSASendTo);
+            SBDLL_HOOK(WSA_,WSASendTo);
         }
 
         /*recvfrom = (P_recvfrom)GetProcAddress(module, "recvfrom");
         if (recvfrom) {
-            SBIEDLL_HOOK(WSA_,recvfrom);
+            SBDLL_HOOK(WSA_,recvfrom);
         }
 
         WSARecvFrom = (P_WSARecvFrom)GetProcAddress(module, "WSARecvFrom");
         if (WSARecvFrom) {
-            SBIEDLL_HOOK(WSA_,WSARecvFrom);
+            SBDLL_HOOK(WSA_,WSARecvFrom);
         }*/
         //
         
@@ -1107,9 +1107,9 @@ _FX HRESULT Net_Common_ImageNamePut(
     if (hFile != INVALID_HANDLE_VALUE) {
 
         BOOLEAN IsBoxedPath;
-        NTSTATUS status = SbieDll_GetHandlePath(hFile, path, &IsBoxedPath);
+        NTSTATUS status = SbDll_GetHandlePath(hFile, path, &IsBoxedPath);
         if (NT_SUCCESS(status) && IsBoxedPath) {
-            if (SbieDll_TranslateNtToDosPath(path)) {
+            if (SbDll_TranslateNtToDosPath(path)) {
 
                 ULONG len = wcslen(path);
                 wmemmove(path + 2, path, len + 1);

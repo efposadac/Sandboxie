@@ -26,7 +26,7 @@ typedef long NTSTATUS;
 #include <windows.h>
 #define COBJMACROS
 #include <objbase.h>
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/win32_ntddk.h"
 #include "common/defines.h"
 #include "common/my_version.h"
@@ -244,7 +244,7 @@ _FX BOOLEAN Sxs_Init(void)
     //
 
     for (retry = 0; retry < 5 * 3; ++retry) {
-        status = SbieDll_QueueCreate(Sxs_QueueName, &Sxs_QueueEventHandle);
+        status = SbDll_QueueCreate(Sxs_QueueName, &Sxs_QueueEventHandle);
         if (status != STATUS_OBJECT_NAME_COLLISION)
             break;
         Sleep(1000 / 3);
@@ -287,7 +287,7 @@ _FX ULONG Sxs_Thread(void *arg)
 
         while (1) {
 
-            status = SbieDll_QueueGetReq(
+            status = SbDll_QueueGetReq(
                 Sxs_QueueName, NULL, NULL, &req_id, &data_ptr, &data_len);
 
             if (status != 0 && status != STATUS_END_OF_FILE)
@@ -307,7 +307,7 @@ _FX ULONG Sxs_Thread(void *arg)
                 rsp_data = (UCHAR *)&error;
             }
 
-            status = SbieDll_QueuePutRpl(
+            status = SbDll_QueuePutRpl(
                 Sxs_QueueName, req_id, rsp_data, rsp_len);
 
             if (status != 0 && status != STATUS_END_OF_FILE)
@@ -316,7 +316,7 @@ _FX ULONG Sxs_Thread(void *arg)
             if (rsp_data != (UCHAR *)&error)
                 HeapFree(GetProcessHeap(), 0, rsp_data);
 
-            SbieDll_FreeMem(data_ptr);
+            SbDll_FreeMem(data_ptr);
         }
     }
 

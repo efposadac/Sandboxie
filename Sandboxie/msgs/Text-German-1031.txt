@@ -133,7 +133,7 @@ SBIE1212 Object-Verzeichnis kann nicht erstellt werden '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Injizieren (Laden) der SbieDll in %2 nicht möglich
+SBIE1214 Injizieren (Laden) der SbDll in %2 nicht möglich
 .
 
 1215;pop;err;01

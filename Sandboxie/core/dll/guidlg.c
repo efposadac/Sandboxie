@@ -132,17 +132,17 @@ _FX BOOLEAN Gui_InitDlgTmpl(void)
     if (! Gui_RenameClasses)
         return TRUE;
 
-    SBIEDLL_HOOK_GUI(CreateDialogParamA);
-    SBIEDLL_HOOK_GUI(CreateDialogParamW);
-    SBIEDLL_HOOK_GUI(CreateDialogIndirectParamA);
-    SBIEDLL_HOOK_GUI(CreateDialogIndirectParamW);
-    SBIEDLL_HOOK_GUI(CreateDialogIndirectParamAorW);
+    SBDLL_HOOK_GUI(CreateDialogParamA);
+    SBDLL_HOOK_GUI(CreateDialogParamW);
+    SBDLL_HOOK_GUI(CreateDialogIndirectParamA);
+    SBDLL_HOOK_GUI(CreateDialogIndirectParamW);
+    SBDLL_HOOK_GUI(CreateDialogIndirectParamAorW);
 
-    SBIEDLL_HOOK_GUI(DialogBoxParamA);
-    SBIEDLL_HOOK_GUI(DialogBoxParamW);
-    SBIEDLL_HOOK_GUI(DialogBoxIndirectParamA);
-    SBIEDLL_HOOK_GUI(DialogBoxIndirectParamW);
-    SBIEDLL_HOOK_GUI(DialogBoxIndirectParamAorW);
+    SBDLL_HOOK_GUI(DialogBoxParamA);
+    SBDLL_HOOK_GUI(DialogBoxParamW);
+    SBDLL_HOOK_GUI(DialogBoxIndirectParamA);
+    SBDLL_HOOK_GUI(DialogBoxIndirectParamW);
+    SBDLL_HOOK_GUI(DialogBoxIndirectParamAorW);
 
     return TRUE;
 }

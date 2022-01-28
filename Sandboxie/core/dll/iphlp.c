@@ -212,22 +212,22 @@ _FX BOOLEAN IpHlp_Init(HMODULE module)
     CancelMibChangeNotify2  =
                         GetProcAddress(module, "CancelMibChangeNotify2");
 
-    SBIEDLL_HOOK(IpHlp_,IcmpCreateFile);
-    SBIEDLL_HOOK(IpHlp_,Icmp6CreateFile);
-    SBIEDLL_HOOK(IpHlp_,IcmpCloseHandle);
+    SBDLL_HOOK(IpHlp_,IcmpCreateFile);
+    SBDLL_HOOK(IpHlp_,Icmp6CreateFile);
+    SBDLL_HOOK(IpHlp_,IcmpCloseHandle);
 
-    SBIEDLL_HOOK(IpHlp_,IcmpSendEcho);
-    SBIEDLL_HOOK(IpHlp_,IcmpSendEcho2);
-    SBIEDLL_HOOK(IpHlp_,Icmp6SendEcho2);
+    SBDLL_HOOK(IpHlp_,IcmpSendEcho);
+    SBDLL_HOOK(IpHlp_,IcmpSendEcho2);
+    SBDLL_HOOK(IpHlp_,Icmp6SendEcho2);
     if (IcmpSendEcho2Ex) {
-        SBIEDLL_HOOK(IpHlp_,IcmpSendEcho2Ex);
+        SBDLL_HOOK(IpHlp_,IcmpSendEcho2Ex);
     }
 
     if (NotifyRouteChange2) {
-        SBIEDLL_HOOK(IpHlp_,NotifyRouteChange2);
+        SBDLL_HOOK(IpHlp_,NotifyRouteChange2);
     }
     if (CancelMibChangeNotify2) {
-        SBIEDLL_HOOK(IpHlp_,CancelMibChangeNotify2);
+        SBDLL_HOOK(IpHlp_,CancelMibChangeNotify2);
     }
 
     return TRUE;
@@ -273,7 +273,7 @@ _FX ULONG_PTR IpHlp_CommonCreate(BOOLEAN ip6)
     req.ip6 = ip6;
 
     handle = (ULONG_PTR)INVALID_HANDLE_VALUE;
-    rpl = (IPHLP_CREATE_FILE_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (IPHLP_CREATE_FILE_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         error = RPC_S_SERVER_UNAVAILABLE;
     else {
@@ -303,7 +303,7 @@ _FX BOOL IpHlp_IcmpCloseHandle(ULONG_PTR IcmpHandle)
     req.h.msgid = MSGID_IPHLP_CLOSE_HANDLE;
     req.handle = (ULONG)IcmpHandle;
 
-    rpl = SbieDll_CallServer(&req.h);
+    rpl = SbDll_CallServer(&req.h);
     if (! rpl)
         error = RPC_S_SERVER_UNAVAILABLE;
     else {
@@ -480,7 +480,7 @@ _FX ULONG IpHlp_CommonSend(         ULONG_PTR IcmpHandle,
     // issue request
     //
 
-    rpl = (IPHLP_SEND_ECHO_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (IPHLP_SEND_ECHO_RPL *)SbDll_CallServer(&req->h);
 
     Dll_Free(req);
 

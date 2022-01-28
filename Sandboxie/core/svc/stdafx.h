@@ -35,7 +35,7 @@ typedef long NTSTATUS;
 #include <windows.h>
 
 #include "common/defines.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 
 
 

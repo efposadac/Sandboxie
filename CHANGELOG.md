@@ -107,7 +107,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - added template support for Osiris and Slimjet browsers (by Dyras) [#1454](https://github.com/sandboxie-plus/Sandboxie/pull/1454)
 
 ### Changed
-- improved SbieDll initialization a bit
+- improved SbDll initialization a bit
 - doubled size of Name_Buffer_Depth [#1342](https://github.com/sandboxie-plus/Sandboxie/issues/1342)
 - improved text filter in the templates view [#1456](https://github.com/sandboxie-plus/Sandboxie/issues/1456)
 
@@ -794,7 +794,7 @@ Fixed issue with Windows 7
 - fixed issue with Vivaldi browser [#821](https://github.com/sandboxie-plus/Sandboxie/issues/821)
 - fixed some issues with box options in the Plus UI [#879](https://github.com/sandboxie-plus/Sandboxie/issues/879)
 - fixed some issues with hardware acceleration in Chromium based browsers [#795](https://github.com/sandboxie-plus/Sandboxie/issues/795)
-- the "Stop All" command now issues "KmdUtil scandll" first to solve issues when the SbieDll.dll is in use
+- the "Stop All" command now issues "KmdUtil scandll" first to solve issues when the SbDll.dll is in use
 - workaround for Electron apps, by forcing an additional command line argument on the GPU renderer process [#547](https://github.com/sandboxie-plus/Sandboxie/issues/547) [#310](https://github.com/sandboxie-plus/Sandboxie/issues/310) [#215](https://github.com/sandboxie-plus/Sandboxie/issues/215)
 - fixed issue with Software Compatibility tab that doesn't always show template names correctly [#774](https://github.com/sandboxie-plus/Sandboxie/issues/774)
 
@@ -1287,7 +1287,7 @@ Fixed issue with Windows 7
 - terminated boxed processes are now kept listed for a couple of seconds
 - reworked sandbox deletion mechanism of the new UI
 - restructured sandbox options window
-- SbieDLL.dll can now be compiled with an up to date ntdll.lib (Thanks to TechLord from Team-IRA for help)
+- SbDLL.dll can now be compiled with an up to date ntdll.lib (Thanks to TechLord from Team-IRA for help)
 - improved automated driver self repair
 
 ### Fixed
@@ -1340,7 +1340,7 @@ Fixed issue with Windows 7
 - fixed disabling of internet block from the presets menu sometimes failed
 - the software compatibility list in the SandMan UI now shows the proper template names
 - fixed use of freed memory in the driver
-- replaced swprintf with snwprintf to prevent potential buffer overflow in SbieDll.dll
+- replaced swprintf with snwprintf to prevent potential buffer overflow in SbDll.dll
 - fixed bad list performance with resource log and API log in SandMan UI
 
 
@@ -1351,8 +1351,8 @@ Fixed issue with Windows 7
 - added SbieLdr (experimental)
 
 ### Changed
-- moved code injection mechanism from SbieSvc to SbieDll
-- moved function hooking mechanism from SbieDrv to SbieDll
+- moved code injection mechanism from SbieSvc to SbDll
+- moved function hooking mechanism from SbieDrv to SbDll
 - introduced a new driverless method to resolve wow64 ntdll base address
 
 ### removed
@@ -1527,7 +1527,7 @@ Fixed issue with Windows 7
 -- Note: using these options weakens the sandboxing, they are intended for debugging and may be used for better application virtualization later
 
 ### Changed
-- SbieDll.dll when processing InjectDll now looks in the SbieHome folder for the DLLs if the entered path starts with a backslash
+- SbDll.dll when processing InjectDll now looks in the SbieHome folder for the DLLs if the entered path starts with a backslash
 -- i.e. "InjectDll=\LogAPI\i386\logapi32v.dll" or "InjectDll64=\LogAPI\amd64\logapi64v.dll"
 
 ### Fixed

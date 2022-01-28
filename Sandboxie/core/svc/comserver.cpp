@@ -28,7 +28,7 @@
 
 #include <objbase.h>
 #include <userenv.h>
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "misc.h"
 
 #pragma auto_inline(off)
@@ -261,7 +261,7 @@ MSG_HEADER *ComServer::GetClassObjectHandler(
     memcpy(&guids[1], &req->iid, sizeof(GUID));
 
     ULONG exc;
-    if (! SbieDll_IsOpenClsid(
+    if (! SbDll_IsOpenClsid(
                         guids[0], CLSCTX_LOCAL_SERVER, slave->BoxName))
         exc = RPC_E_ACCESS_DENIED;
     else {
@@ -931,7 +931,7 @@ RetryLockSlave:
 
         wsprintf(u.path, _tmpl, slave->SidString, slave->BoxName,
                                 slave->SessionId, slave->IsWow64, L":");
-        ok = SbieDll_RunFromHome(_SbieSvc_Exe, u.path, &si, NULL);
+        ok = SbDll_RunFromHome(_SbieSvc_Exe, u.path, &si, NULL);
         if (! ok) {
             error = 0x20;
             goto slave_create_done;
@@ -1830,7 +1830,7 @@ void ComServer::CreateInstanceSlave(void *_map, LIST *ObjectsList,
 
         obj->iid = *guid;
 
-        *hr = SbieDll_ComCreateStub(
+        *hr = SbDll_ComCreateStub(
             *guid, pUnknown, (void **)&obj->pStub, (void **)&obj->pChannel);
 
         if (FAILED(*hr)) {
@@ -1895,7 +1895,7 @@ void ComServer::QueryInterfaceSlave(void *_map, LIST *ObjectsList,
         if (memcmp(&obj->iid, &IID_IWbemServices, sizeof(GUID)) == 0)
             obj->Flags |= FLAG_WMI;
 
-        *hr = SbieDll_ComCreateStub(
+        *hr = SbDll_ComCreateStub(
             *guid, pUnknown, (void **)&obj->pStub, (void **)&obj->pChannel);
 
         if (FAILED(*hr)) {
@@ -2136,7 +2136,7 @@ void ComServer::UnmarshalInterfaceSlave(void *_map, LIST *ObjectsList,
         if (memcmp(&obj->iid, &IID_IWbemServices, sizeof(GUID)) == 0)
             obj->Flags |= FLAG_WMI;
 
-        *hr = SbieDll_ComCreateStub(obj->iid, pUnknown,
+        *hr = SbDll_ComCreateStub(obj->iid, pUnknown,
             (void **)&obj->pStub, (void **)&obj->pChannel);
 
         if (FAILED(*hr)) {
@@ -2388,7 +2388,7 @@ void ComServer::CopyProxySlave(void *_map, LIST *ObjectsList,
 
         obj->iid = *guid;
 
-        *hr = SbieDll_ComCreateStub(
+        *hr = SbDll_ComCreateStub(
             *guid, pUnknown, (void **)&obj->pStub, (void **)&obj->pChannel);
 
         if (FAILED(*hr)) {

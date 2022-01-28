@@ -150,15 +150,15 @@ extern const WCHAR *Pst_OpenProtectedStorage;
 
 
 //---------------------------------------------------------------------------
-// SBIEDLL_HOOK_CRED
+// SBDLL_HOOK_CRED
 //---------------------------------------------------------------------------
 
 
-#define SBIEDLL_HOOK_CRED(proc)                                             \
+#define SBDLL_HOOK_CRED(proc)                                             \
     *(ULONG_PTR *)&__sys_##proc = (ULONG_PTR)Ldr_GetProcAddrNew(DllName_advapi32, L#proc, #proc); \
     if (*(ULONG_PTR *)&__sys_##proc) {                                      \
         *(ULONG_PTR *)&__sys_##proc = (ULONG_PTR)                           \
-            SbieDll_Hook(#proc, __sys_##proc, Cred_##proc);                 \
+            SbDll_Hook(#proc, __sys_##proc, Cred_##proc);                 \
         if (! __sys_##proc) return FALSE;                                   \
     }
 
@@ -188,29 +188,29 @@ _FX BOOLEAN Cred_Init_AdvApi(HMODULE module)
     // otherwise hook Cred APIs
     //
 
-    SBIEDLL_HOOK_CRED(CredWriteA);
-    SBIEDLL_HOOK_CRED(CredWriteW);
+    SBDLL_HOOK_CRED(CredWriteA);
+    SBDLL_HOOK_CRED(CredWriteW);
 
-    SBIEDLL_HOOK_CRED(CredReadA);
-    SBIEDLL_HOOK_CRED(CredReadW);
+    SBDLL_HOOK_CRED(CredReadA);
+    SBDLL_HOOK_CRED(CredReadW);
 
-    SBIEDLL_HOOK_CRED(CredWriteDomainCredentialsA);
-    SBIEDLL_HOOK_CRED(CredWriteDomainCredentialsW);
+    SBDLL_HOOK_CRED(CredWriteDomainCredentialsA);
+    SBDLL_HOOK_CRED(CredWriteDomainCredentialsW);
 
-    SBIEDLL_HOOK_CRED(CredReadDomainCredentialsA);
-    SBIEDLL_HOOK_CRED(CredReadDomainCredentialsW);
+    SBDLL_HOOK_CRED(CredReadDomainCredentialsA);
+    SBDLL_HOOK_CRED(CredReadDomainCredentialsW);
 
-    //SBIEDLL_HOOK_CRED(CredGetTargetInfoA);
-    //SBIEDLL_HOOK_CRED(CredGetTargetInfoW);
+    //SBDLL_HOOK_CRED(CredGetTargetInfoA);
+    //SBDLL_HOOK_CRED(CredGetTargetInfoW);
 
-    SBIEDLL_HOOK_CRED(CredRenameA);
-    SBIEDLL_HOOK_CRED(CredRenameW);
+    SBDLL_HOOK_CRED(CredRenameA);
+    SBDLL_HOOK_CRED(CredRenameW);
 
-    SBIEDLL_HOOK_CRED(CredDeleteA);
-    SBIEDLL_HOOK_CRED(CredDeleteW);
+    SBDLL_HOOK_CRED(CredDeleteA);
+    SBDLL_HOOK_CRED(CredDeleteW);
 
-    SBIEDLL_HOOK_CRED(CredEnumerateA);
-    SBIEDLL_HOOK_CRED(CredEnumerateW);
+    SBDLL_HOOK_CRED(CredEnumerateA);
+    SBDLL_HOOK_CRED(CredEnumerateW);
 
     return TRUE;
 }
@@ -236,7 +236,7 @@ _FX BOOLEAN Cred_PreparePStore(void)
 
         if (Cred_CoTaskMemFree) {
 
-            Cred_PStore = SbieDll_InitPStore();
+            Cred_PStore = SbDll_InitPStore();
             if (Cred_PStore)
                 return TRUE;
         }

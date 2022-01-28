@@ -108,9 +108,9 @@ _FX BOOLEAN Gui_InitWinHooks(void)
     InitializeCriticalSection(&Gui_HooksCritSec);
     List_Init(&Gui_Hooks);
 
-    SBIEDLL_HOOK_GUI(SetWindowsHookExA);
-    SBIEDLL_HOOK_GUI(SetWindowsHookExW);
-    SBIEDLL_HOOK_GUI(UnhookWindowsHookEx);
+    SBDLL_HOOK_GUI(SetWindowsHookExA);
+    SBDLL_HOOK_GUI(SetWindowsHookExW);
+    SBDLL_HOOK_GUI(UnhookWindowsHookEx);
 
     Gui_HookInit = TRUE;
 

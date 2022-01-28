@@ -26,7 +26,7 @@ typedef long NTSTATUS;
 
 #include <windows.h>
 #include <stdlib.h>
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/win32_ntddk.h"
 #include "common/my_version.h"
 #include "common/defines.h"
@@ -360,7 +360,7 @@ int DoLingerLeader(void)
             if (rc != 0)
                 break;
 
-            SbieDll_StartBoxedService(image, TRUE);
+            SbDll_StartBoxedService(image, TRUE);
         }
 
         for (i = 0; ; ++i) {
@@ -370,7 +370,7 @@ int DoLingerLeader(void)
             if (rc != 0)
                 break;
 
-            SbieDll_ExpandAndRunProgram(image);
+            SbDll_ExpandAndRunProgram(image);
         }
 
         WCHAR Cmd[8191];
@@ -381,7 +381,7 @@ int DoLingerLeader(void)
             if (rc != 0)
                 break;
 
-            SbieDll_RunStartExe(Cmd, NULL);
+            SbDll_RunStartExe(Cmd, NULL);
         }
     }
 
@@ -445,7 +445,7 @@ int DoLingerLeader(void)
                 //HANDLE ProcessHandle = 0;
                 //SbieApi_OpenProcess(&ProcessHandle, pids_i);
                 //if (ProcessHandle) {
-                //    if (SbieDll_CheckProcessLocalSystem(ProcessHandle))
+                //    if (SbDll_CheckProcessLocalSystem(ProcessHandle))
                 //        is_local_system_sid = TRUE;
                 //    CloseHandle(ProcessHandle);
                 //}
@@ -603,7 +603,7 @@ do_kill_all:
         HeapFree(GetProcessHeap(), 0, pids);
 
         if (terminate_and_stop) {
-            SbieDll_KillAll(-1, NULL);
+            SbDll_KillAll(-1, NULL);
             break;
         }
     }

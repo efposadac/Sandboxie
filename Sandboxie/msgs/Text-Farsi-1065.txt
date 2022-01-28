@@ -133,7 +133,7 @@ SBIE1213 نميتوان شى دايرکتورى '%3' %2 را ايجاد کرد
 .
 
 # 1214;pop;err;01
-# SBIE1214 Cannot inject SbieDll %2
+# SBIE1214 Cannot inject SbDll %2
 # .
 
 # 1215;pop;err;01

@@ -156,7 +156,7 @@ _FX BOOLEAN Scm_SecHostDll(HMODULE module)
             return FALSE;
         }
 
-        ResPtr = SbieDll_Hook((char *)funcNamesAW[i].FuncNameA, SecPtr, AdvPtr);
+        ResPtr = SbDll_Hook((char *)funcNamesAW[i].FuncNameA, SecPtr, AdvPtr);
         if (! ResPtr)
             return FALSE;
     }
@@ -195,7 +195,7 @@ _FX BOOLEAN Scm_SecHostDll(HMODULE module)
         }
 
         SCM_IMPORT_W8___(SubscribeServiceChangeNotifications);
-        SBIEDLL_HOOK_SCM(SubscribeServiceChangeNotifications);
+        SBDLL_HOOK_SCM(SubscribeServiceChangeNotifications);
     }
 
     return TRUE;

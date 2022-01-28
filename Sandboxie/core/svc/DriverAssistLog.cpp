@@ -93,7 +93,7 @@ void DriverAssist::LogMessage_Single(ULONG code, wchar_t* data)
         WCHAR space[MAX_PATH + 8];
     } u;
 
-    if (! SbieDll_GetServiceRegistryValue(L"LogFile", &u.info, sizeof(u)))
+    if (! SbDll_GetServiceRegistryValue(L"LogFile", &u.info, sizeof(u)))
         return;
     if (u.info.Type != REG_SZ || u.info.DataLength >= sizeof(u))
         return;
@@ -123,7 +123,7 @@ void DriverAssist::LogMessage_Single(ULONG code, wchar_t* data)
     WCHAR *str2 = str1 + str1_len + 1;
     ULONG str2_len = wcslen(str2);
 
-    WCHAR *text = SbieDll_FormatMessage2(code, str1, str2);
+    WCHAR *text = SbDll_FormatMessage2(code, str1, str2);
     if (! text)
         return;
 
@@ -177,7 +177,7 @@ void DriverAssist::LogMessage_Multi(
         WCHAR space[256];
     } u;
 
-    if (! SbieDll_GetServiceRegistryValue(L"MultiLog", &u.info, sizeof(u)))
+    if (! SbDll_GetServiceRegistryValue(L"MultiLog", &u.info, sizeof(u)))
         return;
     if (u.info.Type != REG_SZ || u.info.DataLength >= sizeof(u))
         return;

@@ -123,7 +123,7 @@ extern "C" _FX BOOLEAN Ole_Init(HMODULE module)
     // DisableComProxy BEGIN
     if (!SbieApi_QueryConfBool(NULL, L"DisableComProxy", FALSE))
     // DisableComProxy END
-    if (! SbieDll_IsOpenCOM()) {
+    if (! SbDll_IsOpenCOM()) {
 
         Com_Init_Ole32(module);
 
@@ -139,21 +139,21 @@ extern "C" _FX BOOLEAN Ole_Init(HMODULE module)
             // procedure hook to invoke Ole_DoDragDrop
             //
 
-            SBIEDLL_HOOK(Ole_,RegisterDragDrop);
-            SBIEDLL_HOOK(Ole_,RevokeDragDrop);
+            SBDLL_HOOK(Ole_,RegisterDragDrop);
+            SBDLL_HOOK(Ole_,RevokeDragDrop);
         }
     }
 
     ReleaseStgMedium = (P_ReleaseStgMedium)
         GetProcAddress(module, "ReleaseStgMedium");
 
-    SBIEDLL_HOOK(Ole_, ReleaseStgMedium);
+    SBDLL_HOOK(Ole_, ReleaseStgMedium);
 
     if (Dll_ImageType == DLL_IMAGE_SHELL_EXPLORER) {
 
         OleSetClipboard = GetProcAddress(module, "OleSetClipboard");
 
-        SBIEDLL_HOOK(Ole_,OleSetClipboard);
+        SBDLL_HOOK(Ole_,OleSetClipboard);
     }
 
     return TRUE;
@@ -837,9 +837,9 @@ _FX HGLOBAL XDataObject::InitFormatHDrop(HGLOBAL hData)
         if (hFile != INVALID_HANDLE_VALUE) {
 
             BOOLEAN is_copy;
-            LONG status = SbieDll_GetHandlePath(hFile, DropName, &is_copy);
+            LONG status = SbDll_GetHandlePath(hFile, DropName, &is_copy);
             if (status == 0 && is_copy) {
-                SbieDll_TranslateNtToDosPath(DropName);
+                SbDll_TranslateNtToDosPath(DropName);
                 sandboxed = true;
             } else {
                 wmemzero(DropName, 512);
@@ -941,7 +941,7 @@ _FX HGLOBAL XDataObject::InitFormatFileNameA(HGLOBAL hData)
 
         BOOLEAN is_copy;
         WCHAR *name = (WCHAR *)Dll_Alloc(8192);
-        LONG status = SbieDll_GetHandlePath(hFile, name, &is_copy);
+        LONG status = SbDll_GetHandlePath(hFile, name, &is_copy);
 
         if (! m_pDataObject) {
             // hData was CF_HDROP so we don't have a default CF_FILENAMEA
@@ -951,7 +951,7 @@ _FX HGLOBAL XDataObject::InitFormatFileNameA(HGLOBAL hData)
 
         if (status == 0 && is_copy) {
 
-            SbieDll_TranslateNtToDosPath(name);
+            SbDll_TranslateNtToDosPath(name);
 
             UNICODE_STRING uni;
             ANSI_STRING ansi;
@@ -1013,7 +1013,7 @@ _FX HGLOBAL XDataObject::InitFormatFileNameW(HGLOBAL hData)
 
         BOOLEAN is_copy;
         WCHAR *name = (WCHAR *)Dll_Alloc(8192);
-        LONG status = SbieDll_GetHandlePath(hFile, name, &is_copy);
+        LONG status = SbDll_GetHandlePath(hFile, name, &is_copy);
 
         if (! m_pDataObject) {
             // hData was CF_HDROP so we don't have a default CF_FILENAMEW
@@ -1023,7 +1023,7 @@ _FX HGLOBAL XDataObject::InitFormatFileNameW(HGLOBAL hData)
 
         if (status == 0 && is_copy) {
 
-            SbieDll_TranslateNtToDosPath(name);
+            SbDll_TranslateNtToDosPath(name);
 
             ULONG len = (wcslen(name) + 1) * sizeof(WCHAR);
             hDataRet = GlobalAlloc(GMEM_MOVEABLE, len);
@@ -1093,7 +1093,7 @@ _FX HGLOBAL XDataObject::InitFormatIdList(HGLOBAL hData)
                 if (hFile != INVALID_HANDLE_VALUE) {
 
                     BOOLEAN is_copy;
-                    LONG rc = SbieDll_GetHandlePath(hFile, path, &is_copy);
+                    LONG rc = SbDll_GetHandlePath(hFile, path, &is_copy);
                     if (rc == 0 && is_copy)
                         ++num_in_box;
 
@@ -1139,7 +1139,7 @@ _FX HGLOBAL XDataObject::InitFormatIdList(HGLOBAL hData)
         goto finish;
 
     BOOLEAN is_copy;
-    LONG rc = SbieDll_GetHandlePath(hFile, path, &is_copy);
+    LONG rc = SbDll_GetHandlePath(hFile, path, &is_copy);
 
     CloseHandle(hFile);
 
@@ -1160,7 +1160,7 @@ _FX HGLOBAL XDataObject::InitFormatIdList(HGLOBAL hData)
                     GENERIC_WRITE, FILE_SHARE_VALID_FLAGS, NULL,
                     OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
 
-                LONG rc2 = SbieDll_GetHandlePath(hFile, path, &is_copy);
+                LONG rc2 = SbDll_GetHandlePath(hFile, path, &is_copy);
 
                 CloseHandle(hFile);
 
@@ -1186,7 +1186,7 @@ _FX HGLOBAL XDataObject::InitFormatIdList(HGLOBAL hData)
     // create a new pidl for the parent folder path in the sandbox
     //
 
-    SbieDll_TranslateNtToDosPath(path);
+    SbDll_TranslateNtToDosPath(path);
 
     LPITEMIDLIST pidl;
     ULONG flags = 0;

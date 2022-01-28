@@ -238,7 +238,7 @@ _FX BOOLEAN Custom_CreateRegLinks(void)
     }
 
     if (status == STATUS_ACCESS_DENIED) {
-        ULONG mp_flags = SbieDll_MatchPath(L'k', path);
+        ULONG mp_flags = SbDll_MatchPath(L'k', path);
         if (PATH_IS_OPEN(mp_flags) || PATH_IS_CLOSED(mp_flags)) {
             // ReadKeyPath=* or ClosedKeyPath=*
             return TRUE;
@@ -1066,7 +1066,7 @@ _FX void AutoExec(void)
 
             if (NT_SUCCESS(status)) {
 
-                SbieDll_ExpandAndRunProgram(buf2);
+                SbDll_ExpandAndRunProgram(buf2);
 
             } else {
                 Sbie_snwprintf(error_str, 16, L"%d [%08X]", index, status);
@@ -1087,11 +1087,11 @@ _FX void AutoExec(void)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_ExpandAndRunProgram
+// SbDll_ExpandAndRunProgram
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_ExpandAndRunProgram(const WCHAR *Command)
+_FX BOOLEAN SbDll_ExpandAndRunProgram(const WCHAR *Command)
 {
     ULONG len;
     WCHAR *cmdline;
@@ -1165,7 +1165,7 @@ _FX void Custom_ComServer(void)
     // as a COM server.  (COM returns error "out of memory" when we try
     // to use CoRegisterClassObject.)  to work around this, the comserver
     // module was moved into SbieSvc, and here we just issue a special
-    // SbieDll_RunSandboxed request which runs an instance of SbieSvc
+    // SbDll_RunSandboxed request which runs an instance of SbieSvc
     // outside the sandbox.  SbieSvc (in file core/svc/comserver9.c) then
     // talks to real COM to get the target url or file, then it starts the
     // requested server program in the sandbox.
@@ -1234,7 +1234,7 @@ _FX void Custom_ComServer(void)
         // SbieSvc SANDBOXIE_ComProxy_ComServer:BoxName
         // see also core/svc/ProcessServer.cpp
         // and      core/svc/comserver9.c
-        BOOL ok = SbieDll_RunSandboxed(L"", L"*COMSRV*", L"", 0,
+        BOOL ok = SbDll_RunSandboxed(L"", L"*COMSRV*", L"", 0,
                                        &StartupInfo, &ProcessInformation);
 
         if (ok)
@@ -1267,7 +1267,7 @@ _FX BOOLEAN NsiRpc_Init(HMODULE module)
     NsiRpcRegisterChangeNotification = (P_NsiRpcRegisterChangeNotification)
         Ldr_GetProcAddrNew(DllName_winnsi, L"NsiRpcRegisterChangeNotification", "NsiRpcRegisterChangeNotification");
 
-    SBIEDLL_HOOK(NsiRpc_, NsiRpcRegisterChangeNotification);
+    SBDLL_HOOK(NsiRpc_, NsiRpcRegisterChangeNotification);
 
     return TRUE;
 }
@@ -1473,7 +1473,7 @@ _FX BOOLEAN Custom_InternetDownloadManager(HMODULE module)
 // avast! compatibility hook:  avast hook dll snxhk.dll (also snxhk64.dll)
 // calls LdrGetProcedureAddress to get the address of NtDeviceIoControlFile
 // and then copies the code.  if the code includes relative jumps (which
-// it does, after processing by SbieDll_Hook), this is not fixed up while
+// it does, after processing by SbDll_Hook), this is not fixed up while
 // copying, and causes avast to crash.  to work around this, we return a
 // small trampoline with the following code which avoids a relative jump:
 // mov eax, NtDeviceIoControlFile; jmp eax
@@ -1545,7 +1545,7 @@ _FX BOOLEAN Custom_Avast_SnxHk(HMODULE module)
 {
     static BOOLEAN _done = FALSE;
     if (! _done) {
-        SBIEDLL_HOOK(Custom_Avast_SnxHk_,LdrGetProcedureAddress);
+        SBDLL_HOOK(Custom_Avast_SnxHk_,LdrGetProcedureAddress);
         _done = TRUE;
     }
     return TRUE;

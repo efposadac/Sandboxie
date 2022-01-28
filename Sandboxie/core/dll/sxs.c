@@ -937,7 +937,7 @@ _FX void *Sxs_CallService(SXS_ARGS *args, BOOLEAN *UseAltCreateActCtx)
 
     for (retries = 0; retries < 3; ++retries) {
 
-        status = SbieDll_QueuePutReq(
+        status = SbDll_QueuePutReq(
                             Sxs_QueueName, buf1, len1, &RequestId, &handle);
 
         if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
@@ -956,7 +956,7 @@ _FX void *Sxs_CallService(SXS_ARGS *args, BOOLEAN *UseAltCreateActCtx)
                 wcscat(EvtName, L"_READY");
                 EvtHandle = CreateEvent(NULL, TRUE, FALSE, EvtName);
 
-                SbieDll_StartCOM(FALSE);
+                SbDll_StartCOM(FALSE);
 
                 WaitForSingleObject(EvtHandle, 30 * 1000);
                 CloseHandle(EvtHandle);
@@ -972,7 +972,7 @@ _FX void *Sxs_CallService(SXS_ARGS *args, BOOLEAN *UseAltCreateActCtx)
         if (status != 0)
             continue;
 
-        status = SbieDll_QueueGetRpl(Sxs_QueueName, RequestId, &buf2, &len2);
+        status = SbDll_QueueGetRpl(Sxs_QueueName, RequestId, &buf2, &len2);
 
         break;
     }
@@ -1342,13 +1342,13 @@ _FX HANDLE Sxs_CreateActCtxW_Alt(ACTCTX *ActCtx)
 
             MySource = Dll_AllocTemp(sizeof(WCHAR) * 8192);
 
-            status = SbieDll_GetHandlePath(hFile, MySource, &IsBoxedPath);
+            status = SbDll_GetHandlePath(hFile, MySource, &IsBoxedPath);
 
             CloseHandle(hFile);
 
             if (NT_SUCCESS(status) && IsBoxedPath) {
 
-                if (SbieDll_TranslateNtToDosPath(MySource)) {
+                if (SbDll_TranslateNtToDosPath(MySource)) {
 
                     memcpy(&MyActCtx, ActCtx, sizeof(ACTCTX));
                     MyActCtx.lpSource = MySource;
@@ -1665,7 +1665,7 @@ _FX BOOLEAN Sxs_InitKernel32(void)
         // hook CreateActCtx
         //
 
-        SBIEDLL_HOOK(Sxs_,CreateActCtxW);
+        SBDLL_HOOK(Sxs_,CreateActCtxW);
     }
 
     //
@@ -1678,7 +1678,7 @@ _FX BOOLEAN Sxs_InitKernel32(void)
         void *QueryActCtxW = GetProcAddress(module, "QueryActCtxW");
         if (QueryActCtxW) {
 
-            SBIEDLL_HOOK(Sxs_,QueryActCtxW);
+            SBDLL_HOOK(Sxs_,QueryActCtxW);
         }
     }
 
@@ -1689,7 +1689,7 @@ _FX BOOLEAN Sxs_InitKernel32(void)
 
     NtSetInformationThread = GetProcAddress(Dll_Ntdll, "NtSetInformationThread");
     if (NtSetInformationThread) {
-        SBIEDLL_HOOK(Sxs_, NtSetInformationThread);
+        SBDLL_HOOK(Sxs_, NtSetInformationThread);
     }
 
     //
@@ -1708,19 +1708,19 @@ _FX BOOLEAN Sxs_InitKernel32(void)
     RtlRaiseException     = GetProcAddress(module, "RtlRaiseException");
 
     if (NtCreateTransaction) {
-        SBIEDLL_HOOK(Sxs_,NtCreateTransaction);
+        SBDLL_HOOK(Sxs_,NtCreateTransaction);
     }
     if (NtOpenTransaction) {
-        SBIEDLL_HOOK(Sxs_,NtOpenTransaction);
+        SBDLL_HOOK(Sxs_,NtOpenTransaction);
     }
     if (NtCommitTransaction) {
-        SBIEDLL_HOOK(Sxs_,NtCommitTransaction);
+        SBDLL_HOOK(Sxs_,NtCommitTransaction);
     }
     if (NtRollbackTransaction) {
-        SBIEDLL_HOOK(Sxs_,NtRollbackTransaction);
+        SBDLL_HOOK(Sxs_,NtRollbackTransaction);
     }
     if (RtlRaiseException) {
-        SBIEDLL_HOOK(Sxs_,RtlRaiseException);
+        SBDLL_HOOK(Sxs_,RtlRaiseException);
     }
 
     //
@@ -1767,7 +1767,7 @@ _FX BOOLEAN Sxs_InitKernel32(void)
                 Dll_KernelBase, "CheckTokenMembership");
         P_CheckTokenMembership __sys_CheckTokenMembership;
 
-        SBIEDLL_HOOK(Sxs_,CheckTokenMembership);
+        SBDLL_HOOK(Sxs_,CheckTokenMembership);
     }
 
     return TRUE;
@@ -1785,7 +1785,7 @@ _FX BOOLEAN Sxs_Init(HMODULE module)
 
     SxsInstallW = (P_SxsInstall)GetProcAddress(module, "SxsInstallW");
 
-    SBIEDLL_HOOK(Sxs_,SxsInstallW);
+    SBDLL_HOOK(Sxs_,SxsInstallW);
 
     return TRUE;
 }
@@ -1842,7 +1842,7 @@ _FX void Sxs_ActivateDefaultManifest(void *ImageBase)
         WCHAR *DosPath =
             Dll_Alloc((wcslen(Ldr_ImageTruePath) + 4) * sizeof(WCHAR));
         wcscpy(DosPath, Ldr_ImageTruePath);
-        SbieDll_TranslateNtToDosPath(DosPath);
+        SbDll_TranslateNtToDosPath(DosPath);
 
         memzero(&ActCtx, sizeof(ACTCTX));
         ActCtx.cbSize = sizeof(ACTCTX);
@@ -1955,7 +1955,7 @@ _FX ULONG Sxs_CheckManifestForCreateProcess(const WCHAR *DosPath)
     // was used, to prevent any more interference from UAC
     //
 
-    ElvType = SbieDll_GetTokenElevationType();
+    ElvType = SbDll_GetTokenElevationType();
 
     if (ElvType == TokenElevationTypeFull) {
         TlsData->proc_create_process_as_invoker = TRUE;

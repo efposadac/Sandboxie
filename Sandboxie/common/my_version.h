@@ -58,7 +58,7 @@
 #define START_EXE               L"Start.exe"
 
 // see also environment variable in session.bat
-#define SBIEDLL                 L"SbieDll"
+#define SBDLL                 L"SbDll"
 
 #define SBIEMSG_DLL             L"SbieMsg.dll"
 #define SBIE_IN_MSGS            L"SBIE"

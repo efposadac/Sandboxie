@@ -22,7 +22,7 @@
 #include "stdafx.h"
 
 #include "common/defines.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/svc/SbieIniWire.h"
 #include "resource.h"
 #include "msgs/msgs.h"
@@ -81,7 +81,7 @@ BOOLEAN CanDisableForce(void)
             if (rpl) {
                 if (rpl->admin)
                     retval = TRUE;
-                SbieDll_FreeMem(rpl);
+                SbDll_FreeMem(rpl);
             }
 
         } else
@@ -227,7 +227,7 @@ void TrackToolTip(HWND hwnd, int first_time)
 
     if (dfp_index != LB_ERR && index == dfp_index) {
 
-        WCHAR *text = SbieDll_FormatMessage0(MSG_3252);
+        WCHAR *text = SbDll_FormatMessage0(MSG_3252);
         wcscpy(boxtext, text);
         LocalFree(text);
         SendMessage(hlist, LB_GETTEXT, (int)index, (LPARAM)boxname);
@@ -251,7 +251,7 @@ void TrackToolTip(HWND hwnd, int first_time)
             if (si.dwFlags &
                     (STARTF_USESHOWWINDOW | STARTF_TITLEISLINKNAME)) {
 
-                WCHAR *text = SbieDll_FormatMessage0(MSG_3254);
+                WCHAR *text = SbDll_FormatMessage0(MSG_3254);
                 wcscpy(boxtext, text);
                 LocalFree(text);
             }
@@ -519,13 +519,13 @@ INT_PTR BoxDialogProc(
             // assign text strings
             //
 
-            SetWindowText(hwnd, SbieDll_FormatMessage0(MSG_3052));
+            SetWindowText(hwnd, SbDll_FormatMessage0(MSG_3052));
 
-            SetDlgItemText(hwnd, IDOK, SbieDll_FormatMessage0(MSG_3001));
-            SetDlgItemText(hwnd, IDCANCEL, SbieDll_FormatMessage0(MSG_3002));
+            SetDlgItemText(hwnd, IDOK, SbDll_FormatMessage0(MSG_3001));
+            SetDlgItemText(hwnd, IDCANCEL, SbDll_FormatMessage0(MSG_3002));
 
             SetDlgItemText(hwnd, IDRUNDLGTEXT,
-                           SbieDll_FormatMessage0(MSG_3106));
+                           SbDll_FormatMessage0(MSG_3106));
 
             //
             // position window in the middle of the screen
@@ -588,7 +588,7 @@ INT_PTR BoxDialogProc(
 
                 if (boxdlg_run_outside_sandbox && CanDisableForce()) {
 
-                    WCHAR *text = SbieDll_FormatMessage0(MSG_3251);
+                    WCHAR *text = SbDll_FormatMessage0(MSG_3251);
                     for (x = 0; x < 40; ++x)
                         boxname[x] = 8212;      // separator line
                     boxname[40] = 0;
@@ -723,7 +723,7 @@ INT_PTR BoxDialogProc(
                     hide_tool_tip = TRUE;
 
                     rc = MessageBox(hwnd,
-                                    SbieDll_FormatMessage0(MSG_3253),
+                                    SbDll_FormatMessage0(MSG_3253),
                                     Sandboxie_Start_Title,
                                     MB_ICONQUESTION | MB_YESNO |
                                 (layout_rtl ? MB_RTLREADING | MB_RIGHT : 0));

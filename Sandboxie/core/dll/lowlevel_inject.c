@@ -52,20 +52,20 @@ typedef struct _MY_TARGETS {
 // Functions
 //---------------------------------------------------------------------------
 
-SBIEDLL_EXPORT  HANDLE SbieDll_InjectLow_SendHandle(HANDLE hProcess);
+SBDLL_EXPORT  HANDLE SbDll_InjectLow_SendHandle(HANDLE hProcess);
 
-SBIEDLL_EXPORT  void *SbieDll_InjectLow_CopyCode(
+SBDLL_EXPORT  void *SbDll_InjectLow_CopyCode(
 	HANDLE hProcess, SIZE_T lowLevel_size, UCHAR *code, ULONG code_len);
-SBIEDLL_EXPORT  BOOLEAN SbieDll_InjectLow_BuildTramp(
+SBDLL_EXPORT  BOOLEAN SbDll_InjectLow_BuildTramp(
 	BOOLEAN long_diff, UCHAR *code, ULONG_PTR addr);
-SBIEDLL_EXPORT  void *SbieDll_InjectLow_CopySyscalls(HANDLE hProcess);
-SBIEDLL_EXPORT  BOOLEAN SbieDll_InjectLow_CopyData(
+SBDLL_EXPORT  void *SbDll_InjectLow_CopySyscalls(HANDLE hProcess);
+SBDLL_EXPORT  BOOLEAN SbDll_InjectLow_CopyData(
 	HANDLE hProcess, void *remote_addr, void *local_data);
 #ifdef _WIN64
-SBIEDLL_EXPORT BOOLEAN SbieDll_Has32BitJumpHorizon(void * target, void * detour);
-SBIEDLL_EXPORT void * SbieDll_InjectLow_getPage(HANDLE hProcess, void *remote_addr);
+SBDLL_EXPORT BOOLEAN SbDll_Has32BitJumpHorizon(void * target, void * detour);
+SBDLL_EXPORT void * SbDll_InjectLow_getPage(HANDLE hProcess, void *remote_addr);
 #endif
-SBIEDLL_EXPORT  BOOLEAN SbieDll_InjectLow_WriteJump(
+SBDLL_EXPORT  BOOLEAN SbDll_InjectLow_WriteJump(
 	HANDLE hProcess, void *remote_addr, BOOLEAN long_diff, void *localdata);
 
 //---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ ULONG_PTR m_LdrInitializeThunk = 0;
 //---------------------------------------------------------------------------
 
 
-_FX ULONG SbieDll_InjectLow_InitHelper()
+_FX ULONG SbDll_InjectLow_InitHelper()
 {
     //
     // lock the SbieLow resource (embedded within the SbieSvc executable,
@@ -206,9 +206,9 @@ _FX ULONG SbieDll_InjectLow_InitHelper()
 //---------------------------------------------------------------------------
 
 
-_FX ULONG SbieDll_InjectLow_InitSyscalls(BOOLEAN drv_init)
+_FX ULONG SbDll_InjectLow_InitSyscalls(BOOLEAN drv_init)
 {
-	const WCHAR *_SbieDll = L"\\" SBIEDLL L".dll";
+	const WCHAR *_SbDll = L"\\" SBDLL L".dll";
 	WCHAR sbie_home[512];
 	ULONG status;
 	ULONG len;
@@ -217,7 +217,7 @@ _FX ULONG SbieDll_InjectLow_InitSyscalls(BOOLEAN drv_init)
 	ULONG *syscall_data;
 
 	//
-	// Get the SbieDll Location
+	// Get the SbDll Location
 	//
 
 	if (drv_init)
@@ -305,8 +305,8 @@ _FX ULONG SbieDll_InjectLow_InitSyscalls(BOOLEAN drv_init)
 		char NtRaiseHardError_str[20]	= "NtRaiseHardError";
 		char RtlFindActCtx_str[44]		= "RtlFindActivationContextSectionString";
 		wchar_t KernelDll_str[13]		= L"kernel32.dll";
-		wchar_t NativeSbieDll_str[]		= L"..\\SbieDll.dll";
-		wchar_t Wow64SbieDll_str[]		= L"..\\32\\SbieDll.dll";
+		wchar_t NativeSbDll_str[]		= L"..\\SbDll.dll";
+		wchar_t Wow64SbDll_str[]		= L"..\\32\\SbDll.dll";
 	}
 	*/
 
@@ -371,26 +371,26 @@ _FX ULONG SbieDll_InjectLow_InitSyscalls(BOOLEAN drv_init)
 	ptr += len + 1;
 
 	//
-	// append paths for native and wow64 SbieDll to the syscall buffer
+	// append paths for native and wow64 SbDll to the syscall buffer
 	//
 
 	wcscpy(ptr, sbie_home);
-	wcscat(ptr, _SbieDll);
+	wcscat(ptr, _SbDll);
 
 	len = wcslen(ptr);
-	extra->NativeSbieDll_offset = ULONG_DIFF(ptr, extra);
-	extra->NativeSbieDll_length = len * sizeof(WCHAR);
+	extra->NativeSbDll_offset = ULONG_DIFF(ptr, extra);
+	extra->NativeSbDll_length = len * sizeof(WCHAR);
 	ptr += len + 1;
 
 #ifdef _WIN64
 
 	wcscpy(ptr, sbie_home);
 	wcscat(ptr, L"\\32");
-	wcscat(ptr, _SbieDll);
+	wcscat(ptr, _SbDll);
 
 	len = wcslen(ptr);
-	extra->Wow64SbieDll_offset = ULONG_DIFF(ptr, extra);
-	extra->Wow64SbieDll_length = len * sizeof(WCHAR);
+	extra->Wow64SbDll_offset = ULONG_DIFF(ptr, extra);
+	extra->Wow64SbDll_length = len * sizeof(WCHAR);
 	ptr += len + 1;
 
 #endif _WIN64
@@ -414,7 +414,7 @@ _FX ULONG SbieDll_InjectLow_InitSyscalls(BOOLEAN drv_init)
 //---------------------------------------------------------------------------
 
 
-ULONG64 SbieDll_FindWOW64_Ntdll(_In_ HANDLE ProcessHandle)
+ULONG64 SbDll_FindWOW64_Ntdll(_In_ HANDLE ProcessHandle)
 {
 	/*typedef NTSTATUS(*P_NtQueryVirtualMemory)(
 		IN  HANDLE ProcessHandle,
@@ -479,7 +479,7 @@ ULONG64 SbieDll_FindWOW64_Ntdll(_In_ HANDLE ProcessHandle)
 //---------------------------------------------------------------------------
 
 
-_FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_handle)
+_FX ULONG SbDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_handle)
 {
 	//SVC_PROCESS_MSG *msg = (SVC_PROCESS_MSG *)_msg;
 	ULONG errlvl = 0;
@@ -505,7 +505,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 
 #ifdef _WIN64
 	if (lowdata.flags.is_wow64)
-		lowdata.ntdll_wow64_base = SbieDll_FindWOW64_Ntdll(hProcess);
+		lowdata.ntdll_wow64_base = SbDll_FindWOW64_Ntdll(hProcess);
 #endif
 	lowdata.ntdll_base = (ULONG64)(ULONG_PTR)Dll_Ntdll;
 
@@ -528,7 +528,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 #endif
 		lowLevel_size = m_sbielow_len;
 
-	void *remote_addr = SbieDll_InjectLow_CopyCode(hProcess, lowLevel_size, lowdata.LdrInitializeThunk_tramp, sizeof(lowdata.LdrInitializeThunk_tramp));
+	void *remote_addr = SbDll_InjectLow_CopyCode(hProcess, lowLevel_size, lowdata.LdrInitializeThunk_tramp, sizeof(lowdata.LdrInitializeThunk_tramp));
 	if (!remote_addr) {
 		errlvl = 0x33;
 		goto finish;
@@ -536,7 +536,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 	//   if (lowdata.is_wow64 && (m_addr_high != m_addr_high_32))
 #ifdef _WIN64
 	lowdata.flags.long_diff = 1;
-	if (SbieDll_Has32BitJumpHorizon((void *)m_LdrInitializeThunk, remote_addr)) {
+	if (SbDll_Has32BitJumpHorizon((void *)m_LdrInitializeThunk, remote_addr)) {
 		lowdata.flags.long_diff = 0;
 	}
 #else
@@ -550,7 +550,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 		//
 
 		lowdata.api_device_handle = (ULONG64)(ULONG_PTR)
-			SbieDll_InjectLow_SendHandle(hProcess);
+			SbDll_InjectLow_SendHandle(hProcess);
 		if (!lowdata.api_device_handle) {
 
 			errlvl = 0x22;
@@ -590,7 +590,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 		+ m_sbielow_data_offset     // offset of args area
 		+ FIELD_OFFSET(SBIELOW_DATA, LdrInitializeThunk_tramp);
 
-	if (!SbieDll_InjectLow_BuildTramp(lowdata.flags.long_diff == 1,
+	if (!SbDll_InjectLow_BuildTramp(lowdata.flags.long_diff == 1,
 		lowdata.LdrInitializeThunk_tramp, tramp_remote_addr)) {
 
 		//UCHAR *code = lowdata.LdrInitializeThunk_tramp;
@@ -611,7 +611,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 	// copy the syscall data buffer (m_syscall_data) to target process
 	//
 
-	void *remote_syscall_data = SbieDll_InjectLow_CopySyscalls(hProcess);
+	void *remote_syscall_data = SbDll_InjectLow_CopySyscalls(hProcess);
 	if (!remote_syscall_data) {
 
 		errlvl = 0x55;
@@ -624,7 +624,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 	// write lowdata parameter area, including the converted trampoline
 	// code, into target process, and make it execute-read
 	//
-	if (!SbieDll_InjectLow_CopyData(hProcess, remote_addr, &lowdata)) {
+	if (!SbDll_InjectLow_CopyData(hProcess, remote_addr, &lowdata)) {
 
 		errlvl = 0x66;
 		goto finish;
@@ -636,7 +636,7 @@ _FX ULONG SbieDll_InjectLow(HANDLE hProcess, ULONG init_flags, BOOLEAN dup_drv_h
 	//
 	// Removed hard coded dependency on (.HEAD.00). No longer need to add 8 to
 	// the remote_addr
-	if (!SbieDll_InjectLow_WriteJump(hProcess, (UCHAR *)remote_addr + m_sbielow_start_offset, lowdata.flags.long_diff == 1, &lowdata)) {
+	if (!SbDll_InjectLow_WriteJump(hProcess, (UCHAR *)remote_addr + m_sbielow_start_offset, lowdata.flags.long_diff == 1, &lowdata)) {
 		errlvl = 0x77;
 		goto finish;
 	}
@@ -656,7 +656,7 @@ finish:
 //---------------------------------------------------------------------------
 
 
-_FX HANDLE SbieDll_InjectLow_SendHandle(HANDLE hProcess)
+_FX HANDLE SbDll_InjectLow_SendHandle(HANDLE hProcess)
 {
 	NTSTATUS status;
 	HANDLE HandleLocal, HandleRemote;
@@ -703,7 +703,7 @@ _FX HANDLE SbieDll_InjectLow_SendHandle(HANDLE hProcess)
 //---------------------------------------------------------------------------
 
 
-_FX void *SbieDll_InjectLow_CopyCode(HANDLE hProcess, SIZE_T lowLevel_size, UCHAR *code, ULONG code_len)
+_FX void *SbDll_InjectLow_CopyCode(HANDLE hProcess, SIZE_T lowLevel_size, UCHAR *code, ULONG code_len)
 {
 	SIZE_T region_size;
 	void *remote_addr = NULL;
@@ -761,7 +761,7 @@ _FX void *SbieDll_InjectLow_CopyCode(HANDLE hProcess, SIZE_T lowLevel_size, UCHA
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_InjectLow_BuildTramp(
+_FX BOOLEAN SbDll_InjectLow_BuildTramp(
 	BOOLEAN long_diff, UCHAR *code, ULONG_PTR addr)
 {
 
@@ -890,7 +890,7 @@ _FX BOOLEAN SbieDll_InjectLow_BuildTramp(
 //---------------------------------------------------------------------------
 
 
-_FX void *SbieDll_InjectLow_CopySyscalls(HANDLE hProcess)
+_FX void *SbDll_InjectLow_CopySyscalls(HANDLE hProcess)
 {
 	//
 	// allocate virtual memory somewhere in the process.  to force an
@@ -941,7 +941,7 @@ _FX void *SbieDll_InjectLow_CopySyscalls(HANDLE hProcess)
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_InjectLow_CopyData(
+_FX BOOLEAN SbDll_InjectLow_CopyData(
 	HANDLE hProcess, void *remote_addr, void *local_data)
 {
 	//
@@ -959,7 +959,7 @@ _FX BOOLEAN SbieDll_InjectLow_CopyData(
 		ULONG protect;
 		vm_ok = VirtualProtectEx(hProcess, remote_addr, m_sbielow_len,
 			// we want to be able to pass data from the low level dll we do this here
-			// we set PAGE_EXECUTE_READ in SbieDll.dll Dll_Ordinal1
+			// we set PAGE_EXECUTE_READ in SbDll.dll Dll_Ordinal1
 			PAGE_EXECUTE_READWRITE, &protect);
 			//PAGE_EXECUTE_READ, &protect);
 		if (vm_ok) {
@@ -972,7 +972,7 @@ _FX BOOLEAN SbieDll_InjectLow_CopyData(
 
 #ifdef _WIN64
 
-_FX BOOLEAN SbieDll_Has32BitJumpHorizon(void * target, void * detour)
+_FX BOOLEAN SbDll_Has32BitJumpHorizon(void * target, void * detour)
 {
 	ULONG_PTR diff;
 	long long delta;
@@ -986,7 +986,7 @@ _FX BOOLEAN SbieDll_Has32BitJumpHorizon(void * target, void * detour)
 	return FALSE;
 }
 
-_FX void * SbieDll_InjectLow_getPage(HANDLE hProcess, void *remote_addr)
+_FX void * SbDll_InjectLow_getPage(HANDLE hProcess, void *remote_addr)
 {
 	SIZE_T mySize;
 	ULONG_PTR tempAddr;
@@ -1026,7 +1026,7 @@ _FX void * SbieDll_InjectLow_getPage(HANDLE hProcess, void *remote_addr)
 
 	if (myTable) {
 		mySize = 0;
-		if (SbieDll_Has32BitJumpHorizon(myTable, func)) {
+		if (SbDll_Has32BitJumpHorizon(myTable, func)) {
 			WriteProcessMemory(hProcess, myTable, &remote_addr, 8, &mySize);
 			/*
 			sprintf(buffer,"myPage = %p, kernel32 = %p, ntdll = %p\n",myTable,myKernel32,myNtDll);
@@ -1094,7 +1094,7 @@ _FX void * SbieDll_InjectLow_getPage(HANDLE hProcess, void *remote_addr)
 //---------------------------------------------------------------------------
 // InjectLow_WriteJump
 //---------------------------------------------------------------------------
-_FX BOOLEAN SbieDll_InjectLow_WriteJump(HANDLE hProcess, void *remote_addr, BOOLEAN long_diff, void *localdata)
+_FX BOOLEAN SbDll_InjectLow_WriteJump(HANDLE hProcess, void *remote_addr, BOOLEAN long_diff, void *localdata)
 {
 	//
 	// prepare a short prolog code that jumps to the injected SbieLow
@@ -1136,7 +1136,7 @@ _FX BOOLEAN SbieDll_InjectLow_WriteJump(HANDLE hProcess, void *remote_addr, BOOL
 
 			len1 = 6;
 			target = (ULONG_PTR)&func[6];
-			myTable = SbieDll_InjectLow_getPage(hProcess, remote_addr);
+			myTable = SbDll_InjectLow_getPage(hProcess, remote_addr);
 			if (!myTable) {
 				//OutputDebugStringA("Error: Table not set!\n");
 				return FALSE;

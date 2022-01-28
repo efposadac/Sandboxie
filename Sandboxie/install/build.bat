@@ -24,7 +24,7 @@ goto :SignNow
 
 :Sign64
 set OBJDIR=obj\amd64
-call :SignFile "core\dll\obj\i386\%SBIEDLL%.dll" "" "+DYNAMIC_BASE"
+call :SignFile "core\dll\obj\i386\%SBDLL%.dll" "" "+DYNAMIC_BASE"
 
 :SignNow
 c:\work\tools\EditPE\EditPE.exe +FORCE_INTEGRITY "%SRC_ROOT%\core\drv\%OBJDIR%\SbieDrv.sys"
@@ -32,7 +32,7 @@ set DRV_FLAG=/ph /ac "%SRC_ROOT%\common\certs\MSCV-GlobalSign.cer"
 call :SignFile "core\drv\%OBJDIR%\SbieDrv.sys" "%DRV_FLAG%"
 
 call :SignFile "msgs\%OBJDIR%\SbieMsg.dll"
-call :SignFile "core\dll\%OBJDIR%\%SBIEDLL%.dll" "" "+DYNAMIC_BASE"
+call :SignFile "core\dll\%OBJDIR%\%SBDLL%.dll" "" "+DYNAMIC_BASE"
 call :SignFile "core\svc\%OBJDIR%\SbieSvc.exe" "" "+DYNAMIC_BASE"
 call :SignFile "apps\start\%OBJDIR%\Start.exe" "" "+DYNAMIC_BASE"
 call :SignFile "apps\control\%OBJDIR%\SbieCtrl.exe" "" "+DYNAMIC_BASE"

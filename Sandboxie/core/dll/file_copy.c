@@ -145,7 +145,7 @@ found_match:
         req.file_size = file_size;
         wcscpy(req.file_path, TruePath);
 
-        rpl = SbieDll_CallServerQueue(INTERACTIVE_QUEUE_NAME, &req, sizeof(req), sizeof(*rpl));
+        rpl = SbDll_CallServerQueue(INTERACTIVE_QUEUE_NAME, &req, sizeof(req), sizeof(*rpl));
     }
 
     if (rpl)

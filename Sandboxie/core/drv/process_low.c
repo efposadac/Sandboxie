@@ -297,7 +297,7 @@ _FX BOOLEAN Process_Low_InitConsole(PROCESS *proc)
     // structure as if the process was started with the CreateProcess flag
     // DETACHED_PROCESS so the process doesn't try to connect to a console.
     //
-    // later on, SbieDll will ask SbieSvc to create conhost.exe on behalf
+    // later on, SbDll will ask SbieSvc to create conhost.exe on behalf
     // of the process in the sandbox, and then connect to that console.
     // see core/dll/guicon.c for more about this.
     //

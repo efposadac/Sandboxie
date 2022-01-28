@@ -158,7 +158,7 @@ driver_started:
     }
 
     if (ok) {
-        SbieDll_InjectLow_InitSyscalls(TRUE);
+        SbDll_InjectLow_InitSyscalls(TRUE);
         if (rc != 0) {
             LogEvent(MSG_9234, 0x9362, rc);
             ok = false;
@@ -240,7 +240,7 @@ driver_started:
             if (rc != 0)
                 break;
 
-            SbieDll_RunStartExe(L"auto_run", boxname);
+            SbDll_RunStartExe(L"auto_run", boxname);
         }
     }
 

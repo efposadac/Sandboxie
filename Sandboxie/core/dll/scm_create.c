@@ -812,11 +812,11 @@ _FX BOOL Scm_DeleteService(SC_HANDLE hService)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_StartBoxedService
+// SbDll_StartBoxedService
 //---------------------------------------------------------------------------
 
 
-_FX BOOL SbieDll_StartBoxedService(const WCHAR *ServiceName, BOOLEAN WithAdd)
+_FX BOOL SbDll_StartBoxedService(const WCHAR *ServiceName, BOOLEAN WithAdd)
 {
     HANDLE hkey;
     SERVICE_STATUS ss;
@@ -1000,7 +1000,7 @@ _FX ULONG Scm_StartBoxedService2(const WCHAR *name, SERVICE_QUERY_RPL *qrpl)
             si.cb = sizeof(STARTUPINFO);
             si.dwFlags = STARTF_FORCEOFFFEEDBACK;
 
-            if (! SbieDll_RunFromHome(ProcessName, NULL, &si, &pi))
+            if (! SbDll_RunFromHome(ProcessName, NULL, &si, &pi))
                 return ERROR_SERVICE_LOGON_FAILED;
 
             CloseHandle(pi.hThread);
@@ -1010,7 +1010,7 @@ _FX ULONG Scm_StartBoxedService2(const WCHAR *name, SERVICE_QUERY_RPL *qrpl)
         }
 
         si.lpReserved = NULL;
-        if (SbieDll_RunFromHome(ProcessName, NULL, &si, NULL)) {
+        if (SbDll_RunFromHome(ProcessName, NULL, &si, NULL)) {
 
             path = (WCHAR *)si.lpReserved;
             if (path)
@@ -1056,7 +1056,7 @@ _FX ULONG Scm_StartBoxedService2(const WCHAR *name, SERVICE_QUERY_RPL *qrpl)
     req->path_len = path_len;
     memcpy(req->path, path, path_len);
 
-    rpl = (MSG_HEADER *)SbieDll_CallServer(&req->h);
+    rpl = (MSG_HEADER *)SbDll_CallServer(&req->h);
     if (! rpl)
         error = ERROR_NOT_ENOUGH_MEMORY;
     else {
@@ -1099,7 +1099,7 @@ _FX BOOL Scm_StartServiceW(
     SbieApi_MonitorPut(MONITOR_SCM, text);
 
     if (Scm_IsBoxedService(ServiceName))
-        return SbieDll_StartBoxedService(ServiceName, FALSE);
+        return SbDll_StartBoxedService(ServiceName, FALSE);
 
     u.req.name_len = wcslen(ServiceName);
     wcscpy(u.req.name, ServiceName);
@@ -1108,7 +1108,7 @@ _FX BOOL Scm_StartServiceW(
                    + (u.req.name_len + 1) * sizeof(WCHAR);
     u.req.h.msgid = MSGID_SERVICE_START;
 
-    rpl = (SERVICE_START_RPL *)SbieDll_CallServer(&u.req.h);
+    rpl = (SERVICE_START_RPL *)SbDll_CallServer(&u.req.h);
 
     if (rpl) {
 

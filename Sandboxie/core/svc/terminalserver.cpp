@@ -24,11 +24,11 @@
 #include "terminalserver.h"
 #include "terminalwire.h"
 #include "misc.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 #include <wtsapi32.h>
 #include "core/drv/api_defs.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 
 
 //---------------------------------------------------------------------------

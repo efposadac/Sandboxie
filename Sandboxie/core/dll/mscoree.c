@@ -72,7 +72,7 @@ _FX BOOLEAN MsCorEE_Init(HMODULE hmodule)
 
     _CorExeMain = __sys__CorExeMain;
 
-    SBIEDLL_HOOK(MsCorEE_,_CorExeMain);
+    SBDLL_HOOK(MsCorEE_,_CorExeMain);
     
     return TRUE;
 }

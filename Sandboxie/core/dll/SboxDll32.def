@@ -53,63 +53,63 @@ SbieApi_SessionLeader=_SbieApi_SessionLeader@8
 SbieApi_SetUserName=_SbieApi_SetUserName@8
 
 ;;;
-;;; SbieDll
+;;; SbDll
 ;;;
 
-SbieDll_CallServer=_SbieDll_CallServer@4
+SbDll_CallServer=_SbDll_CallServer@4
 
-SbieDll_ComCreateProxy=_SbieDll_ComCreateProxy@16
-SbieDll_ComCreateStub=_SbieDll_ComCreateStub@16
+SbDll_ComCreateProxy=_SbDll_ComCreateProxy@16
+SbDll_ComCreateStub=_SbDll_ComCreateStub@16
 
-SbieDll_DeviceChange=_SbieDll_DeviceChange@8
-SbieDll_DisableElevationHook=_SbieDll_DisableElevationHook@0
+SbDll_DeviceChange=_SbDll_DeviceChange@8
+SbDll_DisableElevationHook=_SbDll_DisableElevationHook@0
 
-SbieDll_ExpandAndRunProgram=_SbieDll_ExpandAndRunProgram@4
+SbDll_ExpandAndRunProgram=_SbDll_ExpandAndRunProgram@4
 
-SbieDll_FormatMessage=_SbieDll_FormatMessage@8
-SbieDll_FormatMessage0=_SbieDll_FormatMessage0@4
-SbieDll_FormatMessage1=_SbieDll_FormatMessage1@8
-SbieDll_FormatMessage2=_SbieDll_FormatMessage2@12
-SbieDll_FreeMem=_SbieDll_FreeMem@4
+SbDll_FormatMessage=_SbDll_FormatMessage@8
+SbDll_FormatMessage0=_SbDll_FormatMessage0@4
+SbDll_FormatMessage1=_SbDll_FormatMessage1@8
+SbDll_FormatMessage2=_SbDll_FormatMessage2@12
+SbDll_FreeMem=_SbDll_FreeMem@4
 
-SbieDll_GetDrivePath=_SbieDll_GetDrivePath@4
-SbieDll_GetHandlePath=_SbieDll_GetHandlePath@12
-SbieDll_GetLanguage=_SbieDll_GetLanguage@4
-SbieDll_GetServiceRegistryValue=_SbieDll_GetServiceRegistryValue@12
-SbieDll_GetStartError=_SbieDll_GetStartError@0
-SbieDll_GetTokenElevationType=_SbieDll_GetTokenElevationType@0
-SbieDll_GetUserPathEx=_SbieDll_GetUserPathEx@4
+SbDll_GetDrivePath=_SbDll_GetDrivePath@4
+SbDll_GetHandlePath=_SbDll_GetHandlePath@12
+SbDll_GetLanguage=_SbDll_GetLanguage@4
+SbDll_GetServiceRegistryValue=_SbDll_GetServiceRegistryValue@12
+SbDll_GetStartError=_SbDll_GetStartError@0
+SbDll_GetTokenElevationType=_SbDll_GetTokenElevationType@0
+SbDll_GetUserPathEx=_SbDll_GetUserPathEx@4
 
-SbieDll_Hook=_SbieDll_Hook@12
+SbDll_Hook=_SbDll_Hook@12
 
-SbieDll_InitPStore=_SbieDll_InitPStore@0
-SbieDll_IsBoxedService=_SbieDll_IsBoxedService@4
-SbieDll_IsDirectory=_SbieDll_IsDirectory@4
-SbieDll_IsOpenCOM=_SbieDll_IsOpenCOM@0
-SbieDll_IsOpenClsid=_SbieDll_IsOpenClsid@12
+SbDll_InitPStore=_SbDll_InitPStore@0
+SbDll_IsBoxedService=_SbDll_IsBoxedService@4
+SbDll_IsDirectory=_SbDll_IsDirectory@4
+SbDll_IsOpenCOM=_SbDll_IsOpenCOM@0
+SbDll_IsOpenClsid=_SbDll_IsOpenClsid@12
 
-SbieDll_PortName=_SbieDll_PortName@0
+SbDll_PortName=_SbDll_PortName@0
 
-SbieDll_QueueCreate=_SbieDll_QueueCreate@8
-SbieDll_QueueGetReq=_SbieDll_QueueGetReq@24
-SbieDll_QueueGetRpl=_SbieDll_QueueGetRpl@16
-SbieDll_QueuePutReq=_SbieDll_QueuePutReq@20
-SbieDll_QueuePutRpl=_SbieDll_QueuePutRpl@16
+SbDll_QueueCreate=_SbDll_QueueCreate@8
+SbDll_QueueGetReq=_SbDll_QueueGetReq@24
+SbDll_QueueGetRpl=_SbDll_QueueGetRpl@16
+SbDll_QueuePutReq=_SbDll_QueuePutReq@20
+SbDll_QueuePutRpl=_SbDll_QueuePutRpl@16
 
-SbieDll_UpdateConf=_SbieDll_UpdateConf@20
+SbDll_UpdateConf=_SbDll_UpdateConf@20
 
-SbieDll_AssocQueryCommand=_SbieDll_AssocQueryCommand@4
-SbieDll_AssocQueryProgram=_SbieDll_AssocQueryProgram@4
+SbDll_AssocQueryCommand=_SbDll_AssocQueryCommand@4
+SbDll_AssocQueryProgram=_SbDll_AssocQueryProgram@4
 
-SbieDll_KillAll=_SbieDll_KillAll@8
-SbieDll_KillOne=_SbieDll_KillOne@4
+SbDll_KillAll=_SbDll_KillAll@8
+SbDll_KillOne=_SbDll_KillOne@4
 
-SbieDll_RegisterDllCallback=_SbieDll_RegisterDllCallback@4
-SbieDll_RunFromHome=_SbieDll_RunFromHome@16
-SbieDll_RunSandboxed=_SbieDll_RunSandboxed@24
+SbDll_RegisterDllCallback=_SbDll_RegisterDllCallback@4
+SbDll_RunFromHome=_SbDll_RunFromHome@16
+SbDll_RunSandboxed=_SbDll_RunSandboxed@24
 
-SbieDll_StartBoxedService=_SbieDll_StartBoxedService@8
-SbieDll_StartCOM=_SbieDll_StartCOM@4
-SbieDll_StartSbieSvc=_SbieDll_StartSbieSvc@4
+SbDll_StartBoxedService=_SbDll_StartBoxedService@8
+SbDll_StartCOM=_SbDll_StartCOM@4
+SbDll_StartSbieSvc=_SbDll_StartSbieSvc@4
 
-SbieDll_TranslateNtToDosPath=_SbieDll_TranslateNtToDosPath@4
+SbDll_TranslateNtToDosPath=_SbDll_TranslateNtToDosPath@4

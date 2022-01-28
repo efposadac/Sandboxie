@@ -256,7 +256,7 @@ BOOL CBoxes::AnyActivity() const
 void CBoxes::KillAll() const
 {
     for (int i = 1; i < GetSize(); ++i)
-        SbieDll_KillAll(-1, GetBox(i).GetName());
+        SbDll_KillAll(-1, GetBox(i).GetName());
 }
 
 

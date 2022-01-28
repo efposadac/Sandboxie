@@ -688,7 +688,7 @@ _FX NTSTATUS File_CheckFileObject(
     //
 
 #ifdef _WIN64
-    if (! proc->sbiedll_loaded) {
+    if (! proc->sbdll_loaded) {
         WCHAR *Backslash = wcsrchr(NameString->Buffer, L'\\');
         WCHAR *Underscore = wcsrchr(NameString->Buffer, L'_');
         if (Backslash && Underscore &&

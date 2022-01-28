@@ -81,7 +81,7 @@ _FX BOOLEAN UserEnv_InitVer(HMODULE module)
     void* GetVersionExA;
 
     WCHAR str[32];
-    if (SbieDll_GetSettingsForName(NULL, Dll_ImageName, L"OverrideOsBuild", str, sizeof(str), NULL))
+    if (SbDll_GetSettingsForName(NULL, Dll_ImageName, L"OverrideOsBuild", str, sizeof(str), NULL))
         UserEnv_dwBuildNumber = _wtoi(str);
 
     if (UserEnv_dwBuildNumber == 0)
@@ -90,9 +90,9 @@ _FX BOOLEAN UserEnv_InitVer(HMODULE module)
     RtlGetVersion = GetProcAddress(GetModuleHandleW(L"ntdll"), "RtlGetVersion");
     GetVersionExW = (P_GetVersionExW)GetProcAddress(module, "GetVersionExW");
     GetVersionExA = (P_GetVersionExA)GetProcAddress(module, "GetVersionExA");
-    SBIEDLL_HOOK(UserEnv_, RtlGetVersion);
-    SBIEDLL_HOOK(UserEnv_, GetVersionExW);
-    SBIEDLL_HOOK(UserEnv_, GetVersionExA);
+    SBDLL_HOOK(UserEnv_, RtlGetVersion);
+    SBDLL_HOOK(UserEnv_, GetVersionExW);
+    SBDLL_HOOK(UserEnv_, GetVersionExA);
 
     // todo, also hook RtlSwitchedVVI <- BOOL __stdcall VerifyVersionInfoW(LPOSVERSIONINFOEXW lpVersionInformation, DWORD dwTypeMask, DWORDLONG dwlConditionMask)
 
@@ -121,7 +121,7 @@ _FX BOOLEAN UserEnv_Init(HMODULE module)
         GetAppliedGPOList = (P_GetAppliedGPOList)
             GetProcAddress(module, "GetAppliedGPOListInternalW");
 
-        SBIEDLL_HOOK(UserEnv_,GetAppliedGPOList);
+        SBDLL_HOOK(UserEnv_,GetAppliedGPOList);
 
     } else {
 
@@ -135,8 +135,8 @@ _FX BOOLEAN UserEnv_Init(HMODULE module)
         UnregisterGPNotification = (P_UnregisterGPNotification)
             GetProcAddress(module, "UnregisterGPNotification");
 
-        SBIEDLL_HOOK(UserEnv_,RegisterGPNotification);
-        SBIEDLL_HOOK(UserEnv_,UnregisterGPNotification);
+        SBDLL_HOOK(UserEnv_,RegisterGPNotification);
+        SBDLL_HOOK(UserEnv_,UnregisterGPNotification);
     }
 
     return TRUE;

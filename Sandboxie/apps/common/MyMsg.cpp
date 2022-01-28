@@ -23,7 +23,7 @@
 
 #include <afxcmn.h>
 #include "MyMsg.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 
 
@@ -42,7 +42,7 @@ const CString &CMyMsg::m_unknown = CString(L"???");
 
 CMyMsg::CMyMsg(ULONG msgid)
 {
-    Construct(SbieDll_FormatMessage0(msgid));
+    Construct(SbDll_FormatMessage0(msgid));
 }
 
 
@@ -53,7 +53,7 @@ CMyMsg::CMyMsg(ULONG msgid)
 
 CMyMsg::CMyMsg(ULONG msgid, const WCHAR *p1)
 {
-    Construct(SbieDll_FormatMessage1(msgid, p1));
+    Construct(SbDll_FormatMessage1(msgid, p1));
 }
 
 
@@ -64,7 +64,7 @@ CMyMsg::CMyMsg(ULONG msgid, const WCHAR *p1)
 
 CMyMsg::CMyMsg(ULONG msgid, const WCHAR *p1, const WCHAR *p2)
 {
-    Construct(SbieDll_FormatMessage2(msgid, p1, p2));
+    Construct(SbDll_FormatMessage2(msgid, p1, p2));
 }
 
 
@@ -81,7 +81,7 @@ CMyMsg::CMyMsg(
     ins[1] = (WCHAR *)p1;
     ins[2] = (WCHAR *)p2;
     ins[3] = (WCHAR *)p3;
-    Construct(SbieDll_FormatMessage(msgid, ins));
+    Construct(SbDll_FormatMessage(msgid, ins));
 }
 
 

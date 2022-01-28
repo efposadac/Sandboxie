@@ -133,7 +133,7 @@ SBIE1213 Nem lehet létrehozni az objektum könyvtárat: '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Az SbieDll %2 nem szúrható be
+SBIE1214 Az SbDll %2 nem szúrható be
 .
 
 1215;pop;err;01

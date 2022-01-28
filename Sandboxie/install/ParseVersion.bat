@@ -42,7 +42,7 @@ for /F "tokens=3"  %%A in ('findstr /R "^#define.SBIECTRL_EXE\>"           %INPU
 
 for /F "tokens=3"  %%A in ('findstr /R "^#define.START_EXE\>"              %INPUT%') do ( set C=%%A& set C=!C:~1!& echo ^^!define START_EXE !C!) >> %OUTPUT%
 
-for /F "tokens=3"  %%A in ('findstr /R "^#define.SBIEDLL\>"                %INPUT%') do ( set C=%%A& set C=!C:~1!& set C=!C:~1,-1!& echo ^^!define SBIEDLL_DLL "!C!.dll") >> %OUTPUT%
+for /F "tokens=3"  %%A in ('findstr /R "^#define.SBDLL\>"                %INPUT%') do ( set C=%%A& set C=!C:~1!& set C=!C:~1,-1!& echo ^^!define SBDLL_DLL "!C!.dll") >> %OUTPUT%
 
 for /F "tokens=3"  %%A in ('findstr /R "^#define.SBIEMSG_DLL\>"            %INPUT%') do ( set C=%%A& set C=!C:~1!& echo ^^!define SBIEMSG_DLL !C!) >> %OUTPUT%
 

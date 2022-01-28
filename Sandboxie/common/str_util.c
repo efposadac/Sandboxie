@@ -49,11 +49,11 @@ VOID Config_TrimWhiteSpace(const WCHAR** pstr, ULONG* len) {
 
 
 //---------------------------------------------------------------------------
-// SbieDll_GetTagValue
+// SbDll_GetTagValue
 //---------------------------------------------------------------------------
 
 
-const WCHAR* SbieDll_GetTagValue(const WCHAR* str, const WCHAR* strEnd, const WCHAR** value, ULONG* len, WCHAR sep)
+const WCHAR* SbDll_GetTagValue(const WCHAR* str, const WCHAR* strEnd, const WCHAR** value, ULONG* len, WCHAR sep)
 {
     *value = NULL;
     *len = 0;
@@ -97,11 +97,11 @@ const WCHAR* SbieDll_GetTagValue(const WCHAR* str, const WCHAR* strEnd, const WC
 
 
 //---------------------------------------------------------------------------
-// SbieDll_EnumTagValues
+// SbDll_EnumTagValues
 //---------------------------------------------------------------------------
 
 
-VOID SbieDll_EnumTagValues(const WCHAR* string, SbieDll_TagEnumProc enumProc, void* param, WCHAR eq, WCHAR sep)
+VOID SbDll_EnumTagValues(const WCHAR* string, SbDll_TagEnumProc enumProc, void* param, WCHAR eq, WCHAR sep)
 {
     const WCHAR* str_ptr = string;
     const WCHAR* tmp;
@@ -120,7 +120,7 @@ VOID SbieDll_EnumTagValues(const WCHAR* string, SbieDll_TagEnumProc enumProc, vo
         len = (ULONG)(tmp - str_ptr);
         Config_TrimWhiteSpace(&name, &len);
 
-        str_ptr = SbieDll_GetTagValue(tmp + 1, NULL, &found_value, &found_len, sep);
+        str_ptr = SbDll_GetTagValue(tmp + 1, NULL, &found_value, &found_len, sep);
      
         if (!str_ptr || !enumProc(name, len, found_value, found_len, param))
             break;
@@ -129,7 +129,7 @@ VOID SbieDll_EnumTagValues(const WCHAR* string, SbieDll_TagEnumProc enumProc, vo
 
 
 //---------------------------------------------------------------------------
-// SbieDll_FindTagValue
+// SbDll_FindTagValue
 //---------------------------------------------------------------------------
 
 typedef struct
@@ -152,7 +152,7 @@ static BOOLEAN Config_TagFindProc(const WCHAR* name, ULONG name_len, const WCHAR
     return TRUE; // continue
 }
 
-BOOLEAN SbieDll_FindTagValuePtr(const WCHAR* string, const WCHAR* tag_name, const WCHAR** value, ULONG* value_len, WCHAR eq, WCHAR sep)
+BOOLEAN SbDll_FindTagValuePtr(const WCHAR* string, const WCHAR* tag_name, const WCHAR** value, ULONG* value_len, WCHAR eq, WCHAR sep)
 {
     if (!string)
         return FALSE;
@@ -165,7 +165,7 @@ BOOLEAN SbieDll_FindTagValuePtr(const WCHAR* string, const WCHAR* tag_name, cons
         0
     };
 
-    SbieDll_EnumTagValues(string, &Config_TagFindProc, &tagFindProcParam, eq, sep);
+    SbDll_EnumTagValues(string, &Config_TagFindProc, &tagFindProcParam, eq, sep);
     if (!tagFindProcParam.found_value)
         return FALSE;
     *value = tagFindProcParam.found_value;
@@ -173,11 +173,11 @@ BOOLEAN SbieDll_FindTagValuePtr(const WCHAR* string, const WCHAR* tag_name, cons
     return TRUE;
 }
 
-BOOLEAN SbieDll_FindTagValue(const WCHAR* string, const WCHAR* tag_name, WCHAR* value, ULONG value_size, WCHAR eq, WCHAR sep)
+BOOLEAN SbDll_FindTagValue(const WCHAR* string, const WCHAR* tag_name, WCHAR* value, ULONG value_size, WCHAR eq, WCHAR sep)
 {
     WCHAR* value_ptr;
     ULONG value_len;
-    if (!SbieDll_FindTagValuePtr(string, tag_name, &value_ptr, &value_len, eq, sep))
+    if (!SbDll_FindTagValuePtr(string, tag_name, &value_ptr, &value_len, eq, sep))
         return FALSE;
     wcsncpy_s(value, value_size / sizeof(WCHAR), value_ptr, value_len);
     return TRUE;

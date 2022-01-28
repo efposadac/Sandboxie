@@ -321,62 +321,62 @@ _FX BOOLEAN Ipc_Init(void)
     // initialize cache of open and closed IPC paths
     //
 
-    SbieDll_MatchPath(L'i', (const WCHAR *)-1);
+    SbDll_MatchPath(L'i', (const WCHAR *)-1);
 
     //
     // intercept NTDLL entry points
     //
 
-#define SBIEDLL_HOOK_IF(nm)                                     \
+#define SBDLL_HOOK_IF(nm)                                     \
         nm = GetProcAddress(Dll_Ntdll, #nm);                    \
     if (nm) {                                                   \
-        SBIEDLL_HOOK(Ipc_,nm);                                  \
+        SBDLL_HOOK(Ipc_,nm);                                  \
     }
 
-    SBIEDLL_HOOK(Ipc_,NtCreatePort);
-    SBIEDLL_HOOK(Ipc_,NtConnectPort);
-    SBIEDLL_HOOK(Ipc_,NtSecureConnectPort);
+    SBDLL_HOOK(Ipc_,NtCreatePort);
+    SBDLL_HOOK(Ipc_,NtConnectPort);
+    SBDLL_HOOK(Ipc_,NtSecureConnectPort);
 
-    SBIEDLL_HOOK_IF(NtAlpcCreatePort);
-    SBIEDLL_HOOK_IF(NtAlpcConnectPort);
-    SBIEDLL_HOOK_IF(NtAlpcConnectPortEx);
-    SBIEDLL_HOOK_IF(NtAlpcQueryInformation);
-    SBIEDLL_HOOK_IF(NtAlpcQueryInformationMessage);
+    SBDLL_HOOK_IF(NtAlpcCreatePort);
+    SBDLL_HOOK_IF(NtAlpcConnectPort);
+    SBDLL_HOOK_IF(NtAlpcConnectPortEx);
+    SBDLL_HOOK_IF(NtAlpcQueryInformation);
+    SBDLL_HOOK_IF(NtAlpcQueryInformationMessage);
 
     // OriginalToken BEGIN
     if ((Dll_ProcessFlags & SBIE_FLAG_APP_COMPARTMENT) == 0 && !SbieApi_QueryConfBool(NULL, L"OriginalToken", FALSE))
     // OriginalToken END
     {
-        SBIEDLL_HOOK(Ipc_, NtImpersonateClientOfPort);
-        SBIEDLL_HOOK_IF(NtAlpcImpersonateClientOfPort);
+        SBDLL_HOOK(Ipc_, NtImpersonateClientOfPort);
+        SBDLL_HOOK_IF(NtAlpcImpersonateClientOfPort);
     }
 
-    SBIEDLL_HOOK(Ipc_,NtRequestWaitReplyPort);
-    SBIEDLL_HOOK_IF(NtAlpcSendWaitReceivePort);
+    SBDLL_HOOK(Ipc_,NtRequestWaitReplyPort);
+    SBDLL_HOOK_IF(NtAlpcSendWaitReceivePort);
 
     if (NtAlpcSendWaitReceivePort) {
         Ipc_ProxyViews = Dll_Alloc(sizeof(ULONG_PTR) * 256);
         memzero(Ipc_ProxyViews, sizeof(ULONG_PTR) * 256);
     }
 
-    SBIEDLL_HOOK(Ipc_,NtCreateEvent);
-    SBIEDLL_HOOK(Ipc_,NtOpenEvent);
+    SBDLL_HOOK(Ipc_,NtCreateEvent);
+    SBDLL_HOOK(Ipc_,NtOpenEvent);
 
-    SBIEDLL_HOOK(Ipc_,NtCreateMutant);
-    SBIEDLL_HOOK(Ipc_,NtOpenMutant);
+    SBDLL_HOOK(Ipc_,NtCreateMutant);
+    SBDLL_HOOK(Ipc_,NtOpenMutant);
 
-    SBIEDLL_HOOK(Ipc_,NtCreateSemaphore);
-    SBIEDLL_HOOK(Ipc_,NtOpenSemaphore);
+    SBDLL_HOOK(Ipc_,NtCreateSemaphore);
+    SBDLL_HOOK(Ipc_,NtOpenSemaphore);
 
-    SBIEDLL_HOOK(Ipc_,NtCreateSection);
-    SBIEDLL_HOOK(Ipc_,NtOpenSection);
+    SBDLL_HOOK(Ipc_,NtCreateSection);
+    SBDLL_HOOK(Ipc_,NtOpenSection);
 
     // OriginalToken BEGIN
     if ((Dll_ProcessFlags & SBIE_FLAG_APP_COMPARTMENT) == 0 && !SbieApi_QueryConfBool(NULL, L"OriginalToken", FALSE))
     // OriginalToken END
     {
-        SBIEDLL_HOOK(Ipc_, NtImpersonateAnonymousToken);
-        SBIEDLL_HOOK(Ipc_, NtImpersonateThread);
+        SBDLL_HOOK(Ipc_, NtImpersonateAnonymousToken);
+        SBDLL_HOOK(Ipc_, NtImpersonateThread);
     }
 
     Ipc_CreateObjects();
@@ -1038,7 +1038,7 @@ _FX NTSTATUS Ipc_NtCreatePort(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -1133,7 +1133,7 @@ _FX NTSTATUS Ipc_NtConnectPort(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -1261,7 +1261,7 @@ _FX NTSTATUS Ipc_NtSecureConnectPort(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -1413,7 +1413,7 @@ _FX NTSTATUS Ipc_NtAlpcCreatePort(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -1508,7 +1508,7 @@ _FX NTSTATUS Ipc_NtAlpcConnectPort(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -1681,7 +1681,7 @@ _FX NTSTATUS Ipc_NtAlpcConnectPortEx(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2236,7 +2236,7 @@ _FX NTSTATUS Ipc_NtCreateEvent(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2338,7 +2338,7 @@ _FX NTSTATUS Ipc_NtOpenEvent(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2463,7 +2463,7 @@ _FX NTSTATUS Ipc_NtCreateMutant(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2565,7 +2565,7 @@ _FX NTSTATUS Ipc_NtOpenMutant(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2691,7 +2691,7 @@ _FX NTSTATUS Ipc_NtCreateSemaphore(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2793,7 +2793,7 @@ _FX NTSTATUS Ipc_NtOpenSemaphore(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -2931,7 +2931,7 @@ _FX NTSTATUS Ipc_NtCreateSection(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath2(L'i', TruePath, FALSE, TRUE); // SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -3033,7 +3033,7 @@ _FX NTSTATUS Ipc_NtOpenSection(
     // check if this is an open or closed path
     //
 
-    mp_flags = SbieDll_MatchPath(L'i', TruePath);
+    mp_flags = SbDll_MatchPath(L'i', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags)) {
         status = STATUS_ACCESS_DENIED;
@@ -3198,7 +3198,7 @@ _FX BOOLEAN Ipc_IsKnownDllInSandbox(
         BOOLEAN IsBoxedPath;
         WCHAR *path8k = Dll_AllocTemp(8192 * sizeof(WCHAR));
 
-        status = SbieDll_GetHandlePath(handle, path8k, &IsBoxedPath);
+        status = SbDll_GetHandlePath(handle, path8k, &IsBoxedPath);
 
         if (NT_SUCCESS(status) && IsBoxedPath)
             is_known_dll_in_sandbox = TRUE;
@@ -3327,7 +3327,7 @@ _FX NTSTATUS Ipc_ConnectProxyPort(
     else
         req->max_msg_len = -1;
 
-    rpl = (NAMED_PIPE_LPC_CONNECT_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (NAMED_PIPE_LPC_CONNECT_RPL *)SbDll_CallServer(&req->h);
     Dll_Free(req);
 
     //
@@ -3457,7 +3457,7 @@ _FX NTSTATUS Ipc_NtRequestWaitReplyPort(
     if (info)
         memcpy(req->info, info->Buffer, info->BufferLen);
 
-    rpl = (NAMED_PIPE_LPC_REQUEST_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (NAMED_PIPE_LPC_REQUEST_RPL *)SbDll_CallServer(&req->h);
     Dll_Free(req);
 
     //
@@ -3616,7 +3616,7 @@ _FX NTSTATUS Ipc_NtAlpcSendWaitReceivePort(
 
     memcpy(req->data, SendMsg, SendMsg->u1.s1.TotalLength);
 
-    rpl = (NAMED_PIPE_ALPC_REQUEST_RPL *)SbieDll_CallServer(&req->h);
+    rpl = (NAMED_PIPE_ALPC_REQUEST_RPL *)SbDll_CallServer(&req->h);
     Dll_Free(req);
 
     //

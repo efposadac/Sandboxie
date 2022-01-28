@@ -252,7 +252,7 @@
     <ClInclude Include="sbieapi.h">
       <Filter>api</Filter>
     </ClInclude>
-    <ClInclude Include="sbiedll.h">
+    <ClInclude Include="sbdll.h">
       <Filter>api</Filter>
     </ClInclude>
     <ClInclude Include="obj.h">

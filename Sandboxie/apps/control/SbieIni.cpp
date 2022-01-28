@@ -114,7 +114,7 @@ CString CSbieIni::GetPath(BOOL *IsHomePath)
         req->h.length = sizeof(SBIE_INI_GET_PATH_REQ);
 
         SBIE_INI_GET_PATH_RPL *rpl =
-            (SBIE_INI_GET_PATH_RPL *)SbieDll_CallServer(&req->h);
+            (SBIE_INI_GET_PATH_RPL *)SbDll_CallServer(&req->h);
         if (rpl) {
 
             if (rpl->h.status == 0) {
@@ -125,7 +125,7 @@ CString CSbieIni::GetPath(BOOL *IsHomePath)
                     *IsHomePath = TRUE;
             }
 
-            SbieDll_FreeMem(rpl);
+            SbDll_FreeMem(rpl);
         }
 
         free(req);
@@ -154,7 +154,7 @@ BOOL CSbieIni::GetUser(CString &Section, CString &Name, BOOL &IsAdmin)
         req->h.length = sizeof(SBIE_INI_GET_USER_REQ);
 
         SBIE_INI_GET_USER_RPL *rpl =
-            (SBIE_INI_GET_USER_RPL *)SbieDll_CallServer(&req->h);
+            (SBIE_INI_GET_USER_RPL *)SbDll_CallServer(&req->h);
         if (rpl) {
             if (rpl->h.status == 0) {
                 if (rpl->admin)
@@ -162,7 +162,7 @@ BOOL CSbieIni::GetUser(CString &Section, CString &Name, BOOL &IsAdmin)
                 Section = CString(rpl->section);
                 Name    = CString(rpl->name);
             }
-            SbieDll_FreeMem(rpl);
+            SbDll_FreeMem(rpl);
         }
 
         free(req);
@@ -992,10 +992,10 @@ BOOL CSbieIni::CallServerWithPassword(
 
         wcscpy(pPasswordWithinRequestBuf, m_Password);
 
-        MSG_HEADER *rpl = SbieDll_CallServer((MSG_HEADER *)RequestBuf);
+        MSG_HEADER *rpl = SbDll_CallServer((MSG_HEADER *)RequestBuf);
         if (rpl) {
             status = rpl->status;
-            SbieDll_FreeMem(rpl);
+            SbDll_FreeMem(rpl);
         } else
             status = STATUS_SERVER_DISABLED;
 
@@ -1254,7 +1254,7 @@ void CSbieIni::MonitorService(CWnd *pWnd, ULONG idExitCmd)
     req.h.msgid = MSGID_SBIE_INI_GET_WAIT_HANDLE;
 
     SBIE_INI_GET_WAIT_HANDLE_RPL *rpl =
-        (SBIE_INI_GET_WAIT_HANDLE_RPL *)SbieDll_CallServer(&req.h);
+        (SBIE_INI_GET_WAIT_HANDLE_RPL *)SbDll_CallServer(&req.h);
     if (rpl) {
         if (rpl->h.status == 0) {
             ULONG ThreadId;
@@ -1265,7 +1265,7 @@ void CSbieIni::MonitorService(CWnd *pWnd, ULONG idExitCmd)
             CreateThread(
                 NULL, 0, MonitorServiceThread, ThreadArgs, 0, &ThreadId);
         }
-        SbieDll_FreeMem(rpl);
+        SbDll_FreeMem(rpl);
     }
 }
 

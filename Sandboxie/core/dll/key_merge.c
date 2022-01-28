@@ -334,7 +334,7 @@ _FX NTSTATUS Key_OpenForMerge(
     // check for open and closed paths
     //
 
-    mp_flags = SbieDll_MatchPath(L'k', TruePath);
+    mp_flags = SbDll_MatchPath(L'k', TruePath);
 
     if (PATH_IS_CLOSED(mp_flags))
         return STATUS_ACCESS_DENIED;
@@ -532,7 +532,7 @@ _FX BOOLEAN Key_ShouldNotMerge(const WCHAR *TruePath, const WCHAR *CopyPath)
         else
             HaveHkcuDomainsKey = TRUE;
 
-        rpl = SbieDll_CallServer((MSG_HEADER *)req);
+        rpl = SbDll_CallServer((MSG_HEADER *)req);
         Dll_Free(req);
         if (rpl) {
 

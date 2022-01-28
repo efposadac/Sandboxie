@@ -149,7 +149,7 @@ BOOL CMyApp::InitInstance()
 //#endif
 
     BOOLEAN LayoutRTL;
-    SbieDll_GetLanguage(&LayoutRTL);
+    SbDll_GetLanguage(&LayoutRTL);
     if (LayoutRTL)
         m_LayoutRTL = true;
 
@@ -160,7 +160,7 @@ BOOL CMyApp::InitInstance()
         m_session_id = 0;
 #endif
 
-    SbieDll_GetDrivePath(-1);
+    SbDll_GetDrivePath(-1);
 
     //
     // initialize graphical elements

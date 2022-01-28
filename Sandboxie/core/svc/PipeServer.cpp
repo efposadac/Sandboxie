@@ -24,7 +24,7 @@
 #include "PipeServer.h"
 #include "misc.h"
 #include "msgids.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 #include "common/my_version.h"
 //#include <psapi.h> // For access to GetModuleFileNameEx
@@ -264,7 +264,7 @@ bool PipeServer::Start()
     // create server port
     //
 
-    RtlInitUnicodeString(&PortName, SbieDll_PortName());
+    RtlInitUnicodeString(&PortName, SbDll_PortName());
 
     InitializeObjectAttributes(
         &objattrs, &PortName, OBJ_CASE_INSENSITIVE, NULL, sd);

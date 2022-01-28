@@ -243,7 +243,7 @@ BOOLEAN CUpdater::QueryUpdateData(UPDATER_DATA* Context)
 #else
 		m_osvi.dwMajorVersion, m_osvi.dwMinorVersion, m_osvi.dwBuildNumber, L"i386",
 #endif
-		SbieDll_GetLanguage(NULL), Context->Manual ? L"0" : L"1");
+		SbDll_GetLanguage(NULL), Context->Manual ? L"0" : L"1");
 
 	CString update_key;
 	CSbieIni::GetInstance().GetText(_GlobalSettings, L"UpdateKey", update_key);

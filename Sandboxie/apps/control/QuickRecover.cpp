@@ -1132,14 +1132,14 @@ BOOL CQuickRecover::RecoverFile(const CString &DestPath, BOOL SameFolder)
     WCHAR *src = malloc_WCHAR((src_len + 8) * sizeof(WCHAR));
     wmemcpy(src, m_SrcPath, src_len);
     wmemzero(src + src_len, 4);
-    SbieDll_TranslateNtToDosPath(src);
+    SbDll_TranslateNtToDosPath(src);
     wmemzero(src + wcslen(src), 4);
 
     ULONG dst_len = wcslen(DestPath);
     WCHAR *dst = malloc_WCHAR((dst_len + 8) * sizeof(WCHAR));
     wmemcpy(dst, DestPath, dst_len);
     wmemzero(dst + dst_len, 4);
-    SbieDll_TranslateNtToDosPath(dst);
+    SbDll_TranslateNtToDosPath(dst);
     wmemzero(dst + wcslen(dst), 4);
 
     //

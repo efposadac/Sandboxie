@@ -21,7 +21,7 @@
 
 
 #include "global.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 
 
 //---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ int DoUpdate(void)
     else
         return ERRLVL_CMDLINE;
 
-    status = SbieDll_UpdateConf(
+    status = SbDll_UpdateConf(
                     op, NULL, CmdVerb(1), CmdVerb(2), CmdVerb(3));
 
     return 0;

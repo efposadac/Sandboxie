@@ -22,7 +22,7 @@
 
 #include "common/my_version.h"
 #include "common/win32_ntddk.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include <sddl.h>
 
 #pragma warning(disable : 4996)
@@ -57,7 +57,7 @@ static BOOLEAN IsWindows81 = FALSE;
             SourceFunc = (void *)func;                              \
     }                                                               \
     __sys_##func =                                                  \
-        (ULONG_PTR)SbieDll_Hook(FuncName, SourceFunc, my_##func);   \
+        (ULONG_PTR)SbDll_Hook(FuncName, SourceFunc, my_##func);   \
     if (! __sys_##func)                                             \
         hook_success = FALSE;                                       \
     }
@@ -146,7 +146,7 @@ _FX ULONG FindProcessId(
             }
 
             if (process) {
-                if (SbieDll_CheckProcessLocalSystem(process))
+                if (SbDll_CheckProcessLocalSystem(process))
                     found = TRUE;
                 CloseHandle(process);
             }
@@ -240,7 +240,7 @@ _FX void InitComplete(PROCESS_DATA *data) {
 _FX BOOL my_SetServiceStatus(SERVICE_STATUS_HANDLE hServiceStatus, LPSERVICE_STATUS lpServiceStatus) {
     int i = 0;
     //
-    // update service status in SbieDll
+    // update service status in SbDll
     // needed for SandboxieCrypto which hooks SetServiceStatus
     //
 #ifdef SANDBOXIECRYPTO
@@ -347,7 +347,7 @@ SC_HANDLE my_OpenServiceW(
     }
     else {
 
-        // fallback to SbieDll SCM implementation
+        // fallback to SbDll SCM implementation
 
         typedef SC_HANDLE(*P_OpenService)(
             SC_HANDLE hSCManager,
@@ -362,7 +362,7 @@ SC_HANDLE my_OpenServiceW(
         //wsprintf(txt, L"OpenService %s by Process ID %d gives %08X\n", lpServiceName, GetCurrentProcessId(), hService);
         //OutputDebugString(txt);}
 
-        if (SbieDll_IsBoxedService(hService)) {
+        if (SbDll_IsBoxedService(hService)) {
 
             SetLastError(err);
             return hService;
@@ -505,7 +505,7 @@ BOOL my_QueryServiceStatusEx(
         }
         else {
 
-            // fallback to SbieDll SCM implementation
+            // fallback to SbDll SCM implementation
 
             typedef BOOL(*P_QueryServiceStatusEx)(
                 SC_HANDLE hService, SC_STATUS_TYPE InfoLevel,
@@ -571,10 +571,10 @@ BOOL my_StartService(
 
     if (hService == SC_HANDLE_MSISERVER) {
 
-        ok = SbieDll_StartBoxedService(L"MSIServer", FALSE);
+        ok = SbDll_StartBoxedService(L"MSIServer", FALSE);
 
     }
-    else if (SbieDll_IsBoxedService(hService)) {
+    else if (SbDll_IsBoxedService(hService)) {
 
         typedef BOOL(*P_StartService)(
             SC_HANDLE hService, DWORD NumArgs, void *ArgVector);
@@ -604,7 +604,7 @@ BOOL my_ControlService(
     DWORD dwControl,
     LPSERVICE_STATUS lpServiceStatus)
 {
-    if (SbieDll_IsBoxedService(hService)) {
+    if (SbDll_IsBoxedService(hService)) {
 
         typedef BOOL(*P_ControlService)(
             SC_HANDLE hService,

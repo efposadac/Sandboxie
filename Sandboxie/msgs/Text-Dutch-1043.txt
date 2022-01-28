@@ -137,7 +137,7 @@ SBIE1213 Kan object-map '%3' niet aanmaken %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Kan SbieDll niet invoegen %2
+# SBIE1214 Kan SbDll niet invoegen %2
 # .
 
 # 1215;pop;err;01

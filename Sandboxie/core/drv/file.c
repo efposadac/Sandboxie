@@ -1522,12 +1522,12 @@ _FX NTSTATUS File_Generic_MyParseProc(
         KeLowerIrql(irql);
 
         //
-        // if process is trying to load a special DLL before SbieDll
+        // if process is trying to load a special DLL before SbDll
         // has been initialized, then pretend the file does not exist,
-        // and add the DLL path so it can be loaded by SbieDll
+        // and add the DLL path so it can be loaded by SbDll
         //
 
-        if ((! proc->sbiedll_loaded) && status == STATUS_SUCCESS
+        if ((! proc->sbdll_loaded) && status == STATUS_SUCCESS
                 && (CreateOptions & FILE_DIRECTORY_FILE) == 0) {
         
             WCHAR *backslash = wcsrchr(path, L'\\');
@@ -1578,7 +1578,7 @@ skip_due_to_home_folder:
             //
             // we can't allow write access on sandbox directories as this
             // can be used to create a directory reparse point (junction) in
-            // a call to NtFsControlFile.  instead, SbieDll will use the
+            // a call to NtFsControlFile.  instead, SbDll will use the
             // SbieSvc FileServer proxy to adjust attributes on directories.
             //
             // note that the the sandbox cannot be circumvented by this, but
@@ -2390,7 +2390,7 @@ _FX NTSTATUS File_Api_Open(PROCESS *proc, ULONG64 *parms)
     //
     // if the path matches a ClosedFilePath setting, we only allow opening
     // directory files, and only for query attribute access;  this is used
-    // by File_NtQueryFullAttributesFile in SbieDll
+    // by File_NtQueryFullAttributesFile in SbDll
     //
 
     DesiredAccess = FILE_GENERIC_READ;

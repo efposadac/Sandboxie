@@ -149,19 +149,19 @@ _FX BOOLEAN Gui_InitProp(void)
     // DisableComProxy BEGIN
     if (!SbieApi_QueryConfBool(NULL, L"DisableComProxy", FALSE))
     // DisableComProxy END
-    if (! SbieDll_IsOpenCOM()) {
+    if (! SbDll_IsOpenCOM()) {
 
         //
         // if there is access to the real COM epmapper, then don't
         // hook Prop functions that are used to hide drag/drop props
         //
 
-        SBIEDLL_HOOK_GUI(GetPropA);
-        SBIEDLL_HOOK_GUI(GetPropW);
-        SBIEDLL_HOOK_GUI(SetPropA);
-        SBIEDLL_HOOK_GUI(SetPropW);
-        SBIEDLL_HOOK_GUI(RemovePropA);
-        SBIEDLL_HOOK_GUI(RemovePropW);
+        SBDLL_HOOK_GUI(GetPropA);
+        SBDLL_HOOK_GUI(GetPropW);
+        SBDLL_HOOK_GUI(SetPropA);
+        SBDLL_HOOK_GUI(SetPropW);
+        SBDLL_HOOK_GUI(RemovePropA);
+        SBDLL_HOOK_GUI(RemovePropW);
     }
 
     if (! Gui_OpenAllWinClasses) {
@@ -170,15 +170,15 @@ _FX BOOLEAN Gui_InitProp(void)
         // if not hooking window classes, don't install custom wndproc
         //
 
-        SBIEDLL_HOOK_GUI(GetWindowLongA);
-        SBIEDLL_HOOK_GUI(GetWindowLongW);
+        SBDLL_HOOK_GUI(GetWindowLongA);
+        SBDLL_HOOK_GUI(GetWindowLongW);
 
 #ifdef _WIN64
 
         // new style hook on SetWindowLong on 64-bit Windows 8.1 and later
         if (Dll_OsBuild < 9600) {
-            SBIEDLL_HOOK_GUI(SetWindowLongA);
-            SBIEDLL_HOOK_GUI(SetWindowLongW);
+            SBDLL_HOOK_GUI(SetWindowLongA);
+            SBDLL_HOOK_GUI(SetWindowLongW);
 
         } else if (! Gui_Hook_SetWindowLong8())
             return FALSE;
@@ -186,29 +186,29 @@ _FX BOOLEAN Gui_InitProp(void)
 #else ! _WIN64
 
         // otherwise old style hooks on SetWindowLongA and SetWindowLongW
-        SBIEDLL_HOOK_GUI(SetWindowLongA);
-        SBIEDLL_HOOK_GUI(SetWindowLongW);
+        SBDLL_HOOK_GUI(SetWindowLongA);
+        SBDLL_HOOK_GUI(SetWindowLongW);
 
 #endif _WIN64
 
-        SBIEDLL_HOOK_GUI(GetClassLongA);
-        SBIEDLL_HOOK_GUI(GetClassLongW);
+        SBDLL_HOOK_GUI(GetClassLongA);
+        SBDLL_HOOK_GUI(GetClassLongW);
 
 #ifdef _WIN64
 
-        SBIEDLL_HOOK_GUI(GetWindowLongPtrA);
-        SBIEDLL_HOOK_GUI(GetWindowLongPtrW);
+        SBDLL_HOOK_GUI(GetWindowLongPtrA);
+        SBDLL_HOOK_GUI(GetWindowLongPtrW);
 
         // special hook on SetWindowLongPtr on 64-bit Windows 8 and later
         if (Dll_OsBuild < 8400) {
-            SBIEDLL_HOOK_GUI(SetWindowLongPtrA);
-            SBIEDLL_HOOK_GUI(SetWindowLongPtrW);
+            SBDLL_HOOK_GUI(SetWindowLongPtrA);
+            SBDLL_HOOK_GUI(SetWindowLongPtrW);
 
         } else if (! Gui_Hook_SetWindowLongPtr8())
             return FALSE;
 
-        SBIEDLL_HOOK_GUI(GetClassLongPtrA);
-        SBIEDLL_HOOK_GUI(GetClassLongPtrW);
+        SBDLL_HOOK_GUI(GetClassLongPtrA);
+        SBDLL_HOOK_GUI(GetClassLongPtrW);
 
 #endif _WIN64
 
@@ -1077,7 +1077,7 @@ _FX BOOLEAN Gui_Hook_SetWindowLong8(void)
 
         hWin32u = GetModuleHandleA("win32u.dll");
         __sys_SetWindowLong8 = (P_SetWindowLong8) GetProcAddress(hWin32u, "NtUserSetWindowLong");
-        SBIEDLL_HOOK_GUI(SetWindowLong8);
+        SBDLL_HOOK_GUI(SetWindowLong8);
         return TRUE;
     }
 
@@ -1090,7 +1090,7 @@ _FX BOOLEAN Gui_Hook_SetWindowLong8(void)
 
             __sys_SetWindowLong8 = (P_SetWindowLong8)(w + 8 + w_offset);
 
-            SBIEDLL_HOOK_GUI(SetWindowLong8);
+            SBDLL_HOOK_GUI(SetWindowLong8);
 
             return TRUE;
         }
@@ -1175,7 +1175,7 @@ _FX BOOLEAN Gui_Hook_SetWindowLongPtr8(void)
         HMODULE hWin32u;
         hWin32u = GetModuleHandleA("win32u.dll");
         __sys_SetWindowLongPtr8 = (P_SetWindowLongPtr8) GetProcAddress(hWin32u,"NtUserSetWindowLongPtr");
-        SBIEDLL_HOOK_GUI(SetWindowLongPtr8);
+        SBDLL_HOOK_GUI(SetWindowLongPtr8);
         return TRUE;
     }
 
@@ -1189,7 +1189,7 @@ _FX BOOLEAN Gui_Hook_SetWindowLongPtr8(void)
             __sys_SetWindowLongPtr8 =
                                 (P_SetWindowLongPtr8)(w + 8 + w_offset);
 
-            SBIEDLL_HOOK_GUI(SetWindowLongPtr8);
+            SBDLL_HOOK_GUI(SetWindowLongPtr8);
 
             return TRUE;
         }

@@ -103,18 +103,18 @@ extern "C" _FX BOOLEAN Pst_Init(HMODULE module)
     PStoreCreateInstance = (P_PStoreCreateInstance)
         GetProcAddress(module, Pst_PStoreCreateInstanceProcName);
 
-    SBIEDLL_HOOK(Pst_,PStoreCreateInstance)
+    SBDLL_HOOK(Pst_,PStoreCreateInstance)
 
     return TRUE;
 }
 
 
 //---------------------------------------------------------------------------
-// SbieDll_InitPStore
+// SbDll_InitPStore
 //---------------------------------------------------------------------------
 
 
-extern "C" void *SbieDll_InitPStore(void)
+extern "C" void *SbDll_InitPStore(void)
 {
     static const WCHAR *_pstorec = L"pstorec.dll";
     void *pst = NULL;

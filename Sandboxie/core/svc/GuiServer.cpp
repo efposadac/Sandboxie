@@ -26,7 +26,7 @@
 #include "GuiServer.h"
 #include "QueueWire.h"
 #include "GuiWire.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/drv/api_defs.h"
 #include "common/my_version.h"
 #include <stdlib.h>
@@ -724,7 +724,7 @@ bool GuiServer::CreateQueueSlave(const WCHAR *cmdline)
     if (*ptr != L'\0')
         return false;
 
-    ULONG status = SbieDll_QueueCreate(m_QueueName, &m_QueueEvent);
+    ULONG status = SbDll_QueueCreate(m_QueueName, &m_QueueEvent);
     if (status != 0)
         return false;
 
@@ -836,7 +836,7 @@ bool GuiServer::QueueCallbackSlave2(void)
     void *data_ptr;
     ULONG rpl_buf[MAX_RPL_BUF_SIZE / sizeof(ULONG)];
 
-    ULONG status = SbieDll_QueueGetReq(m_QueueName, &args.pid, NULL,
+    ULONG status = SbDll_QueueGetReq(m_QueueName, &args.pid, NULL,
                                        &request_id, &data_ptr, &data_len);
     if (status != 0) {
         if (status != STATUS_END_OF_FILE)
@@ -907,10 +907,10 @@ bool GuiServer::QueueCallbackSlave2(void)
     //
 
     *rpl_buf = status;
-    status = SbieDll_QueuePutRpl(
+    status = SbDll_QueuePutRpl(
                             m_QueueName, request_id, rpl_buf, rpl_len);
 
-    SbieDll_FreeMem(data_ptr);
+    SbDll_FreeMem(data_ptr);
 
     if (status != 0 && status != STATUS_END_OF_FILE) {
         ReportError2336(-1, 0x82, status);
@@ -3225,7 +3225,7 @@ ULONG GuiServer::SplWow64Slave(SlaveArgs *args)
         // so we want to terminate SplWow64
         //
 
-        SbieDll_KillOne(_SplWow64Pid);
+        SbDll_KillOne(_SplWow64Pid);
 
         _SplWow64Pid = 0;
         _SplWow64CreateTime = 0;

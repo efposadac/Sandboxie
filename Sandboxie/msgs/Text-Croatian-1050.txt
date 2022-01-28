@@ -133,7 +133,7 @@ SBIE1213 Ne mogu kreirati direktorij za objekt '%3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Ne mogu ubaciti SbieDll %2
+# SBIE1214 Ne mogu ubaciti SbDll %2
 # .
 
 # 1215;pop;err;01

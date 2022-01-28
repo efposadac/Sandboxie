@@ -133,7 +133,7 @@ SBIE1213 Nelze vytvořit objekt adresáře %3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Nelze injektovat SbieDll %2
+# SBIE1214 Nelze injektovat SbDll %2
 # .
 
 # 1215;pop;err;01

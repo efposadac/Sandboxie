@@ -165,7 +165,7 @@ IEnumPStoreTypes *IEnumPStoreTypesImpl::CreateEnumType(
     req.pst_key = pst_key;
 
     PSTORE_ENUM_TYPES_RPL *rpl =
-        (PSTORE_ENUM_TYPES_RPL *)SbieDll_CallServer(&req.h);
+        (PSTORE_ENUM_TYPES_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl && rpl->h.status == 0) {
 
@@ -218,7 +218,7 @@ IEnumPStoreTypes *IEnumPStoreTypesImpl::CreateEnumSubtype(
     req.enum_subtypes = TRUE;
 
     PSTORE_ENUM_TYPES_RPL *rpl =
-        (PSTORE_ENUM_TYPES_RPL *)SbieDll_CallServer(&req.h);
+        (PSTORE_ENUM_TYPES_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl && rpl->h.status == 0) {
 
@@ -477,7 +477,7 @@ IEnumPStoreItems *IEnumPStoreItemsImpl::CreateEnumItem(
     req.subtype_id = *subtype_guid;
 
     PSTORE_ENUM_ITEMS_RPL *rpl =
-        (PSTORE_ENUM_ITEMS_RPL *)SbieDll_CallServer(&req.h);
+        (PSTORE_ENUM_ITEMS_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl && rpl->h.status == 0) {
 

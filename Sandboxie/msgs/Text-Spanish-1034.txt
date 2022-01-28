@@ -133,7 +133,7 @@ SBIE1213 No es posible crear el objeto de directorio '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 No es posible inyectar SbieDll %2
+SBIE1214 No es posible inyectar SbDll %2
 .
 
 1215;pop;err;01

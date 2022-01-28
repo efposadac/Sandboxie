@@ -30,7 +30,7 @@
 #include "DriverAssist.h"
 #include "common/defines.h"
 #include "common/my_version.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/drv/api_defs.h"
 #include "sbieiniserver.h"
 
@@ -127,7 +127,7 @@ bool DriverAssist::InitializePortAndThreads()
     //
 
     wsprintf(PortName, L"%s-internal-%d",
-             SbieDll_PortName(), GetTickCount());
+             SbDll_PortName(), GetTickCount());
     RtlInitUnicodeString(&objname, PortName);
 
     InitializeObjectAttributes(

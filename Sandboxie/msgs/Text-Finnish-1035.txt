@@ -133,7 +133,7 @@ SBIE1213 Ei voi luoda objektikansiota '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Ei voi injektoida SbieDll %2
+SBIE1214 Ei voi injektoida SbDll %2
 .
 
 1215;pop;err;01

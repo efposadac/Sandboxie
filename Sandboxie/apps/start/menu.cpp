@@ -23,7 +23,7 @@
 
 #include "common/defines.h"
 #include "common/list.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "msgs/msgs.h"
 #include "common/my_version.h"
 
@@ -308,7 +308,7 @@ _FX HMENU BuildTopLevelMenu(MENU_DIR *root)
     int i;
 
     if (! _desktop)
-        _desktop = SbieDll_FormatMessage0(MSG_3112);
+        _desktop = SbDll_FormatMessage0(MSG_3112);
 
     subdir = NULL;
 
@@ -369,7 +369,7 @@ _FX HMENU BuildTopLevelMenu(MENU_DIR *root)
 
                 wcscpy(name, data.cFileName);
                 if (_wcsicmp(name, L"Programs") == 0)
-                    wcscpy(name, SbieDll_FormatMessage0(MSG_3114));
+                    wcscpy(name, SbDll_FormatMessage0(MSG_3114));
 
                 subdir2 = Insert_MENU_DIR(
                                 root, name, data.cFileName, subdir, 0);
@@ -390,7 +390,7 @@ _FX HMENU BuildTopLevelMenu(MENU_DIR *root)
     //
 
     if (! _all_files_and_folders)
-        _all_files_and_folders = SbieDll_FormatMessage0(MSG_3521);
+        _all_files_and_folders = SbDll_FormatMessage0(MSG_3521);
 
     subdir = Insert_MENU_DIR(root, _all_files_and_folders, NULL, subdir, 0);
 
@@ -557,9 +557,9 @@ _FX void BuildMenu(HMENU hMenu, MENU_DIR *menu, WCHAR *fullpath)
     BOOLEAN separator;
 
     if (! _explore)
-        _explore = SbieDll_FormatMessage0(MSG_3113);
+        _explore = SbDll_FormatMessage0(MSG_3113);
     if (! _cancel)
-        _cancel  = SbieDll_FormatMessage0(MSG_3002);
+        _cancel  = SbDll_FormatMessage0(MSG_3002);
 
     memzero(&menuinfo, sizeof(MENUINFO));
     menuinfo.cbSize = sizeof(MENUINFO);
@@ -576,7 +576,7 @@ _FX void BuildMenu(HMENU hMenu, MENU_DIR *menu, WCHAR *fullpath)
 
         SbieApi_QueryProcess(NULL, boxname, NULL, NULL, NULL);
         wsprintf(
-            title, SbieDll_FormatMessage1(MSG_3111, boxname));
+            title, SbDll_FormatMessage1(MSG_3111, boxname));
 
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_STATE | MIIM_STRING;
@@ -688,7 +688,7 @@ _FX void ScanFolder(MENU_DIR *menu, WCHAR *path, UCHAR source)
             if (hFile != INVALID_HANDLE_VALUE) {
 
                 BOOLEAN IsBoxedPath;
-                LONG rc = SbieDll_GetHandlePath(
+                LONG rc = SbDll_GetHandlePath(
                         hFile, StartMenu_TempPath, &IsBoxedPath);
 
                 if (rc == 0 && IsBoxedPath)
@@ -764,7 +764,7 @@ _FX void ScanAllFilesAndFolders(MENU_DIR *menu, WCHAR *path)
 
             DrivePath[0] = DriveLetter;
             DrivePath[1] = L'\0';
-            DriveTitle = SbieDll_FormatMessage1(MSG_3676, DrivePath);
+            DriveTitle = SbDll_FormatMessage1(MSG_3676, DrivePath);
             DrivePath[1] = L':';
             DrivePath[2] = L'\\';
             DrivePath[3] = L'\0';
@@ -918,7 +918,7 @@ _FX WCHAR *DoStartMenu()
     wc.lpszClassName = SANDBOXIE L"StartMenuMessageOnlyWindowClass";
     atom = RegisterClass(&wc);
 
-    title = SbieDll_FormatMessage0(MSG_3465);
+    title = SbDll_FormatMessage0(MSG_3465);
     titleptr = wcschr(title, L'&');
     if (titleptr)
         memmove(titleptr, titleptr + 1, wcslen(titleptr));
@@ -1058,9 +1058,9 @@ _FX BOOL WriteStartMenuResult(const WCHAR *MapName, const WCHAR *Command)
             if (hFile != INVALID_HANDLE_VALUE) {
 
                 BOOLEAN IsBoxedPath;
-                if (0 == SbieDll_GetHandlePath(
+                if (0 == SbDll_GetHandlePath(
                                     hFile, buf + 1024, &IsBoxedPath)) {
-                    if (SbieDll_TranslateNtToDosPath(buf + 1024)) {
+                    if (SbDll_TranslateNtToDosPath(buf + 1024)) {
 
                         *(ULONG *)(buf + 1020) = IconIndex;
                         ok = TRUE;

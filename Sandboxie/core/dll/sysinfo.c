@@ -126,7 +126,7 @@ _FX BOOLEAN SysInfo_Init(void)
 
     if (! Dll_SkipHook(L"ntqsi")) {
 
-        SBIEDLL_HOOK(SysInfo_,NtQuerySystemInformation);
+        SBDLL_HOOK(SysInfo_,NtQuerySystemInformation);
     }
 
     extern BOOLEAN Gui_OpenAllWinClasses;
@@ -135,18 +135,18 @@ _FX BOOLEAN SysInfo_Init(void)
     if (Dll_OsBuild >= 8400)
         SysInfo_CanUseJobs = SbieApi_QueryConfBool(NULL, L"AllowBoxedJobs", FALSE);
 
-    SBIEDLL_HOOK(SysInfo_, NtCreateJobObject);
-    SBIEDLL_HOOK(SysInfo_, NtOpenJobObject);
+    SBDLL_HOOK(SysInfo_, NtCreateJobObject);
+    SBDLL_HOOK(SysInfo_, NtOpenJobObject);
     if (SysInfo_UseSbieJob) {
         if (!SysInfo_CanUseJobs) {
-            SBIEDLL_HOOK(SysInfo_, NtAssignProcessToJobObject);
+            SBDLL_HOOK(SysInfo_, NtAssignProcessToJobObject);
         }
-        SBIEDLL_HOOK(SysInfo_, NtSetInformationJobObject);
+        SBDLL_HOOK(SysInfo_, NtSetInformationJobObject);
     }
 
 
-    SBIEDLL_HOOK(SysInfo_,SetLocaleInfoW);
-    SBIEDLL_HOOK(SysInfo_,SetLocaleInfoA);
+    SBDLL_HOOK(SysInfo_,SetLocaleInfoW);
+    SBDLL_HOOK(SysInfo_,SetLocaleInfoA);
 
     //
     // we don't want to hook NtTraceEvent in kernel mode
@@ -156,7 +156,7 @@ _FX BOOLEAN SysInfo_Init(void)
     NtTraceEvent = GetProcAddress(Dll_Ntdll, "NtTraceEvent");
     if (NtTraceEvent) {
 
-        SBIEDLL_HOOK(SysInfo_, NtTraceEvent);
+        SBDLL_HOOK(SysInfo_, NtTraceEvent);
     }
 
     if (Dll_OsBuild >= 8400) {
@@ -170,7 +170,7 @@ _FX BOOLEAN SysInfo_Init(void)
         if (NtDeleteWnfStateData) {
 
             P_NtDeleteWnfStateData __sys_NtDeleteWnfStateData = NULL;
-            SBIEDLL_HOOK(SysInfo_,NtDeleteWnfStateData);
+            SBDLL_HOOK(SysInfo_,NtDeleteWnfStateData);
         }
     }
 

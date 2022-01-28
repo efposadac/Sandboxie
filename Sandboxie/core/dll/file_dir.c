@@ -1356,7 +1356,7 @@ _FX NTSTATUS File_MergeDummy(
     WCHAR test_buf[MAX_PATH];
 
     LIST* lists[4];
-    SbieDll_GetReadablePaths(L'f', lists);
+    SbDll_GetReadablePaths(L'f', lists);
 
     ULONG TruePathLen = wcslen(TruePath);
     if (TruePathLen > 1 && TruePath[TruePathLen - 1] == L'\\')
@@ -1407,7 +1407,7 @@ _FX NTSTATUS File_MergeDummy(
         }
     }
 
-    SbieDll_ReleaseFilePathLock();
+    SbDll_ReleaseFilePathLock();
 
     if(mask)
         Pattern_Free(mask);
@@ -2297,7 +2297,7 @@ _FX NTSTATUS File_NtCloseImpl(HANDLE FileHandle)
                 // than a file handle
                 //
 
-                if (SbieDll_TranslateNtToDosPath(DeletePath)) {
+                if (SbDll_TranslateNtToDosPath(DeletePath)) {
                     len = wcslen(DeletePath);
                     wmemmove(DeletePath + 4, DeletePath, len + 1);
                     wmemcpy(DeletePath, File_BQQB, 4);
@@ -3439,7 +3439,7 @@ _FX NTSTATUS File_NtQueryVolumeInformationFile(
 
     // NtQueryObject on a named pipe handle can hang when it is in pending read/write. See P.71 NT/2000 Native API Reference
     // If the caller only asks about FileFsDeviceInformation and it is a named pipe, hook can return right away without the 
-    // need to wait on NtQueryObject called by SbieDll_GetHandlePath
+    // need to wait on NtQueryObject called by SbDll_GetHandlePath
     if (FsInformationClass == FileFsDeviceInformation && Length >= sizeof(FILE_FS_DEVICE_INFORMATION))
     {
         FILE_FS_DEVICE_INFORMATION devInfo = { 0 };
@@ -3466,11 +3466,11 @@ _FX NTSTATUS File_NtQueryVolumeInformationFile(
 
     handle = FileHandle;
 
-    status = SbieDll_GetHandlePath(FileHandle, path, &IsBoxedPath);
+    status = SbDll_GetHandlePath(FileHandle, path, &IsBoxedPath);
     if (IsBoxedPath && (
             NT_SUCCESS(status) || (status == STATUS_BAD_INITIAL_PC))) {
 
-        status = SbieDll_GetHandlePath(FileHandle, path, NULL);
+        status = SbDll_GetHandlePath(FileHandle, path, NULL);
         if (NT_SUCCESS(status)) {
 
             const FILE_DRIVE *drive =
@@ -3672,7 +3672,7 @@ _FX NTSTATUS File_SetReparsePoint(
         req->dst_path_ofs = dst_ofs;
         req->dst_path_len = wcslen(dst_path) * sizeof(WCHAR);
 
-        rpl = SbieDll_CallServer(&req->h);
+        rpl = SbDll_CallServer(&req->h);
 
         Dll_Free(req);
 
@@ -3784,7 +3784,7 @@ _FX void File_DoAutoRecover_2(BOOLEAN force, ULONG ticks)
         MSG_HEADER req;
         req.length = sizeof(req);
         req.msgid = MSGID_FILE_GET_ALL_HANDLES;
-        rpl = (FILE_GET_ALL_HANDLES_RPL *)SbieDll_CallServer(&req);
+        rpl = (FILE_GET_ALL_HANDLES_RPL *)SbDll_CallServer(&req);
 
         if (rpl) {
             info = NULL;

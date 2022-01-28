@@ -96,7 +96,7 @@ ULONG Dll_Windows = 0;
 CRITICAL_SECTION  VT_CriticalSection;
 #endif
 
-const UCHAR *SbieDll_Version = MY_VERSION_COMPAT;
+const UCHAR *SbDll_Version = MY_VERSION_COMPAT;
 
 BOOLEAN Dll_SbieTrace = FALSE;
 
@@ -187,7 +187,7 @@ _FX BOOL WINAPI DllMain(
 _FX void Dll_InitGeneric(HINSTANCE hInstance)
 {
     //
-    // Dll_InitGeneric initializes SbieDll in a general way, suitable
+    // Dll_InitGeneric initializes SbDll in a general way, suitable
     // for a program which may or may not be in the sandbox
     //
 
@@ -234,7 +234,7 @@ _FX void Dll_InitInjected(void)
 
 		Trace_Init();
 
-		OutputDebugString(L"SbieDll injected...");
+		OutputDebugString(L"SbDll injected...");
 	}
 
     //
@@ -252,7 +252,7 @@ _FX void Dll_InitInjected(void)
 
     Dll_ProcessId = (ULONG)(ULONG_PTR)GetCurrentProcessId();
 
-    status = SbieApi_QueryProcessEx2( // sets proc->sbiedll_loaded = TRUE; in the driver
+    status = SbieApi_QueryProcessEx2( // sets proc->sbdll_loaded = TRUE; in the driver
         (HANDLE)(ULONG_PTR)Dll_ProcessId, 255,
         Dll_BoxNameSpace, Dll_ImageNameSpace, Dll_SidStringSpace,
         &Dll_SessionId, NULL);
@@ -529,7 +529,7 @@ _FX void Dll_InitExeEntry(void)
     // start SandboxieRpcSs
     //
 
-    SbieDll_StartCOM(TRUE);
+    SbDll_StartCOM(TRUE);
 
     //
     // setup own top level exception handler
@@ -789,7 +789,7 @@ _FX ULONG_PTR Dll_Ordinal1(
     if (!bHostInject)
     {
         //
-        // SbieDll was already partially initialized in Dll_InitGeneric,
+        // SbDll was already partially initialized in Dll_InitGeneric,
         // complete the initialization for a sandboxed process
         //
         HANDLE heventProcessStart = 0;
@@ -820,7 +820,7 @@ _FX ULONG_PTR Dll_Ordinal1(
 
         else if (Dll_ProcessFlags & SBIE_FLAG_FORCED_PROCESS) {
             if (SbieApi_QueryConfBool(NULL, L"ForceRestartAll", FALSE)
-             || SbieDll_CheckStringInList(Dll_ImageName, NULL, L"ForceRestart"))
+             || SbDll_CheckStringInList(Dll_ImageName, NULL, L"ForceRestart"))
                 MustRestartProcess = 2;
         }
 

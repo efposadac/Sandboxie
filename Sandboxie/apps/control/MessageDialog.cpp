@@ -986,7 +986,7 @@ void CMessageDialog::DoAutoPlay(const CBox &box, const WCHAR drive)
 
 void CMessageDialog::ReadStartError()
 {
-    const WCHAR *StartError = SbieDll_GetStartError();
+    const WCHAR *StartError = SbDll_GetStartError();
     if (! StartError)
         return;
 

@@ -90,7 +90,7 @@ BOOL IsSvcInjected(DWORD dwPid)
                 WCHAR   wszModName[MAX_PATH];
                 if (GetModuleBaseNameW(hProcess, hMods[n], wszModName, sizeof(wszModName) / sizeof(WCHAR)))
                 {
-                    if (_wcsicmp(wszModName, SBIEDLL L".dll") == 0)
+                    if (_wcsicmp(wszModName, SBDLL L".dll") == 0)
                     {
                         res = TRUE;
                         break;

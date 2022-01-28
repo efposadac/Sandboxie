@@ -24,7 +24,7 @@
 
 #include "EpMapperServer.h"
 #include "EpMapperWire.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 #include "core/drv/api_defs.h"
 
@@ -117,7 +117,7 @@ MSG_HEADER *EpMapperServer::EpmapperGetPortNameHandler(MSG_HEADER *msg)
     else
     {
         WCHAR buf[MAX_PATH];
-        if (SbieDll_GetStringForStringList(req->wszPortId, boxname, L"RpcPortBindingIfId", buf, sizeof(buf)))
+        if (SbDll_GetStringForStringList(req->wszPortId, boxname, L"RpcPortBindingIfId", buf, sizeof(buf)))
         {
             unsigned short uuid[37];
             wmemcpy((WCHAR*)uuid, buf + 1, 36); uuid[36] = 0;
@@ -127,7 +127,7 @@ MSG_HEADER *EpMapperServer::EpmapperGetPortNameHandler(MSG_HEADER *msg)
             if(UuidFromString(uuid, &ifidRequest.Uuid) != RPC_S_OK)
                 return SHORT_REPLY(E_INVALIDARG);
         }
-        else if (SbieDll_GetStringForStringList(req->wszPortId, boxname, L"RpcPortBindingSvc", buf, sizeof(buf)))
+        else if (SbDll_GetStringForStringList(req->wszPortId, boxname, L"RpcPortBindingSvc", buf, sizeof(buf)))
         {
             wcscpy_s(pwszServiceName, 81, buf);
         }

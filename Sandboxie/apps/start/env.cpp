@@ -22,7 +22,7 @@
 #include "stdafx.h"
 
 #include "common/defines.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/win32_ntddk.h"
 
 

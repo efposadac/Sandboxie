@@ -869,7 +869,7 @@ void CMyFrame::OnCmdConfEdit()
     shex.nShow = SW_SHOWNORMAL;
 
     shex.lpVerb = NULL;
-    if (SbieDll_GetTokenElevationType() != TokenElevationTypeNone)
+    if (SbDll_GetTokenElevationType() != TokenElevationTypeNone)
         shex.lpVerb = L"runas";
 
     if (! ShellExecuteEx(&shex))
@@ -1451,7 +1451,7 @@ void CMyFrame::OnCmdTerminateProcess()
 
     if (rv == IDYES) {
 
-        SbieDll_KillOne(pid);
+        SbDll_KillOne(pid);
         OnSetFocus(NULL);
     }
 }
@@ -1498,7 +1498,7 @@ BOOL CMyFrame::TerminateProcesses(CBox &box, BOOL warn)
         }
 
         if (rv == IDYES)
-            SbieDll_KillAll(-1, box.GetName());
+            SbDll_KillAll(-1, box.GetName());
         else
             abort = TRUE;
     }
@@ -2365,7 +2365,7 @@ void CMyFrame::OnDropFiles(HDROP hDrop)
 
 BOOL CMyFrame::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
 {
-    SbieDll_DeviceChange(nEventType, dwData);
+    SbDll_DeviceChange(nEventType, dwData);
     return TRUE;
 }
 

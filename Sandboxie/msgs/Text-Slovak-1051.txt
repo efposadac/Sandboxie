@@ -133,7 +133,7 @@ SBIE1213 Nemožno vytvoriť objekt adresára '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Nemožno vložiť SbieDll %2
+SBIE1214 Nemožno vložiť SbDll %2
 .
 
 1215;pop;err;01

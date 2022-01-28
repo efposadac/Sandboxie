@@ -226,16 +226,16 @@ _FX BOOLEAN AdvApi_Init(HMODULE module)
         return FALSE;
 
     LookupAccountNameW = __sys_LookupAccountNameW;
-    SBIEDLL_HOOK(AdvApi_,LookupAccountNameW);
+    SBDLL_HOOK(AdvApi_,LookupAccountNameW);
 
     RegConnectRegistryA = __sys_RegConnectRegistryA;
-    SBIEDLL_HOOK(AdvApi_,RegConnectRegistryA);
+    SBDLL_HOOK(AdvApi_,RegConnectRegistryA);
 
     RegConnectRegistryW = __sys_RegConnectRegistryW;
-    SBIEDLL_HOOK(AdvApi_,RegConnectRegistryW);
+    SBDLL_HOOK(AdvApi_,RegConnectRegistryW);
 
     CreateRestrictedToken = __sys_CreateRestrictedToken;
-    SBIEDLL_HOOK(AdvApi_, CreateRestrictedToken);
+    SBDLL_HOOK(AdvApi_, CreateRestrictedToken);
 
     // only hook SetSecurityInfo if this is Chrome.  Outlook 2013 uses delayed loading and will cause infinite callbacks
     // Starting with Win 10, we only want to hook ntmarta!SetSecurityInfo. Do NOT hook advapi!SetSecurityInfo. Delay loading for advapi will cause infinite recursion.
@@ -243,13 +243,13 @@ _FX BOOLEAN AdvApi_Init(HMODULE module)
     if (((Dll_ImageType == DLL_IMAGE_GOOGLE_CHROME) || (Dll_ImageType == DLL_IMAGE_ACROBAT_READER)) && (Dll_Windows < 10)) {
         SetSecurityInfo = __sys_SetSecurityInfo;
         GetSecurityInfo = __sys_GetSecurityInfo;
-        SBIEDLL_HOOK(AdvApi_, SetSecurityInfo);
-        SBIEDLL_HOOK(AdvApi_, GetSecurityInfo);
+        SBDLL_HOOK(AdvApi_, SetSecurityInfo);
+        SBDLL_HOOK(AdvApi_, GetSecurityInfo);
     }
 
     if (__sys_GetEffectiveRightsFromAclW) {
         void *GetEffectiveRightsFromAclW = __sys_GetEffectiveRightsFromAclW;
-        SBIEDLL_HOOK(AdvApi_,GetEffectiveRightsFromAclW);
+        SBDLL_HOOK(AdvApi_,GetEffectiveRightsFromAclW);
     }
 
     //
@@ -279,7 +279,7 @@ _FX BOOLEAN AdvApi_Init(HMODULE module)
                 L"AccessCheckByType", "AccessCheckByType");
             if (AccessCheckByType) {
                 void *__sys_AccessCheckByType;
-                SBIEDLL_HOOK(AdvApi_, AccessCheckByType);
+                SBDLL_HOOK(AdvApi_, AccessCheckByType);
             }
         }
     }
@@ -627,7 +627,7 @@ _FX BOOLEAN AdvApi_EnableDisableSRP(BOOLEAN Enable)
     // rules.  it passes the SAFER_TOKEN_NULL_IF_EQUAL flag and if
     // SaferComputeTokenFromLevel still returns a token, the new process
     // is aborted.  we hook SaferComputeTokenFromLevel so it can't interfere
-    // with SbieDll_RunFromHome
+    // with SbDll_RunFromHome
     //
 
     if (! AdvApi_Module)
@@ -637,7 +637,7 @@ _FX BOOLEAN AdvApi_EnableDisableSRP(BOOLEAN Enable)
             (P_SaferComputeTokenFromLevel)GetProcAddress(
                 AdvApi_Module, "SaferComputeTokenFromLevel");
         if (SaferComputeTokenFromLevel) {
-            SBIEDLL_HOOK(AdvApi_,SaferComputeTokenFromLevel);
+            SBDLL_HOOK(AdvApi_,SaferComputeTokenFromLevel);
         }
     }
     if (! __sys_SaferComputeTokenFromLevel)
@@ -686,9 +686,9 @@ DWORD Ntmarta_GetSecurityInfo(
     PSECURITY_DESCRIPTOR *ppSecurityDescriptor);
 
 
-#define SBIEDLL_HOOK2(pfx,proc)                  \
+#define SBDLL_HOOK2(pfx,proc)                  \
     *(ULONG_PTR *)&__sys_##pfx##proc = (ULONG_PTR)   \
-    SbieDll_Hook(#proc, proc, pfx##proc);   \
+    SbDll_Hook(#proc, proc, pfx##proc);   \
     if (! __sys_##pfx##proc) return FALSE;
 
 _FX BOOLEAN Ntmarta_Init(HMODULE module)
@@ -714,7 +714,7 @@ _FX BOOLEAN Ntmarta_Init(HMODULE module)
 
                 //Due to the risk of the stack overflow issue limited this hook for
                 //Acrobat Reader in 32 bit only
-                SBIEDLL_HOOK2(Ntmarta_, GetSecurityInfo);
+                SBDLL_HOOK2(Ntmarta_, GetSecurityInfo);
             }
 #endif
             __sys_GetSecurityInfo = GetSecurityInfo;
@@ -730,7 +730,7 @@ _FX BOOLEAN Ntmarta_Init(HMODULE module)
         if (SetSecurityInfo)
         {
             // this hook conflicts with the AdvApi32 hook and causes infinite callbacks if delay loading.
-            //SBIEDLL_HOOK2(Ntmarta_,SetSecurityInfo);
+            //SBDLL_HOOK2(Ntmarta_,SetSecurityInfo);
             __sys_SetSecurityInfo = SetSecurityInfo;
         }
     }

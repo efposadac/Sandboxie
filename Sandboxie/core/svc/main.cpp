@@ -38,7 +38,7 @@
 #include "queueserver.h"
 #include "EpMapperServer.h"
 #include "misc.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/my_version.h"
 #include "common/defines.h"
 

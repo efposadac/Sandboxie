@@ -410,7 +410,7 @@ _FX int __stdcall WinMain(
         }
     }
 
-    if (!SbieDll_IsOpenCOM()) {
+    if (!SbDll_IsOpenCOM()) {
 
         Check_Windows_7();
 
@@ -468,7 +468,7 @@ _FX int __stdcall WinMain(
         MSG_HEADER req;
         req.length = sizeof(req);
         req.msgid = MSGID_SBIE_INI_RUN_SBIE_CTRL;
-        SbieDll_CallServer(&req);
+        SbDll_CallServer(&req);
     }
 
     return DoLingerLeader();

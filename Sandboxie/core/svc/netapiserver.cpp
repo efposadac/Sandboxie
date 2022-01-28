@@ -24,7 +24,7 @@
 #include "netapiserver.h"
 #include "netapiwire.h"
 #include "msgids.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/my_version.h"
 #include "common/defines.h"
 #include <lm.h>
@@ -245,7 +245,7 @@ void NetApiServer::LaunchSlave(ULONG len, const WCHAR *drive)
     STARTUPINFO si;
     WCHAR cmdline[128];
     wsprintf(cmdline, L"%s_NetProxy:Use=%c", SANDBOXIE, drive[0]);
-    if (! SbieDll_RunFromHome(SBIESVC_EXE, cmdline, &si, NULL))
+    if (! SbDll_RunFromHome(SBIESVC_EXE, cmdline, &si, NULL))
         return;
     WCHAR *ExePath = (WCHAR *)si.lpReserved;
 

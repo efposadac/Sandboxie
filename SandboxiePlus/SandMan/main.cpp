@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
 	//InitConsole(false);
 
-	bool IsBoxed = GetModuleHandle(L"SbieDll.dll") != NULL;
+	bool IsBoxed = GetModuleHandle(L"SbDll.dll") != NULL;
 
 	SB_STATUS Status = CSbieUtils::DoAssist();
 	if (Status.GetStatus()) {

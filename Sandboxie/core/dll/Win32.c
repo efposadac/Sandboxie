@@ -33,11 +33,11 @@ extern SBIELOW_DATA* SbieApi_data;
 
 
 //---------------------------------------------------------------------------
-// SbieDll_HookWin32SysCalls
+// SbDll_HookWin32SysCalls
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_HookWin32SysCalls(HMODULE win32u_base)
+_FX BOOLEAN SbDll_HookWin32SysCalls(HMODULE win32u_base)
 {
     UCHAR *SystemServiceAsm, *ZwXxxPtr;
     ULONG *SyscallPtr;
@@ -195,11 +195,11 @@ ULONG Win32_WoW64_GetSysCallNumber(DWORD64 pos, UCHAR* dll_data)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_HasSysCallHook
+// SbDll_HasSysCallHook
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_HasSysCallHook(UCHAR* syscall_data, ULONG syscall_index)
+_FX BOOLEAN SbDll_HasSysCallHook(UCHAR* syscall_data, ULONG syscall_index)
 {
     ULONG *SyscallPtr;
     ULONG SyscallNum;
@@ -223,7 +223,7 @@ _FX BOOLEAN SbieDll_HasSysCallHook(UCHAR* syscall_data, ULONG syscall_index)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_HookWin32WoW64
+// SbDll_HookWin32WoW64
 //---------------------------------------------------------------------------
 
 //#include "../../common/wow64ext/wow64ext.h"
@@ -233,7 +233,7 @@ BOOL __cdecl VirtualProtectEx64(HANDLE hProcess, DWORD64 lpAddress, SIZE_T dwSiz
 BOOL __cdecl ReadProcessMemory64(HANDLE hProcess, DWORD64 lpBaseAddress, LPVOID lpBuffer, SIZE_T nSize, SIZE_T *lpNumberOfBytesRead);
 BOOL __cdecl WriteProcessMemory64(HANDLE hProcess, DWORD64 lpBaseAddress, LPVOID lpBuffer, SIZE_T nSize, SIZE_T *lpNumberOfBytesWritten);
 
-_FX BOOLEAN SbieDll_HookWin32WoW64()
+_FX BOOLEAN SbDll_HookWin32WoW64()
 {
     BOOLEAN ok = FALSE;
     UCHAR* dll_data = NULL;
@@ -304,7 +304,7 @@ _FX BOOLEAN SbieDll_HookWin32WoW64()
         SyscallNum = Win32_WoW64_GetSysCallNumber(pos, dll_data);
         if (SyscallNum) 
         {
-            if(SbieDll_HasSysCallHook(syscall_data, SyscallNum))
+            if(SbDll_HasSysCallHook(syscall_data, SyscallNum))
             {
                 RegionBase = BaseAddress + pos;
                 RegionSize = 14;
@@ -407,14 +407,14 @@ _FX BOOLEAN Win32_Init(HMODULE hmodule)
     WCHAR* cmdline = GetCommandLine();
 
     if ((wcsstr(cmdline, L"--type=gpu-process") != NULL && wcsstr(cmdline, L"--gpu-preferences=") != NULL)
-     || SbieDll_GetSettingsForName_bool(NULL, Dll_ImageName, L"AlwaysUseWin32kHooks", FALSE)) {
+     || SbDll_GetSettingsForName_bool(NULL, Dll_ImageName, L"AlwaysUseWin32kHooks", FALSE)) {
 
 #ifndef _WIN64
         if (Dll_IsWow64) 
-            SbieDll_HookWin32WoW64(); // WoW64 hooks
+            SbDll_HookWin32WoW64(); // WoW64 hooks
         else 
 #endif
-            SbieDll_HookWin32SysCalls(hmodule); // Native x86/x64 hooks
+            SbDll_HookWin32SysCalls(hmodule); // Native x86/x64 hooks
     }
 
 	return TRUE;

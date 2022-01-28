@@ -353,7 +353,7 @@ void CShellDialog::SyncRunLogon()
     if (ini) {
 
         STARTUPINFO si;
-        if (SbieDll_RunFromHome(SBIECTRL_EXE, NULL, &si, NULL)) {
+        if (SbDll_RunFromHome(SBIECTRL_EXE, NULL, &si, NULL)) {
             WCHAR *path2 = (WCHAR *)si.lpReserved;
             wcscpy(path, path2);
             HeapFree(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS, path2);
@@ -533,7 +533,7 @@ void CShellDialog::CreateAssoc(WCHAR *path, const WCHAR *classname)
 
     rc = RegSetValueEx(hkey, NULL, 0, REG_SZ, (BYTE *)path, path_len);
 
-    if (rc == 0 && SbieDll_RunFromHome(START_EXE, NULL, &si, NULL)) {
+    if (rc == 0 && SbDll_RunFromHome(START_EXE, NULL, &si, NULL)) {
 
         WCHAR *path2 = (WCHAR *)si.lpReserved;
 
@@ -649,7 +649,7 @@ void CShellDialog::CreateAssoc(WCHAR *path, const WCHAR *classname)
     // write Start.exe command line into command key
     //
 
-    if (SbieDll_RunFromHome(START_EXE, path, &si, NULL)) {
+    if (SbDll_RunFromHome(START_EXE, path, &si, NULL)) {
 
         WCHAR *path2 = (WCHAR *)si.lpReserved;
 
@@ -756,7 +756,7 @@ void CShellDialog::SyncBrowserIcon(
     if (ini) {
 
         STARTUPINFO si;
-        if (SbieDll_RunFromHome(L"QuickLaunch.lnk", NULL, &si, NULL)) {
+        if (SbDll_RunFromHome(L"QuickLaunch.lnk", NULL, &si, NULL)) {
             WCHAR *path2 = (WCHAR *)si.lpReserved;
             CopyFile(path2, path, FALSE);
             HeapFree(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS, path2);
@@ -1119,7 +1119,7 @@ BOOL CShellDialog::CreateShortcut(
     if (! StartExe) {
 
         STARTUPINFO si;
-        if (SbieDll_RunFromHome(START_EXE, L"", &si, NULL)) {
+        if (SbDll_RunFromHome(START_EXE, L"", &si, NULL)) {
             StartExe = ((WCHAR *)si.lpReserved) + 1;
             *wcschr(StartExe, L'\"') = L'\0';
         }

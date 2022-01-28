@@ -369,29 +369,29 @@ _FX BOOLEAN Secure_Init(void)
     // intercept NTDLL entry points
     //
     if ((Dll_ProcessFlags & SBIE_FLAG_APP_COMPARTMENT) == 0 && !SbieApi_QueryConfBool(NULL, L"NoSysCallHooks", FALSE)) {
-        SBIEDLL_HOOK(Secure_, NtOpenProcess);
-        SBIEDLL_HOOK(Secure_, NtOpenThread);
-        SBIEDLL_HOOK(Secure_, NtDuplicateObject);
+        SBDLL_HOOK(Secure_, NtOpenProcess);
+        SBDLL_HOOK(Secure_, NtOpenThread);
+        SBDLL_HOOK(Secure_, NtDuplicateObject);
     }
-    SBIEDLL_HOOK(Secure_,NtQuerySecurityObject);
-    SBIEDLL_HOOK(Secure_,NtSetSecurityObject);
-    SBIEDLL_HOOK(Secure_,NtSetInformationToken);
-    SBIEDLL_HOOK(Secure_,NtAdjustPrivilegesToken);
+    SBDLL_HOOK(Secure_,NtQuerySecurityObject);
+    SBDLL_HOOK(Secure_,NtSetSecurityObject);
+    SBDLL_HOOK(Secure_,NtSetInformationToken);
+    SBDLL_HOOK(Secure_,NtAdjustPrivilegesToken);
     // OriginalToken BEGIN
     if ((Dll_ProcessFlags & SBIE_FLAG_APP_COMPARTMENT) == 0 && !SbieApi_QueryConfBool(NULL, L"OriginalToken", FALSE))
     // OriginalToken END
     if (Dll_OsBuild >= 21286) {    // Windows 11
-        SBIEDLL_HOOK(Secure_, NtDuplicateToken);
-        SBIEDLL_HOOK(Secure_, NtFilterToken);
+        SBDLL_HOOK(Secure_, NtDuplicateToken);
+        SBDLL_HOOK(Secure_, NtFilterToken);
         //NtFilterTokenEx is only present in windows 8 later windoses return STATUS_NOT_SUPPORTED
     }
     //if (Dll_Windows < 10) {
-    //    SBIEDLL_HOOK(Secure_, NtQueryInformationToken);
+    //    SBDLL_HOOK(Secure_, NtQueryInformationToken);
     //}
 
     void* RtlEqualSid = (P_RtlEqualSid)GetProcAddress(Dll_Ntdll, "RtlEqualSid");
 
-    SBIEDLL_HOOK(Ldr_, RtlEqualSid);
+    SBDLL_HOOK(Ldr_, RtlEqualSid);
 
     //
     // install hooks to fake administrator privileges
@@ -411,16 +411,16 @@ _FX BOOLEAN Secure_Init(void)
         void* NtAccessCheckByTypeResultList = GetProcAddress(Dll_Ntdll, "NtAccessCheckByTypeResultList");
         
 
-        SBIEDLL_HOOK(Ldr_, NtQuerySecurityAttributesToken);
-        SBIEDLL_HOOK(Ldr_, NtAccessCheckByType);
-        SBIEDLL_HOOK(Ldr_, NtAccessCheck);
-        SBIEDLL_HOOK(Ldr_, NtAccessCheckByTypeResultList);
-        SBIEDLL_HOOK(Ldr_, NtQueryInformationToken);
+        SBDLL_HOOK(Ldr_, NtQuerySecurityAttributesToken);
+        SBDLL_HOOK(Ldr_, NtAccessCheckByType);
+        SBDLL_HOOK(Ldr_, NtAccessCheck);
+        SBDLL_HOOK(Ldr_, NtAccessCheckByTypeResultList);
+        SBDLL_HOOK(Ldr_, NtQueryInformationToken);
     }
     
     if (Dll_OsBuild >= 9600) { // Windows 8.1 and later
         if (DLL_IMAGE_GOOGLE_CHROME == Dll_ImageType) {
-            SBIEDLL_HOOK(Ldr_, NtOpenThreadToken);
+            SBDLL_HOOK(Ldr_, NtOpenThreadToken);
         }
     }
 
@@ -451,7 +451,7 @@ _FX BOOLEAN Secure_Init(void)
 
         if (ShouldFakeRunningAsAdmin) {
 
-            SBIEDLL_HOOK(Secure_,RtlQueryElevationFlags);
+            SBDLL_HOOK(Secure_,RtlQueryElevationFlags);
 
             //
             // if this is an Internet Explorer tab process then we always
@@ -492,7 +492,7 @@ _FX BOOLEAN Secure_Init(void)
 
         if (Secure_FakeAdmin) {
 
-            SBIEDLL_HOOK(Secure_, RtlCheckTokenMembershipEx);
+            SBDLL_HOOK(Secure_, RtlCheckTokenMembershipEx);
         }
 
     }
@@ -1956,7 +1956,7 @@ ALIGNED ULONG_PTR __cdecl Secure_HandleElevation(
 
     Gui_AllowSetForegroundWindow();
 
-    rpl = SbieDll_CallServer(&req.h);
+    rpl = SbDll_CallServer(&req.h);
 
     if ((! rpl) || (rpl->status != 0))
         SetEvent((HANDLE)pkt->hEvent);
@@ -2001,22 +2001,22 @@ ALIGNED BOOLEAN Secure_RpcAsyncCompleteCall(
 
 
 //---------------------------------------------------------------------------
-// SbieDll_DisableElevationHook
+// SbDll_DisableElevationHook
 //---------------------------------------------------------------------------
 
 
-_FX void SbieDll_DisableElevationHook(void)
+_FX void SbDll_DisableElevationHook(void)
 {
     Secure_Elevation_HookDisabled = TRUE;
 }
 
 
 //---------------------------------------------------------------------------
-// SbieDll_GetPublicSecurityDescriptor
+// SbDll_GetPublicSecurityDescriptor
 //---------------------------------------------------------------------------
 
 
-/*_FX const void *SbieDll_GetPublicSecurityDescriptor(void)
+/*_FX const void *SbDll_GetPublicSecurityDescriptor(void)
 {
     if (! Secure_EveryoneSD)
         Secure_InitSecurityDescriptors();

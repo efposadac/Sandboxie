@@ -46,7 +46,7 @@
 //#define BREAK_PROC      "InstallDriverPackages"
 #define BREAK_PROC        "MSIunzipcore"
 
-#undef  HIDE_SBIEDLL
+#undef  HIDE_SBDLL
 
 
 //---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ static BOOL Debug_WaitForDebugEvent(
 static ULONG_PTR Debug_GetProcAddress(HMODULE hModule, const UCHAR *ProcName);
 #endif
 
-#ifdef HIDE_SBIEDLL
+#ifdef HIDE_SBDLL
 static NTSTATUS Debug_LdrGetDllHandle(
     WCHAR *DllPath, ULONG *DllCharacteristics,
     UNICODE_STRING *DllName, ULONG_PTR *DllHandle);
@@ -101,7 +101,7 @@ typedef ULONG_PTR (*P_GetProcAddress)(HMODULE hModule, const UCHAR *ProcName);
 static P_GetProcAddress __sys_GetProcAddress            = NULL;
 #endif
 
-#ifdef HIDE_SBIEDLL
+#ifdef HIDE_SBDLL
 typedef NTSTATUS (*P_LdrGetDllHandle)(
     WCHAR *DllPath, ULONG *DllCharacteristics,
     UNICODE_STRING *DllName, ULONG_PTR *DllHandle);
@@ -132,7 +132,7 @@ _FX int Debug_Init(void)
     RtlSetLastWin32Error = (P_RtlSetLastWin32Error)
         GetProcAddress(Dll_Ntdll, "RtlSetLastWin32Error");
 
-    //SBIEDLL_HOOK(Debug_,RtlSetLastWin32Error);
+    //SBDLL_HOOK(Debug_,RtlSetLastWin32Error);
 
     //
     // intercept KERNEL32 entry points
@@ -145,8 +145,8 @@ _FX int Debug_Init(void)
 
     /*if (_wcsicmp(Dll_ImageName, L"msiexec.exe") == 0) {
 
-        SBIEDLL_HOOK(Debug_,OutputDebugStringW);
-        SBIEDLL_HOOK(Debug_,OutputDebugStringA);
+        SBDLL_HOOK(Debug_,OutputDebugStringW);
+        SBDLL_HOOK(Debug_,OutputDebugStringA);
     }*/
 
     DebugActiveProcess = (P_DebugActiveProcess)
@@ -155,15 +155,15 @@ _FX int Debug_Init(void)
     WaitForDebugEvent = (P_WaitForDebugEvent)
         GetProcAddress(Dll_Kernel32, "WaitForDebugEvent");
 
-    //SBIEDLL_HOOK(Debug_,DebugActiveProcess);
-    //SBIEDLL_HOOK(Debug_,WaitForDebugEvent);
+    //SBDLL_HOOK(Debug_,DebugActiveProcess);
+    //SBDLL_HOOK(Debug_,WaitForDebugEvent);
 
 #ifdef BREAK_PROC
-    SBIEDLL_HOOK(Debug_,GetProcAddress);
+    SBDLL_HOOK(Debug_,GetProcAddress);
 #endif
 
-#ifdef HIDE_SBIEDLL
-    SBIEDLL_HOOK(Debug_,LdrGetDllHandle);
+#ifdef HIDE_SBDLL
+    SBDLL_HOOK(Debug_,LdrGetDllHandle);
 #endif
 
     //
@@ -373,7 +373,7 @@ ALIGNED ULONG_PTR Debug_GetProcAddress(HMODULE hModule, const UCHAR *ProcName)
 //---------------------------------------------------------------------------
 
 
-#ifdef HIDE_SBIEDLL
+#ifdef HIDE_SBDLL
 _FX NTSTATUS Debug_LdrGetDllHandle(
     WCHAR *DllPath, ULONG *DllCharacteristics,
     UNICODE_STRING *DllName, ULONG_PTR *DllHandle)

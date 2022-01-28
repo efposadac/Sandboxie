@@ -23,7 +23,7 @@
 #include "stdafx.h"
 
 #include "common/win32_ntddk.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/svc/SbieIniWire.h"
 #include "common/my_version.h"
 #include "common/defines.h"
@@ -60,11 +60,11 @@ extern void DeleteSandbox(
 
 
 extern "C" {
-    SBIEDLL_EXPORT NTSTATUS Key_GetName(
+    SBDLL_EXPORT NTSTATUS Key_GetName(
         HANDLE RootDirectory, UNICODE_STRING* ObjectName,
         WCHAR** OutTruePath, WCHAR** OutCopyPath, BOOLEAN* OutIsBoxedPath);
 
-    SBIEDLL_EXPORT NTSTATUS File_GetName(
+    SBDLL_EXPORT NTSTATUS File_GetName(
         HANDLE RootDirectory, UNICODE_STRING* ObjectName,
         WCHAR** OutTruePath, WCHAR** OutCopyPath, ULONG* OutFlags);
 }
@@ -147,7 +147,7 @@ void Show_Error(WCHAR *Descr)
                   (LPTSTR)&ErrorText, 0, NULL);
 
     if (ErrorCode) {
-        WCHAR *SysErrText = SbieDll_FormatMessage0(MSG_3206);
+        WCHAR *SysErrText = SbDll_FormatMessage0(MSG_3206);
         wsprintf(msg, L"%s\n\n%s\n\n%s (%d)",
             Descr, SysErrText, ErrorText, ErrorCode);
         LocalFree(SysErrText);
@@ -174,7 +174,7 @@ void MyCoInitialize(void)
         extern HRESULT CoInitialize(void *);
         HRESULT hr = CoInitialize(NULL);
         if (hr != S_OK && hr != S_FALSE) {
-            Show_Error(SbieDll_FormatMessage(MSG_3213, NULL));
+            Show_Error(SbDll_FormatMessage(MSG_3213, NULL));
             die(EXIT_FAILURE);
         }
         init = TRUE;
@@ -202,13 +202,13 @@ void *CallSbieSvcGetUser(void)
 
         if (retries) {
 
-            SbieDll_StartSbieSvc(FALSE);
+            SbDll_StartSbieSvc(FALSE);
             Sleep(500);
         }
 
         req.h.msgid = MSGID_SBIE_INI_GET_USER;
         req.h.length = sizeof(SBIE_INI_GET_USER_REQ);
-        rpl = SbieDll_CallServer(&req.h);
+        rpl = SbDll_CallServer(&req.h);
 
         if (rpl)
             break;
@@ -232,7 +232,7 @@ BOOL Validate_Box_Name(void)
     if (! CallSbieSvcGetUser()) {
 
         WCHAR *errmsg =
-            SbieDll_FormatMessage1(MSG_2331, SbieDll_GetStartError());
+            SbDll_FormatMessage1(MSG_2331, SbDll_GetStartError());
         SetLastError(0);
         Show_Error(errmsg);
 
@@ -271,7 +271,7 @@ BOOL Validate_Box_Name(void)
                 ExitProcess(ERROR_UNKNOWN_PROPERTY);
 
             SetLastError(0);
-            Show_Error(SbieDll_FormatMessage1(MSG_3204, BoxName));
+            Show_Error(SbDll_FormatMessage1(MSG_3204, BoxName));
             return die(EXIT_FAILURE);
         }
     }
@@ -415,7 +415,7 @@ BOOL Parse_Command_Line(void)
         if (CallSbieSvcGetUser()) {
             req.length = sizeof(req);
             req.msgid  = MSGID_SBIE_INI_RUN_SBIE_CTRL;
-            rpl = SbieDll_CallServer(&req);
+            rpl = SbDll_CallServer(&req);
         }
         ExitProcess((rpl && rpl->status == 0) ? EXIT_SUCCESS : EXIT_FAILURE);
     }
@@ -474,7 +474,7 @@ BOOL Parse_Command_Line(void)
                     ExitProcess(ERROR_UNKNOWN_PROPERTY);
 
                 SetLastError(0);
-                Show_Error(SbieDll_FormatMessage1(MSG_3204, tmp));
+                Show_Error(SbDll_FormatMessage1(MSG_3204, tmp));
                 return FALSE;
             }
 
@@ -514,7 +514,7 @@ BOOL Parse_Command_Line(void)
                 env_name_len = 999;
             if (env_name_len > 128) {
                 SetLastError(0);
-                Show_Error(SbieDll_FormatMessage1(MSG_3202, save_cmd));
+                Show_Error(SbDll_FormatMessage1(MSG_3202, save_cmd));
                 return FALSE;
             }
 
@@ -526,7 +526,7 @@ BOOL Parse_Command_Line(void)
                 env_value_len = 999;
             if (env_value_len > 128) {
                 SetLastError(0);
-                Show_Error(SbieDll_FormatMessage1(MSG_3202, save_cmd));
+                Show_Error(SbDll_FormatMessage1(MSG_3202, save_cmd));
                 return FALSE;
             }
 
@@ -660,7 +660,7 @@ BOOL Parse_Command_Line(void)
 
         } else {
             SetLastError(0);
-            Show_Error(SbieDll_FormatMessage1(MSG_3202, cmd));
+            Show_Error(SbDll_FormatMessage1(MSG_3202, cmd));
             return FALSE;
         }
 
@@ -699,7 +699,7 @@ BOOL Parse_Command_Line(void)
 
         if (rc != S_OK) {
             SetLastError(0);
-            Show_Error(SbieDll_FormatMessage0(MSG_3209));
+            Show_Error(SbDll_FormatMessage0(MSG_3209));
             return FALSE;
         }
 
@@ -873,7 +873,7 @@ BOOL Parse_Command_Line(void)
 
     if (*cmd == L'\0') {
         SetLastError(0);
-        Show_Error(SbieDll_FormatMessage0(MSG_3203));
+        Show_Error(SbDll_FormatMessage0(MSG_3203));
         return FALSE;
     }
 
@@ -945,13 +945,13 @@ int Terminate_All_Processes(BOOL all_boxes)
             index = SbieApi_EnumBoxes(index, BoxName);
             if (index == -1)
                 break;
-            SbieDll_KillAll(-1, BoxName);
+            SbDll_KillAll(-1, BoxName);
         }
 
     } else {
 
         Validate_Box_Name();
-        SbieDll_KillAll(-1, BoxName);
+        SbDll_KillAll(-1, BoxName);
     }
 
     return EXIT_SUCCESS;
@@ -1234,7 +1234,7 @@ int Program_Start(void)
 
     if (ok && (! disable_force_on_this_program)) {
 
-        SbieDll_StartCOM(FALSE);
+        SbDll_StartCOM(FALSE);
     }
 
     //
@@ -1243,7 +1243,7 @@ int Program_Start(void)
 
     if (! ok) {
 
-        WCHAR *errmsg = SbieDll_FormatMessage1(MSG_3205, cmdline);
+        WCHAR *errmsg = SbDll_FormatMessage1(MSG_3205, cmdline);
         SetLastError(err);
         Show_Error(errmsg);
 
@@ -1284,7 +1284,7 @@ int Program_Start(void)
 
 void StartAutoRun(const WCHAR* Name, const WCHAR* Cmd)
 {
-    SbieDll_RunStartExe(Cmd, NULL);
+    SbDll_RunStartExe(Cmd, NULL);
 }
 
 
@@ -1315,8 +1315,8 @@ void StartAutoRunKey(LPCWSTR lpKey)
 	NTSTATUS Status;
 
     // Get the native unhooked fucntion in order to enumerate only the sandboxed entries
-    P_NtOpenKey __sys_NtOpenKey = (P_NtOpenKey)SbieDll_GetSysFunction(L"NtOpenKey");
-    P_NtEnumerateValueKey __sys_NtEnumerateValueKey = (P_NtEnumerateValueKey)SbieDll_GetSysFunction(L"NtEnumerateValueKey");
+    P_NtOpenKey __sys_NtOpenKey = (P_NtOpenKey)SbDll_GetSysFunction(L"NtOpenKey");
+    P_NtEnumerateValueKey __sys_NtEnumerateValueKey = (P_NtEnumerateValueKey)SbDll_GetSysFunction(L"NtEnumerateValueKey");
 
     RtlInitUnicodeString(&RegistryPath, OutCopyPath);
 	InitializeObjectAttributes(&ObjectAttributes, &RegistryPath, 0, NULL, NULL);
@@ -1414,8 +1414,8 @@ void StartAutoAutoFolder(LPCWSTR lpPath)
     PFILE_ID_BOTH_DIR_INFORMATION DirInformation;
 
     // Get the native unhooked fucntion in order to enumerate only the sandboxed entries
-    P_NtCreateFile __sys_NtCreateFile = (P_NtCreateFile)SbieDll_GetSysFunction(L"NtCreateFile");
-    P_NtQueryDirectoryFile __sys_NtQueryDirectoryFile = (P_NtQueryDirectoryFile)SbieDll_GetSysFunction(L"NtQueryDirectoryFile");
+    P_NtCreateFile __sys_NtCreateFile = (P_NtCreateFile)SbDll_GetSysFunction(L"NtCreateFile");
+    P_NtQueryDirectoryFile __sys_NtQueryDirectoryFile = (P_NtQueryDirectoryFile)SbDll_GetSysFunction(L"NtQueryDirectoryFile");
 	
 	RtlInitUnicodeString(&RootDirectoryName, OutCopyPath);
 	InitializeObjectAttributes(&RootDirectoryAttributes, &RootDirectoryName, OBJ_CASE_INSENSITIVE, 0, 0);
@@ -1528,7 +1528,7 @@ ULONG RestartInSandbox(void)
     }
 
     // we should have foreground rights at this point, but the second
-    // instance of Start.exe that we run through SbieDll_RunSandboxed
+    // instance of Start.exe that we run through SbDll_RunSandboxed
     // does not inherit our foreground rights automatically
 
     AllowSetForegroundWindow(ASFW_ANY);
@@ -1536,7 +1536,7 @@ ULONG RestartInSandbox(void)
     //
     // build command line.  note that we pass the current directory as an
     // environment variable which will be queried by Program_Start.  this
-    // is because SbieSvc ProcessServer (used by SbieDll_RunSandboxed)
+    // is because SbieSvc ProcessServer (used by SbDll_RunSandboxed)
     // does not necssarily share our dos device map, and will not be able
     // to change to a drive letter that isn't in its dos device map
     //
@@ -1568,7 +1568,7 @@ ULONG RestartInSandbox(void)
     //
     //
 
-    ok = SbieDll_RunSandboxed(BoxName, cmd, dir, 0, &si, &pi);
+    ok = SbDll_RunSandboxed(BoxName, cmd, dir, 0, &si, &pi);
     err = GetLastError();
 
     if (! ok) {
@@ -1576,7 +1576,7 @@ ULONG RestartInSandbox(void)
         if (err == ERROR_SERVER_DISABLED) {
 
             SetLastError(0);
-            Show_Error(SbieDll_FormatMessage0(MSG_3212));
+            Show_Error(SbDll_FormatMessage0(MSG_3212));
             return EXIT_FAILURE;
 
         } else {
@@ -1586,7 +1586,7 @@ ULONG RestartInSandbox(void)
     }
 
     if (! ok) {
-        WCHAR *errmsg = SbieDll_FormatMessage1(MSG_3205, ChildCmdLine);
+        WCHAR *errmsg = SbDll_FormatMessage1(MSG_3205, ChildCmdLine);
         SetLastError(err);
         Show_Error(errmsg);
 
@@ -1622,12 +1622,12 @@ int __stdcall WinMainCRTStartup(
     USHORT KeyState;
     STARTUPINFO si;
 
-    Sandboxie_Start_Title = SbieDll_FormatMessage0(MSG_3101);
-    SbieDll_GetLanguage(&layout_rtl);
+    Sandboxie_Start_Title = SbDll_FormatMessage0(MSG_3101);
+    SbDll_GetLanguage(&layout_rtl);
 
     wcscpy(BoxName, L"DefaultBox");
 
-    Token_Elevation_Type = SbieDll_GetTokenElevationType();
+    Token_Elevation_Type = SbDll_GetTokenElevationType();
 
     //
     // keep the nShowCmd flag that was passed to us

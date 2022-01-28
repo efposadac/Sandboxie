@@ -29,7 +29,7 @@
 //        SourceFunc = GetProcAddress(Dll_KernelBase, FuncName);              \
 //    }                                                                       \
 //    __sys_##func =                                                          \
-//        (ULONG_PTR)SbieDll_Hook(FuncName, SourceFunc, my_##func);           \
+//        (ULONG_PTR)SbDll_Hook(FuncName, SourceFunc, my_##func);           \
 //    if (! __sys_##func)                                                     \
 //        hook_success = FALSE;                                               \
 //    }
@@ -133,11 +133,11 @@ _FX BOOLEAN Scm_SetupMsiHooks()
     //__debugbreak();
 
     P_CreateWaitableTimerW CreateWaitableTimerW = (P_CreateWaitableTimerW)GetProcAddress(Dll_Kernel32, "CreateWaitableTimerW");
-    SBIEDLL_HOOK(Scm_, CreateWaitableTimerW);
+    SBDLL_HOOK(Scm_, CreateWaitableTimerW);
 
 
     // MSIServer without system - fake running as system
-    if (!SbieDll_CheckProcessLocalSystem(GetCurrentProcess()))
+    if (!SbDll_CheckProcessLocalSystem(GetCurrentProcess()))
     {
         Scm_MsiServer_Systemless = TRUE;
 
@@ -176,14 +176,14 @@ _FX BOOLEAN Scm_SetupMsiHooks()
         HMODULE hAdvapi32 = LoadLibrary(L"Advapi32.dll");
 
         void* OpenProcessToken = (P_OpenProcessToken)GetProcAddress(hAdvapi32, "OpenProcessToken");
-        SBIEDLL_HOOK(Scm_, OpenProcessToken);
+        SBDLL_HOOK(Scm_, OpenProcessToken);
 
         //void* OpenThreadToken = (P_OpenThreadToken)GetProcAddress(hAdvapi32, "OpenThreadToken");
-        //SBIEDLL_HOOK(Scm_, OpenThreadToken);
+        //SBDLL_HOOK(Scm_, OpenThreadToken);
 
 
         void* GetTokenInformation = (P_GetTokenInformation)GetProcAddress(hAdvapi32, "GetTokenInformation");
-        SBIEDLL_HOOK(Scm_, GetTokenInformation);
+        SBDLL_HOOK(Scm_, GetTokenInformation);
     }
 
     return TRUE;

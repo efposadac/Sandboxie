@@ -61,7 +61,7 @@
 //#define MSG_PROCESS_CREATE                                  MSG_1211
 #define MSG_FILE_CREATE_BOX_PATH                            MSG_1212
 #define MSG_IPC_CREATE_BOX_PATH                             MSG_1213
-//#define MSG_PROCESS_INJECT_SBIEDLL                          MSG_1214
+//#define MSG_PROCESS_INJECT_SBDLL                          MSG_1214
 //#define MSG_PROCESS_SID                                     MSG_1216
 //#define MSG_SECURE_CREATE_RESTRICTED_TOKEN                  MSG_1222
 //#define MSG_SECURE_REPLACE_TOKEN                            MSG_1223

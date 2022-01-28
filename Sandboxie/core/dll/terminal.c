@@ -250,7 +250,7 @@ _FX BOOLEAN Terminal_DontHook(void)
     // On older windows check the endpoint
     //
 
-    ULONG mp_flags = SbieDll_MatchPath(L'i', L"\\RPC Control\\IcaApi");
+    ULONG mp_flags = SbDll_MatchPath(L'i', L"\\RPC Control\\IcaApi");
     return (PATH_IS_OPEN(mp_flags));
 }
 
@@ -389,7 +389,7 @@ _FX BOOLEAN Terminal_WinStationDisconnect(
 
     req.length = sizeof(MSG_HEADER);
     req.msgid = MSGID_TERMINAL_DISCONNECT;
-    rpl = SbieDll_CallServer(&req);
+    rpl = SbDll_CallServer(&req);
     if (! rpl)
         err = ERROR_GEN_FAILURE;
     else {
@@ -469,7 +469,7 @@ _FX BOOLEAN Terminal_WinStaQueryInformationW(
     req.info_class = InformationClass;
     req.data_len = InformationLength;
 
-    rpl = (TERMINAL_QUERY_INFO_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (TERMINAL_QUERY_INFO_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         err = ERROR_GEN_FAILURE;
     else {
@@ -515,7 +515,7 @@ _FX BOOLEAN Terminal_WinStationIsSessionRemoteable(
     req.h.msgid = MSGID_TERMINAL_CHECK_TYPE;
     req.check_is_remote = TRUE;
 
-    rpl = (TERMINAL_CHECK_TYPE_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (TERMINAL_CHECK_TYPE_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         err = ERROR_GEN_FAILURE;
     else {
@@ -561,7 +561,7 @@ _FX BOOLEAN Terminal_WinStationNameFromLogonIdW(
     req.h.length = sizeof(TERMINAL_GET_NAME_REQ);
     req.h.msgid = MSGID_TERMINAL_GET_NAME;
 
-    rpl = (TERMINAL_GET_NAME_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (TERMINAL_GET_NAME_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         err = ERROR_GEN_FAILURE;
     else {
@@ -601,7 +601,7 @@ _FX BOOLEAN Terminal_WinStationGetConnectionProperty(
     req.h.msgid = MSGID_TERMINAL_GET_PROPERTY;
     memcpy(&req.guid, TypeGuid, sizeof(GUID));
 
-    rpl = (TERMINAL_GET_PROPERTY_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (TERMINAL_GET_PROPERTY_RPL *)SbDll_CallServer(&req.h);
     if (! rpl)
         err = ERROR_GEN_FAILURE;
     else {
@@ -740,22 +740,22 @@ _FX BOOLEAN Terminal_Init_WinSta(HMODULE module)
     WinStationFreeMemory = (P_WinStationFreeMemory)
         GetProcAddress(module, "WinStationFreeMemory");
 
-    SBIEDLL_HOOK(Terminal_,WinStationOpenServerW);
-    SBIEDLL_HOOK(Terminal_,WinStationCloseServer);
-    SBIEDLL_HOOK(Terminal_,WinStationDisconnect);
-    SBIEDLL_HOOK(Terminal_,WinStationEnumerateW);
-    SBIEDLL_HOOK(Terminal_,WinStaQueryInformationW);
-    SBIEDLL_HOOK(Terminal_,WinStationFreeMemory);
+    SBDLL_HOOK(Terminal_,WinStationOpenServerW);
+    SBDLL_HOOK(Terminal_,WinStationCloseServer);
+    SBDLL_HOOK(Terminal_,WinStationDisconnect);
+    SBDLL_HOOK(Terminal_,WinStationEnumerateW);
+    SBDLL_HOOK(Terminal_,WinStaQueryInformationW);
+    SBDLL_HOOK(Terminal_,WinStationFreeMemory);
     if (WinStationIsSessionRemoteable) {
-        SBIEDLL_HOOK(Terminal_,WinStationIsSessionRemoteable);
+        SBDLL_HOOK(Terminal_,WinStationIsSessionRemoteable);
     }
     if (WinStationNameFromLogonIdW) {
-        SBIEDLL_HOOK(Terminal_,WinStationNameFromLogonIdW);
+        SBDLL_HOOK(Terminal_,WinStationNameFromLogonIdW);
     }
     if (WinStationGetConnectionProperty) {
-        SBIEDLL_HOOK(Terminal_,WinStationGetConnectionProperty);
+        SBDLL_HOOK(Terminal_,WinStationGetConnectionProperty);
         if (WinStationFreePropertyValue) {
-            SBIEDLL_HOOK(Terminal_,WinStationFreePropertyValue);
+            SBDLL_HOOK(Terminal_,WinStationFreePropertyValue);
         }
     }
 
@@ -793,7 +793,7 @@ _FX BOOL Terminal_WTSQueryUserToken(ULONG SessionId, HANDLE *pToken)
     req->h.length = req_len;
     req->h.msgid = MSGID_TERMINAL_GET_USER_TOKEN;
 
-    rpl = (GET_USER_TOKEN_RPL *)SbieDll_CallServer((MSG_HEADER *)req);
+    rpl = (GET_USER_TOKEN_RPL *)SbDll_CallServer((MSG_HEADER *)req);
     Dll_Free(req);
 
     if (! rpl)
@@ -1218,7 +1218,7 @@ _FX BOOLEAN Terminal_Init_WtsApi(HMODULE module)
         GetProcAddress(module, "WTSQueryUserToken");
 
     if (WTSQueryUserToken) {
-        SBIEDLL_HOOK(Terminal_,WTSQueryUserToken);
+        SBDLL_HOOK(Terminal_,WTSQueryUserToken);
     }
 
     if (Terminal_DontHook())
@@ -1245,25 +1245,25 @@ _FX BOOLEAN Terminal_Init_WtsApi(HMODULE module)
 
 
     if (WTSEnumerateSessionsW) {
-        SBIEDLL_HOOK(Terminal_,WTSEnumerateSessionsW);
+        SBDLL_HOOK(Terminal_,WTSEnumerateSessionsW);
     }
     if (WTSEnumerateProcessesW) {
-        SBIEDLL_HOOK(Terminal_,WTSEnumerateProcessesW);
+        SBDLL_HOOK(Terminal_,WTSEnumerateProcessesW);
     }
     if (WTSFreeMemory) {
-        SBIEDLL_HOOK(Terminal_,WTSFreeMemory);
+        SBDLL_HOOK(Terminal_,WTSFreeMemory);
     }
     if (WTSRegisterSessionNotification) {
-        SBIEDLL_HOOK(Terminal_,WTSRegisterSessionNotification);
+        SBDLL_HOOK(Terminal_,WTSRegisterSessionNotification);
     }
     if (WTSRegisterSessionNotificationEx) {
-        SBIEDLL_HOOK(Terminal_,WTSRegisterSessionNotificationEx);
+        SBDLL_HOOK(Terminal_,WTSRegisterSessionNotificationEx);
     }
     if (WTSUnRegisterSessionNotification) {
-        SBIEDLL_HOOK(Terminal_,WTSUnRegisterSessionNotification);
+        SBDLL_HOOK(Terminal_,WTSUnRegisterSessionNotification);
     }
     if (WTSUnRegisterSessionNotificationEx) {
-        SBIEDLL_HOOK(Terminal_,WTSUnRegisterSessionNotificationEx);
+        SBDLL_HOOK(Terminal_,WTSUnRegisterSessionNotificationEx);
     }
 
     return TRUE;

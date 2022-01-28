@@ -410,11 +410,11 @@ _FX BOOLEAN Ldr_Init()
 
 
     if (Dll_OsBuild >= 6000) { // Windows Vista and later
-        SbieDll_RegisterDllCallback(Ldr_MyDllCallbackA);
+        SbDll_RegisterDllCallback(Ldr_MyDllCallbackA);
         __my_Ldr_CallOneDllCallback = Ldr_CallOneDllCallback;
     }
     else { // Windows XP
-        SbieDll_RegisterDllCallback(Ldr_MyDllCallbackW);
+        SbDll_RegisterDllCallback(Ldr_MyDllCallbackW);
         __my_Ldr_CallOneDllCallback = Ldr_CallOneDllCallbackXP;
     }
 
@@ -432,8 +432,8 @@ _FX BOOLEAN Ldr_Init()
         /* needed for future update */
         //void *LdrRegisterDllNotification = (P_LdrRegisterDllNotification)GetProcAddress(Dll_Ntdll,"LdrRegisterDllNotification");
         //void *LdrUnregisterDllNotification = (P_LdrUnregisterDllNotification)GetProcAddress(Dll_Ntdll,"LdrUnregisterDllNotification");
-        //SBIEDLL_HOOK(Ldr_,LdrRegisterDllNotification);
-        //SBIEDLL_HOOK(Ldr_,LdrUnregisterDllNotification);
+        //SBDLL_HOOK(Ldr_,LdrRegisterDllNotification);
+        //SBDLL_HOOK(Ldr_,LdrUnregisterDllNotification);
         if (__sys_LdrRegisterDllNotification) {
             rc = __sys_LdrRegisterDllNotification(0, ((void *)Ldr_LdrDllNotification), NULL, &LdrLoaderCookie);
         }
@@ -441,13 +441,13 @@ _FX BOOLEAN Ldr_Init()
             return FALSE;
         }
 
-        SBIEDLL_HOOK(Ldr_, NtTerminateProcess);
-        SBIEDLL_HOOK(Ldr_Win10_, LdrLoadDll);
+        SBDLL_HOOK(Ldr_, NtTerminateProcess);
+        SBDLL_HOOK(Ldr_Win10_, LdrLoadDll);
     }
     else { // Windows 8 and before
-        SBIEDLL_HOOK(Ldr_, LdrLoadDll);
-        SBIEDLL_HOOK(Ldr_, LdrUnloadDll);
-        SBIEDLL_HOOK(Ldr_, LdrQueryImageFileExecutionOptions);
+        SBDLL_HOOK(Ldr_, LdrLoadDll);
+        SBDLL_HOOK(Ldr_, LdrUnloadDll);
+        SBDLL_HOOK(Ldr_, LdrQueryImageFileExecutionOptions);
 
         if (Dll_OsBuild >= 8400) {
 
@@ -459,11 +459,11 @@ _FX BOOLEAN Ldr_Init()
                 (P_NtApphelpCacheControl)GetProcAddress(
                     Dll_Ntdll, "NtApphelpCacheControl");
 
-            SBIEDLL_HOOK(Ldr_, LdrResolveDelayLoadedAPI);
-            SBIEDLL_HOOK(Ldr_, NtApphelpCacheControl);
+            SBDLL_HOOK(Ldr_, LdrResolveDelayLoadedAPI);
+            SBDLL_HOOK(Ldr_, NtApphelpCacheControl);
         }
     }
-    SBIEDLL_HOOK(Ldr_, NtLoadDriver);
+    SBDLL_HOOK(Ldr_, NtLoadDriver);
 
 
     //
@@ -508,10 +508,10 @@ _FX BOOLEAN Ldr_Init()
 }
 
 //---------------------------------------------------------------------------
-// SbieDll_RegisterDllCallback
+// SbDll_RegisterDllCallback
 //---------------------------------------------------------------------------
 
-_FX BOOLEAN SbieDll_RegisterDllCallback(void *Callback)
+_FX BOOLEAN SbDll_RegisterDllCallback(void *Callback)
 {
     NTSTATUS status = 0;
     ULONG_PTR LdrCookie;
@@ -841,7 +841,7 @@ _FX NTSTATUS Ldr_LdrUnloadDll(HANDLE ModuleHandle)
     DWORD tid;
 
     //
-    // prevent unloading of SbieDll
+    // prevent unloading of SbDll
     //
 
     tid = GetCurrentThreadId();

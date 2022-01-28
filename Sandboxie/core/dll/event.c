@@ -66,7 +66,7 @@ ALIGNED BOOLEAN EvtApi_Init(HMODULE module)
     EvtIntAssertConfig = (P_EvtIntAssertConfig)
         GetProcAddress(module, "EvtIntAssertConfig");
 
-    SBIEDLL_HOOK(Event_,EvtIntAssertConfig);
+    SBDLL_HOOK(Event_,EvtIntAssertConfig);
 
     return TRUE;
 }

@@ -250,23 +250,23 @@ _FX BOOLEAN Dll_InitPathList3(POOL *pool, ULONG path_code, LIST *list)
 }
 
 //---------------------------------------------------------------------------
-// SbieDll_MatchPath
+// SbDll_MatchPath
 //---------------------------------------------------------------------------
 
 
-_FX ULONG SbieDll_MatchPath(WCHAR path_code, const WCHAR *path)
+_FX ULONG SbDll_MatchPath(WCHAR path_code, const WCHAR *path)
 {
-    return SbieDll_MatchPath2(path_code, path, TRUE, TRUE);
+    return SbDll_MatchPath2(path_code, path, TRUE, TRUE);
 }
 
 #ifdef USE_MATCH_PATH_EX
 
 //---------------------------------------------------------------------------
-// SbieDll_GetReadablePaths
+// SbDll_GetReadablePaths
 //---------------------------------------------------------------------------
 
 
-_FX void SbieDll_GetReadablePaths(WCHAR path_code, LIST **lists)
+_FX void SbDll_GetReadablePaths(WCHAR path_code, LIST **lists)
 {
     if (path_code == L'f') {
 
@@ -293,7 +293,7 @@ _FX void SbieDll_GetReadablePaths(WCHAR path_code, LIST **lists)
     }
 }
 
-_FX void SbieDll_ReleaseFilePathLock()
+_FX void SbDll_ReleaseFilePathLock()
 {
     LeaveCriticalSection(&Dll_FilePathListCritSec);
 }
@@ -355,11 +355,11 @@ _FX int Process_MatchPathList(
 
 
 //---------------------------------------------------------------------------
-// SbieDll_MatchPath2
+// SbDll_MatchPath2
 //---------------------------------------------------------------------------
 
 
-_FX ULONG SbieDll_MatchPath2(WCHAR path_code, const WCHAR *path, BOOLEAN bCheckObjectExists, BOOLEAN bMonitorLog)
+_FX ULONG SbDll_MatchPath2(WCHAR path_code, const WCHAR *path, BOOLEAN bCheckObjectExists, BOOLEAN bMonitorLog)
 {
 #ifdef USE_MATCH_PATH_EX
     LIST *normal_list, *open_list, *closed_list, *write_list, *read_list;
@@ -819,16 +819,16 @@ _FX void Dll_RefreshPathList(void)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_IsParentReadable
+// SbDll_IsParentReadable
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_HasReadableSubPath(WCHAR path_code, const WCHAR* TruePath)
+_FX BOOLEAN SbDll_HasReadableSubPath(WCHAR path_code, const WCHAR* TruePath)
 {
     BOOLEAN FoundReadable = FALSE;
 
     LIST* lists[4];
-    SbieDll_GetReadablePaths(path_code, lists);
+    SbDll_GetReadablePaths(path_code, lists);
 
     ULONG TruePathLen = wcslen(TruePath);
     if (TruePathLen > 1 && TruePath[TruePathLen - 1] == L'\\')
@@ -852,7 +852,7 @@ _FX BOOLEAN SbieDll_HasReadableSubPath(WCHAR path_code, const WCHAR* TruePath)
     }
 
     if (path_code == L'f')
-        SbieDll_ReleaseFilePathLock();
+        SbDll_ReleaseFilePathLock();
 
     return FoundReadable;
 }

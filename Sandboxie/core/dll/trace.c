@@ -72,7 +72,7 @@ _FX int Trace_Init(void)
     if (SbieApi_QueryConfBool(NULL, L"ErrorTrace", FALSE)) {
         RtlSetLastWin32Error = (P_RtlSetLastWin32Error)
             GetProcAddress(Dll_Ntdll, "RtlSetLastWin32Error");
-        SBIEDLL_HOOK(Trace_, RtlSetLastWin32Error);
+        SBDLL_HOOK(Trace_, RtlSetLastWin32Error);
     }
 
     //
@@ -81,11 +81,11 @@ _FX int Trace_Init(void)
 
     OutputDebugStringW = (P_OutputDebugString)
         GetProcAddress(Dll_Kernel32, "OutputDebugStringW");
-	SBIEDLL_HOOK(Trace_, OutputDebugStringW);
+	SBDLL_HOOK(Trace_, OutputDebugStringW);
 
     OutputDebugStringA = (P_OutputDebugString)
         GetProcAddress(Dll_Kernel32, "OutputDebugStringA");
-    SBIEDLL_HOOK(Trace_,OutputDebugStringA);
+    SBDLL_HOOK(Trace_,OutputDebugStringA);
 
     return TRUE;
 }

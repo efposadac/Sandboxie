@@ -408,7 +408,7 @@ void CDeleteDialog::OnOK()
 
     CWaitCursor waitcursor;
 
-    SbieDll_KillAll(-1, BoxName);
+    SbDll_KillAll(-1, BoxName);
 
     int i = 0;
     for (i = 0; i < 20; ++i) {

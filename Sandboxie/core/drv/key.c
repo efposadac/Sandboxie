@@ -503,15 +503,15 @@ _FX NTSTATUS Key_MyParseProc_2(OBJ_PARSE_PROC_ARGS_2)
 
         //
         // when Software Restriction Policies is in effect, ADVAPI32 opens
-        // \REGISTRY\MACHINE for MAXIMUM_ALLOWED access even before SbieDll
+        // \REGISTRY\MACHINE for MAXIMUM_ALLOWED access even before SbDll
         // was loaded, so permit those accesses
         //
-        // note that since version 3.45, SbieDll takes over the job of
+        // note that since version 3.45, SbDll takes over the job of
         // loading static import DLLs, however ADVAPI32 is loaded directly
         // by NTDLL even before manipulating static imports.
         //
 
-        if (status == STATUS_ACCESS_DENIED && (! proc->sbiedll_loaded) &&
+        if (status == STATUS_ACCESS_DENIED && (! proc->sbdll_loaded) &&
                 Name->Name.Length == 17 * sizeof(WCHAR) &&
                 _wcsicmp(Name->Name.Buffer, Key_Registry_Machine) == 0) {
 

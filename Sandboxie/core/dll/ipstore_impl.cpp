@@ -560,7 +560,7 @@ IPStoreImpl::PsType *IPStoreImpl::find_type(const GUID *guid)
     req.type_id = *guid;
 
     PSTORE_GET_TYPE_INFO_RPL *rpl =
-        (PSTORE_GET_TYPE_INFO_RPL *)SbieDll_CallServer(&req.h);
+        (PSTORE_GET_TYPE_INFO_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl && rpl->h.status == 0) {
 
@@ -602,7 +602,7 @@ IPStoreImpl::PsSubtype *IPStoreImpl::find_subtype(
     req.subtype_id = *guid;
 
     PSTORE_GET_SUBTYPE_INFO_RPL *rpl =
-        (PSTORE_GET_SUBTYPE_INFO_RPL *)SbieDll_CallServer(&req.h);
+        (PSTORE_GET_SUBTYPE_INFO_RPL *)SbDll_CallServer(&req.h);
 
     if (rpl && rpl->h.status == 0) {
 
@@ -649,7 +649,7 @@ IPStoreImpl::PsItem *IPStoreImpl::find_item(
     wcscpy(req->name, name);
 
     PSTORE_READ_ITEM_RPL *rpl =
-        (PSTORE_READ_ITEM_RPL *)SbieDll_CallServer(&req->h);
+        (PSTORE_READ_ITEM_RPL *)SbDll_CallServer(&req->h);
 
     if (rpl && rpl->h.status == 0) {
 

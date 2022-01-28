@@ -28,7 +28,7 @@
 #include "sbieiniserver.h"
 #include "sbieiniwire.h"
 #include "misc.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 #include "common/my_version.h"
 #define CRC_HEADER_ONLY
@@ -2132,7 +2132,7 @@ bool SbieIniServer::GetIniPath(WCHAR **IniPath,
         //
 
         STARTUPINFOW si;
-        if (SbieDll_RunFromHome(_ini, NULL, &si, NULL)) {
+        if (SbDll_RunFromHome(_ini, NULL, &si, NULL)) {
             WCHAR *path2 = (WCHAR *)si.lpReserved;
             wcscpy(path, path2);
             HeapFree(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS, path2);
@@ -2310,7 +2310,7 @@ MSG_HEADER *SbieIniServer::RunSbieCtrl(HANDLE idProcess, bool isSandboxed)
         } else
             args = L" /open /sync";
 
-        if (SbieDll_RunFromHome(*ctrlName ? ctrlName : SBIECTRL_EXE, args, &si, NULL)) {
+        if (SbDll_RunFromHome(*ctrlName ? ctrlName : SBIECTRL_EXE, args, &si, NULL)) {
 
             WCHAR *CmdLine = (WCHAR *)si.lpReserved;
 

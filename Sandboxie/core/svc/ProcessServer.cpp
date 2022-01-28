@@ -31,7 +31,7 @@
 #include "misc.h"
 #include "common/defines.h"
 #include "common/my_version.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/drv/api_defs.h"
 #include <sddl.h>
 

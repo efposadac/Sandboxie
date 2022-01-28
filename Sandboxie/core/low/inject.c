@@ -52,13 +52,13 @@ typedef struct _INJECT_DATA {
     ULONG   KerneDll_Buf32;
     ULONG64 KerneDll_Buf64;
 
-    USHORT  SbieDll_Length;
-    USHORT  SbieDll_MaxLen;
-    ULONG   SbieDll_Buf32;
-    ULONG64 SbieDll_Buf64;
+    USHORT  SbDll_Length;
+    USHORT  SbDll_MaxLen;
+    ULONG   SbDll_Buf32;
+    ULONG64 SbDll_Buf64;
 
     ULONG64 ModuleHandle;
-    ULONG64 SbieDllOrdinal1;
+    ULONG64 SbDllOrdinal1;
 
 #ifdef _WIN64
 
@@ -328,12 +328,12 @@ _FX void InitInject(SBIELOW_DATA *data, void * RtlFindActivationContextSectionSt
 
 #endif _WIN64
 
-    inject->SbieDll_Length = (SHORT)extra->NativeSbieDll_length;
-    inject->SbieDll_MaxLen = inject->SbieDll_Length + sizeof(WCHAR);
-    inject->SbieDll_Buf32  =
-                    (ULONG)((ULONG_PTR)extra + extra->NativeSbieDll_offset);
-    inject->SbieDll_Buf64  =
-                    (ULONG)((ULONG_PTR)extra + extra->NativeSbieDll_offset);
+    inject->SbDll_Length = (SHORT)extra->NativeSbDll_length;
+    inject->SbDll_MaxLen = inject->SbDll_Length + sizeof(WCHAR);
+    inject->SbDll_Buf32  =
+                    (ULONG)((ULONG_PTR)extra + extra->NativeSbDll_offset);
+    inject->SbDll_Buf64  =
+                    (ULONG)((ULONG_PTR)extra + extra->NativeSbDll_offset);
 
     //
     // select version of RtlFindActivationContextSectionString detour code:
@@ -407,7 +407,7 @@ _FX void InitInject(SBIELOW_DATA *data, void * RtlFindActivationContextSectionSt
     //
     // at this point we no longer need the data at top of the
     // syscall/inject data area, so store a pointer back to SbieLow
-    // data area, for use by SbieDll ordinal 1
+    // data area, for use by SbDll ordinal 1
     //
 
 
@@ -448,10 +448,10 @@ _FX void InitInjectWow64(SBIELOW_DATA *data, void * RtlFindActivationContextSect
     // prepare unicode strings
     //
 
-    inject->SbieDll_Length = (SHORT)extra->Wow64SbieDll_length;
-    inject->SbieDll_MaxLen = inject->SbieDll_Length + sizeof(WCHAR);
-    inject->SbieDll_Buf32  =
-                    (ULONG)((ULONG_PTR)extra + extra->Wow64SbieDll_offset);
+    inject->SbDll_Length = (SHORT)extra->Wow64SbDll_length;
+    inject->SbDll_MaxLen = inject->SbDll_Length + sizeof(WCHAR);
+    inject->SbDll_Buf32  =
+                    (ULONG)((ULONG_PTR)extra + extra->Wow64SbDll_offset);
 
     //
     // select the 32-bit version of RtlFindActivationContextSectionString

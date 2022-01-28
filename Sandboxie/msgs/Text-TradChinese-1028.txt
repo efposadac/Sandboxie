@@ -133,7 +133,7 @@ SBIE1213 無法建立物件目錄 '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 無法插入SbieDll %2
+SBIE1214 無法插入SbDll %2
 .
 
 1215;pop;err;01

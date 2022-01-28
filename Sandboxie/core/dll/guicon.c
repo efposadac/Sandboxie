@@ -130,7 +130,7 @@ _FX BOOLEAN Gui_InitConsole1(void)
                             GetProcAddress(Dll_Kernel32, _AllocConsole);
         }
 
-        SBIEDLL_HOOK(Gui_,AllocConsole);
+        SBDLL_HOOK(Gui_,AllocConsole);
 
         return TRUE;
     }
@@ -139,11 +139,11 @@ _FX BOOLEAN Gui_InitConsole1(void)
     // hook title APIs
     //
 
-    SBIEDLL_HOOK(Gui_,SetConsoleTitleA);
-    SBIEDLL_HOOK(Gui_,SetConsoleTitleW);
+    SBDLL_HOOK(Gui_,SetConsoleTitleA);
+    SBDLL_HOOK(Gui_,SetConsoleTitleW);
 
-    SBIEDLL_HOOK(Gui_,GetConsoleTitleA);
-    SBIEDLL_HOOK(Gui_,GetConsoleTitleW);
+    SBDLL_HOOK(Gui_,GetConsoleTitleA);
+    SBDLL_HOOK(Gui_,GetConsoleTitleW);
 
     return TRUE;
 }

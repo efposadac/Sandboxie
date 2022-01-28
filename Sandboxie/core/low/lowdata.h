@@ -109,7 +109,7 @@ typedef struct _SBIELOW_DATA {
 #define SBIELOW_SYMBOL_SECTION     "zzzz"
 
 //
-// additional strings that are used to inject SbieDll are passed in
+// additional strings that are used to inject SbDll are passed in
 // the syscall data area.  the second ULONG in the syscall data area
 // specifies the offset to this extra data structure
 //
@@ -122,10 +122,10 @@ typedef struct _SBIELOW_EXTRA_DATA {
     ULONG RtlFindActCtx_offset;
     ULONG KernelDll_offset;
     ULONG KernelDll_length;
-    ULONG NativeSbieDll_offset;
-    ULONG NativeSbieDll_length;
-    ULONG Wow64SbieDll_offset;
-    ULONG Wow64SbieDll_length;
+    ULONG NativeSbDll_offset;
+    ULONG NativeSbDll_length;
+    ULONG Wow64SbDll_offset;
+    ULONG Wow64SbDll_length;
 
 } SBIELOW_EXTRA_DATA;
 

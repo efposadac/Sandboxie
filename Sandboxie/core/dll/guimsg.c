@@ -168,17 +168,17 @@ _FX BOOLEAN Gui_InitMsg(void)
 
     if (! Gui_OpenAllWinClasses) {
 
-        SBIEDLL_HOOK_GUI(SendMessageA);
-        SBIEDLL_HOOK_GUI(SendMessageW);
+        SBDLL_HOOK_GUI(SendMessageA);
+        SBDLL_HOOK_GUI(SendMessageW);
 
-        SBIEDLL_HOOK_GUI(SendMessageTimeoutA);
-        SBIEDLL_HOOK_GUI(SendMessageTimeoutW);
+        SBDLL_HOOK_GUI(SendMessageTimeoutA);
+        SBDLL_HOOK_GUI(SendMessageTimeoutW);
 
-        SBIEDLL_HOOK_GUI(SendNotifyMessageA);
-        SBIEDLL_HOOK_GUI(SendNotifyMessageW);
+        SBDLL_HOOK_GUI(SendNotifyMessageA);
+        SBDLL_HOOK_GUI(SendNotifyMessageW);
 
-        SBIEDLL_HOOK_GUI(PostMessageA);
-        SBIEDLL_HOOK_GUI(PostMessageW);
+        SBDLL_HOOK_GUI(PostMessageA);
+        SBDLL_HOOK_GUI(PostMessageW);
 
         //
         // hook PostThreadMessage on Vista, see Gui_PostThreadMessage_Check
@@ -190,8 +190,8 @@ _FX BOOLEAN Gui_InitMsg(void)
                 GetProcAddress(Dll_Kernel32, "GetProcessIdOfThread");
             if (__sys_GetProcessIdOfThread) {
 
-                SBIEDLL_HOOK_GUI(PostThreadMessageA);
-                SBIEDLL_HOOK_GUI(PostThreadMessageW);
+                SBDLL_HOOK_GUI(PostThreadMessageA);
+                SBDLL_HOOK_GUI(PostThreadMessageW);
             }
         }
     }
@@ -202,14 +202,14 @@ _FX BOOLEAN Gui_InitMsg(void)
 
 #ifndef _WIN64
 
-    SBIEDLL_HOOK_GUI(DispatchMessageA);
-    SBIEDLL_HOOK_GUI(DispatchMessageW);
+    SBDLL_HOOK_GUI(DispatchMessageA);
+    SBDLL_HOOK_GUI(DispatchMessageW);
 
 #else _WIN64
 
     if (Dll_OsBuild < 8400) {
-        SBIEDLL_HOOK_GUI(DispatchMessageA);
-        SBIEDLL_HOOK_GUI(DispatchMessageW);
+        SBDLL_HOOK_GUI(DispatchMessageA);
+        SBDLL_HOOK_GUI(DispatchMessageW);
 
     } else if (! Gui_Hook_DispatchMessage8())
         return FALSE;
@@ -221,7 +221,7 @@ _FX BOOLEAN Gui_InitMsg(void)
     //
 
     if (SH_GetInternetExplorerVersion() >= 9) {
-        SBIEDLL_HOOK_GUI(LoadStringW);
+        SBDLL_HOOK_GUI(LoadStringW);
     }
 
     return TRUE;
@@ -876,7 +876,7 @@ _FX BOOLEAN Gui_Hook_DispatchMessage8(void)
 
         hWin32u = GetModuleHandleA("win32u.dll");
         __sys_DispatchMessage8 = (P_DispatchMessage8)GetProcAddress(hWin32u, "NtUserDispatchMessage");
-        SBIEDLL_HOOK_GUI(DispatchMessage8);
+        SBDLL_HOOK_GUI(DispatchMessage8);
         return TRUE;
     }
 
@@ -901,7 +901,7 @@ _FX BOOLEAN Gui_Hook_DispatchMessage8(void)
 
             __sys_DispatchMessage8 = (P_DispatchMessage8)(w + w_offset);
 
-            SBIEDLL_HOOK_GUI(DispatchMessage8);
+            SBDLL_HOOK_GUI(DispatchMessage8);
 
             return TRUE;
         }

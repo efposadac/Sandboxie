@@ -133,7 +133,7 @@ SBIE1213 Kan inte skapa objekt-bibliotek '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Kan inte injicera SbieDll %2
+SBIE1214 Kan inte injicera SbDll %2
 .
 
 1215;pop;err;01

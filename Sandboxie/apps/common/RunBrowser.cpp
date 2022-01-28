@@ -26,7 +26,7 @@
 #include "CommonUtils.h"
 #include "RunStartExe.h"
 #include "MyMsg.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 
 
 //---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ CRunBrowser::CRunBrowser(CWnd *pParentWnd, const CString &url)
     m_lpszTemplateName = L"RUN_BROWSER_DIALOG";
 
     BOOLEAN LayoutRTL;
-    SbieDll_GetLanguage(&LayoutRTL);
+    SbDll_GetLanguage(&LayoutRTL);
     if (LayoutRTL) {
 
         m_DlgTmplCopy =

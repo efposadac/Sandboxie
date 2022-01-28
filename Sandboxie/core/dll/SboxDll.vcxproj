@@ -70,22 +70,22 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SbieDebug|Win32'">
     <TargetExt>.dll</TargetExt>
-    <TargetName>SbieDll</TargetName>
+    <TargetName>SbDll</TargetName>
     <LibraryPath>$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SbieDebug|x64'">
     <TargetExt>.dll</TargetExt>
-    <TargetName>SbieDll</TargetName>
+    <TargetName>SbDll</TargetName>
     <LibraryPath>$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SbieRelease|Win32'">
     <TargetExt>.dll</TargetExt>
-    <TargetName>SbieDll</TargetName>
+    <TargetName>SbDll</TargetName>
     <LibraryPath>$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SbieRelease|x64'">
     <TargetExt>.dll</TargetExt>
-    <TargetName>SbieDll</TargetName>
+    <TargetName>SbDll</TargetName>
     <LibraryPath>$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SbieDebug|Win32'">
@@ -434,7 +434,7 @@
     <ClInclude Include="propsys.h" />
     <ClInclude Include="pstore.h" />
     <ClInclude Include="sbieapi.h" />
-    <ClInclude Include="sbiedll.h" />
+    <ClInclude Include="sbdll.h" />
     <ClInclude Include="taskbar.h" />
     <ClInclude Include="trace.h" />
   </ItemGroup>

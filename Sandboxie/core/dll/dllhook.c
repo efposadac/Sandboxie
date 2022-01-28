@@ -17,7 +17,7 @@
  */
 
 //---------------------------------------------------------------------------
-// SbieDLL Hook Management
+// SbDLL Hook Management
 //---------------------------------------------------------------------------
 
 
@@ -35,7 +35,7 @@
 //---------------------------------------------------------------------------
 
 
-static void *SbieDll_Hook_CheckChromeHook(void *SourceFunc);
+static void *SbDll_Hook_CheckChromeHook(void *SourceFunc);
 
 ULONG_PTR  DLL_FindWow64Target(ULONG_PTR address);
 
@@ -56,7 +56,7 @@ BOOL bVTableEable = TRUE;
 #define NUM_VTABLES 0x10 
 #define VTABLE_SIZE 0x4000 //16k enough for 2048 8 byte entrys
 
-VECTOR_TABLE SbieDllVectorTable[NUM_VTABLES] = {
+VECTOR_TABLE SbDllVectorTable[NUM_VTABLES] = {
     {0,0,0},{0,0,0},{0,0,0},{0,0,0},
     {0,0,0},{0,0,0},{0,0,0},{0,0,0},
     {0,0,0},{0,0,0},{0,0,0},{0,0,0},
@@ -91,11 +91,11 @@ _FX LONG SbieApi_HookTramp(void *Source, void *Trampoline)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_Hook
+// SbDll_Hook
 //---------------------------------------------------------------------------
 
 
-_FX void *SbieDll_Hook(
+_FX void *SbDll_Hook(
     const char *SourceFuncName, void *SourceFunc, void *DetourFunc)
 {
     static const WCHAR *_fmt1 = L"%s (%d)";
@@ -124,7 +124,7 @@ _FX void *SbieDll_Hook(
     // Chrome sandbox support
     //
 
-    SourceFunc = SbieDll_Hook_CheckChromeHook(SourceFunc);
+    SourceFunc = SbDll_Hook_CheckChromeHook(SourceFunc);
 
     //
     // if the source function begins with relative jump EB xx, it means
@@ -159,7 +159,7 @@ _FX void *SbieDll_Hook(
 
 #else ! WIN_64
 
-        func = SbieDll_Hook_CheckChromeHook((void *)target);
+        func = SbDll_Hook_CheckChromeHook((void *)target);
         if (func != (void *)target) {
             SourceFunc = func;
             goto skip_e9_rewrite;
@@ -388,7 +388,7 @@ skip_e9_rewrite: ;
         EnterCriticalSection(&VT_CriticalSection);
 
         if (bVTableEable) {
-            VECTOR_TABLE *ptrVTable = SbieDllVectorTable;
+            VECTOR_TABLE *ptrVTable = SbDllVectorTable;
             //default step size 
 
             for (i = 0; i < NUM_VTABLES && !hookset; i++, ptrVTable++) {
@@ -501,12 +501,12 @@ skip_e9_rewrite: ;
 
 
 //---------------------------------------------------------------------------
-// SbieDll_Hook_CheckChromeHook
+// SbDll_Hook_CheckChromeHook
 //---------------------------------------------------------------------------
 #ifdef _WIN64
 #define MAX_FUNC_SIZE 0x76
 //Note any change to this function requires the same modification to the function in LowLevel: see init.c (findChromeTarget)
-ULONGLONG * SbieDll_findChromeTarget(unsigned char* addr)
+ULONGLONG * SbDll_findChromeTarget(unsigned char* addr)
 {
     int i = 0;
     ULONGLONG target;
@@ -542,7 +542,7 @@ ULONGLONG * SbieDll_findChromeTarget(unsigned char* addr)
 }
 #endif
 
-_FX void *SbieDll_Hook_CheckChromeHook(void *SourceFunc)
+_FX void *SbDll_Hook_CheckChromeHook(void *SourceFunc)
 {
     if (!SourceFunc)
         return NULL;
@@ -573,7 +573,7 @@ _FX void *SbieDll_Hook_CheckChromeHook(void *SourceFunc)
         func[1] == 0x48 &&	//mov rax,?
         func[2] == 0xb8) {
         ULONGLONG *longlongs = *(ULONGLONG **)&func[3];
-        chrome64Target = SbieDll_findChromeTarget((unsigned char *)longlongs);
+        chrome64Target = SbDll_findChromeTarget((unsigned char *)longlongs);
     }
     // Chrome 49+ 64bit hook
     // mov rax, <target> 
@@ -582,7 +582,7 @@ _FX void *SbieDll_Hook_CheckChromeHook(void *SourceFunc)
         func[1] == 0xb8 &&
         *(USHORT *)&func[10] == 0xe0ff) /* jmp rax */ {
         ULONGLONG *longlongs = *(ULONGLONG **)&func[2];
-        chrome64Target = SbieDll_findChromeTarget((unsigned char *)longlongs);
+        chrome64Target = SbDll_findChromeTarget((unsigned char *)longlongs);
     }
     if (chrome64Target) {
         SourceFunc = chrome64Target;

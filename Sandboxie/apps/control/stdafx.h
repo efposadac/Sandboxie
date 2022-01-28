@@ -76,7 +76,7 @@ typedef long NTSTATUS;
 #endif
 
 #include "common/defines.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 
 #define malloc_WCHAR(n) ((WCHAR *)malloc(n))
 

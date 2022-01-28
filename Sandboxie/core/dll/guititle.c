@@ -68,7 +68,7 @@ _FX BOOLEAN Gui_InitTitle(void)
     // initialize title variables
     //
 
-    SbieDll_GetSettingsForName(NULL, Dll_ImageName, L"BoxNameTitle", buf, sizeof(buf), NULL);
+    SbDll_GetSettingsForName(NULL, Dll_ImageName, L"BoxNameTitle", buf, sizeof(buf), NULL);
     if (*buf == L'y' || *buf == L'Y') { // indicator + box name
 
         UNICODE_STRING uni;
@@ -97,8 +97,8 @@ _FX BOOLEAN Gui_InitTitle(void)
 
     if (! Gui_DisableTitle) {
 
-        SBIEDLL_HOOK_GUI(GetWindowTextW);
-        SBIEDLL_HOOK_GUI(GetWindowTextA);
+        SBDLL_HOOK_GUI(GetWindowTextW);
+        SBDLL_HOOK_GUI(GetWindowTextA);
     }
 
     return TRUE;

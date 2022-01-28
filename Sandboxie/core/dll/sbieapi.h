@@ -371,11 +371,11 @@ LONG SbieApi_ProcessExemptionControl(
 
 
 SBIEAPI_EXPORT 
-void* SbieDll_GetSysFunction(
+void* SbDll_GetSysFunction(
     const WCHAR* name);
 
 SBIEAPI_EXPORT 
-BOOL SbieDll_RunStartExe(
+BOOL SbDll_RunStartExe(
     const WCHAR* cmd, 
     const wchar_t* boxname);
 

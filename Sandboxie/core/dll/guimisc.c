@@ -158,20 +158,20 @@ _FX BOOLEAN Gui_InitMisc(void)
     if (! Gui_OpenAllWinClasses) {
 
         
-        SBIEDLL_HOOK_GUI(SetParent);
+        SBDLL_HOOK_GUI(SetParent);
         if (Gui_UseProxyService) {
-            SBIEDLL_HOOK_GUI(GetWindow);
-            SBIEDLL_HOOK_GUI(GetParent);
-            SBIEDLL_HOOK_GUI(SetForegroundWindow);
-            SBIEDLL_HOOK_GUI(MonitorFromWindow);
+            SBDLL_HOOK_GUI(GetWindow);
+            SBDLL_HOOK_GUI(GetParent);
+            SBDLL_HOOK_GUI(SetForegroundWindow);
+            SBDLL_HOOK_GUI(MonitorFromWindow);
         
-            SBIEDLL_HOOK_GUI(SetCursor);
-            SBIEDLL_HOOK_GUI(GetIconInfo);
-            SBIEDLL_HOOK_GUI(SetCursorPos);
-            SBIEDLL_HOOK_GUI(ClipCursor);
+            SBDLL_HOOK_GUI(SetCursor);
+            SBDLL_HOOK_GUI(GetIconInfo);
+            SBDLL_HOOK_GUI(SetCursorPos);
+            SBDLL_HOOK_GUI(ClipCursor);
         }
-        SBIEDLL_HOOK_GUI(SwapMouseButton);
-        SBIEDLL_HOOK_GUI(SetDoubleClickTime);
+        SBDLL_HOOK_GUI(SwapMouseButton);
+        SBDLL_HOOK_GUI(SetDoubleClickTime);
 
         if (Dll_OsBuild >= 6000) {
 
@@ -182,17 +182,17 @@ _FX BOOLEAN Gui_InitMisc(void)
             // in core/drv/gui.c and PostThreadMessage in core/dll/guimsg.c
             //
 
-            SBIEDLL_HOOK_GUI(BlockInput);
-            SBIEDLL_HOOK_GUI(SendInput);
+            SBDLL_HOOK_GUI(BlockInput);
+            SBDLL_HOOK_GUI(SendInput);
         }
     }
 
 	if (!Gui_UseProxyService)
 		return TRUE;
 
-    SBIEDLL_HOOK_GUI(OpenClipboard);
-    SBIEDLL_HOOK_GUI(CloseClipboard);
-    SBIEDLL_HOOK_GUI(GetClipboardData);
+    SBDLL_HOOK_GUI(OpenClipboard);
+    SBDLL_HOOK_GUI(CloseClipboard);
+    SBDLL_HOOK_GUI(GetClipboardData);
 
     //
     // Chinese instant messenger QQ.exe (aka TM.exe) uses OpenInputDesktop,
@@ -216,11 +216,11 @@ _FX BOOLEAN Gui_InitMisc(void)
             Ldr_GetProcAddrNew(DllName_user32, L"GetUserObjectInformationW","GetUserObjectInformationW");
 
         if (__sys_OpenInputDesktop) {
-            SBIEDLL_HOOK_GUI(OpenInputDesktop);
+            SBDLL_HOOK_GUI(OpenInputDesktop);
         }
 
         if (__sys_GetUserObjectInformationW) {
-            SBIEDLL_HOOK_GUI(GetUserObjectInformationW);
+            SBDLL_HOOK_GUI(GetUserObjectInformationW);
         }
     }
 
@@ -233,12 +233,12 @@ _FX BOOLEAN Gui_InitMisc(void)
             Ldr_GetProcAddrNew(DllName_user32, L"ChangeDisplaySettingsExA","ChangeDisplaySettingsExA");
         P_ChangeDisplaySettingsEx __sys_ChangeDisplaySettingsExW =
             Ldr_GetProcAddrNew(DllName_user32, L"ChangeDisplaySettingsExW","ChangeDisplaySettingsExW");
-        SBIEDLL_HOOK_GUI(ChangeDisplaySettingsExA);
-        SBIEDLL_HOOK_GUI(ChangeDisplaySettingsExW);
+        SBDLL_HOOK_GUI(ChangeDisplaySettingsExA);
+        SBDLL_HOOK_GUI(ChangeDisplaySettingsExW);
     }
 
-    SBIEDLL_HOOK_GUI(GetRawInputDeviceInfoA);
-    SBIEDLL_HOOK_GUI(GetRawInputDeviceInfoW);
+    SBDLL_HOOK_GUI(GetRawInputDeviceInfoA);
+    SBDLL_HOOK_GUI(GetRawInputDeviceInfoW);
 
 	__sys_GetThreadDpiAwarenessContext = (P_GetThreadDpiAwarenessContext)
 		Ldr_GetProcAddrNew(DllName_user32, L"GetThreadDpiAwarenessContext","GetThreadDpiAwarenessContext");
@@ -1347,11 +1347,11 @@ _FX BOOLEAN Gui_Init_IMM32(HMODULE module)
     if (__sys_ImmCreateContext) {
 
         if (__sys_ImmAssociateContext) {
-            SBIEDLL_HOOK_GUI(ImmAssociateContext);
+            SBDLL_HOOK_GUI(ImmAssociateContext);
         }
 
         if (__sys_ImmAssociateContextEx) {
-            SBIEDLL_HOOK_GUI(ImmAssociateContextEx);
+            SBDLL_HOOK_GUI(ImmAssociateContextEx);
         }
     }
 

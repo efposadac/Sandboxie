@@ -171,8 +171,8 @@ _FX BOOLEAN Gui_DDE_Init(void)
     Gui_DDE_ACK_Len  = wcslen(Gui_DDE_ACK);
     Gui_DDE_REQ_Len  = wcslen(Gui_DDE_REQ);
 
-    SBIEDLL_HOOK_GUI(DdeInitializeW);
-    SBIEDLL_HOOK_GUI(DdeInitializeA);
+    SBDLL_HOOK_GUI(DdeInitializeW);
+    SBDLL_HOOK_GUI(DdeInitializeA);
     return TRUE;
 }
 

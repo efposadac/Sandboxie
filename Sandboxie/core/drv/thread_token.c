@@ -349,7 +349,7 @@ _FX NTSTATUS Thread_SetInformationProcess_PrimaryToken(
     PROCESS *proc2;
     NTSTATUS status;
     KIRQL irql;
-    BOOLEAN SpecialCallFromSbieDll;
+    BOOLEAN SpecialCallFromSbDll;
 
     //
     // syscall handler for NtSetInformationProcess with info class
@@ -366,14 +366,14 @@ _FX NTSTATUS Thread_SetInformationProcess_PrimaryToken(
     // to change after this point
     //
 
-    SpecialCallFromSbieDll = FALSE;
+    SpecialCallFromSbDll = FALSE;
     __try {
         status = STATUS_SUCCESS;
         if (InfoLength == sizeof(PROCESS_ACCESS_TOKEN)) {
             PROCESS_ACCESS_TOKEN *Info = (PROCESS_ACCESS_TOKEN *)InfoBuffer;
             ProbeForRead(InfoBuffer, InfoLength, sizeof(UCHAR));
             if ((! Info->Token) && (! Info->Thread))
-                SpecialCallFromSbieDll = TRUE;
+                SpecialCallFromSbDll = TRUE;
         }
     } __except (EXCEPTION_EXECUTE_HANDLER) {
         status = GetExceptionCode();
@@ -406,18 +406,18 @@ _FX NTSTATUS Thread_SetInformationProcess_PrimaryToken(
         //
         // a process in the sandbox should only issue NtSetInformationProcess
         // with ProcessAccessToken as part of our CreateProcessInternalW hook
-        // in SbieDll, and in this case, InfoBuffer should contain zeroes,
-        // and SpecialCallFromSbieDll will be set by the code sequenece above
+        // in SbDll, and in this case, InfoBuffer should contain zeroes,
+        // and SpecialCallFromSbDll will be set by the code sequenece above
         //
 
-        if (! SpecialCallFromSbieDll) {
+        if (! SpecialCallFromSbDll) {
 
             status = STATUS_ACCESS_DENIED;
 
         } else {
 
             //
-            // the special call from SbieDll is a request to copy the active
+            // the special call from SbDll is a request to copy the active
             // impersonation token into the new process as its primary token,
             // or if no impersonation, copy the original unrestricted primary
             // token of this parent process into the new child process
@@ -1418,7 +1418,7 @@ _FX NTSTATUS Thread_CheckTokenForImpersonation(
 _FX NTSTATUS Thread_SetInformationThread_ChangeNotifyToken(PROCESS *proc)
 {
     //
-    // the call to SetProcessWindowStation by SbieDll during process
+    // the call to SetProcessWindowStation by SbDll during process
     // initialization will fail in a non-zero session because the
     // \Session\N object directory does not grant access to Everyone,
     // and our highly restricted process token does not include the

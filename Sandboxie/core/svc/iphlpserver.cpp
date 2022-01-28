@@ -24,7 +24,7 @@
 #include "iphlpserver.h"
 #include "iphlpwire.h"
 #include "misc.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 
 
@@ -192,7 +192,7 @@ MSG_HEADER *IpHlpServer::CreateHandler(MSG_HEADER *msg, HANDLE idProcess)
     if (!NT_SUCCESS(SbieApi_QueryProcess(idProcess, boxname, exename, NULL, NULL)))
         return SHORT_REPLY(E_FAIL);
 
-    if (!SbieDll_GetSettingsForName_bool(boxname, exename, L"AllowNetworkAccess", TRUE))
+    if (!SbDll_GetSettingsForName_bool(boxname, exename, L"AllowNetworkAccess", TRUE))
         return SHORT_REPLY(ERROR_ACCESS_DENIED);
 
     if (0 != SbieApi_CheckInternetAccess(

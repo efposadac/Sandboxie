@@ -117,7 +117,7 @@ struct _PROCESS {
 
     BOOLEAN forced_process;
 
-    BOOLEAN sbiedll_loaded;
+    BOOLEAN sbdll_loaded;
     BOOLEAN sbielow_loaded;
 
     BOOLEAN is_start_exe;

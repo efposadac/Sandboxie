@@ -41,7 +41,7 @@
 #include <stdio.h>
 #include "common/defines.h"
 #include "common/my_version.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/drv/api_flags.h"
 
 
@@ -360,7 +360,7 @@ _FX void ComServer_RestartProgram(const WCHAR *arg)
     StartupInfo.cb = sizeof(STARTUPINFO);
     StartupInfo.dwFlags = STARTF_FORCEOFFFEEDBACK;
 
-    SbieDll_RunSandboxed(ComServer_BoxName, cmd, dir, 0,
+    SbDll_RunSandboxed(ComServer_BoxName, cmd, dir, 0,
                          &StartupInfo, &ProcessInformation);
 }
 

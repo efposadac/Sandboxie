@@ -499,7 +499,7 @@ void CFileListCtrl::RebuildCombo()
             CString BoxName = OrderedBoxList.RemoveHead();
             CBox &box = boxes.GetBox(BoxName);
             pBoxName = new CString(box.GetName());
-            WCHAR *BoxNameText = SbieDll_FormatMessage1(MSG_3515, *pBoxName);
+            WCHAR *BoxNameText = SbDll_FormatMessage1(MSG_3515, *pBoxName);
             i = m_combo.AddString(BoxNameText);
             LocalFree(BoxNameText);
             m_combo.SetItemDataPtr(i, pBoxName);

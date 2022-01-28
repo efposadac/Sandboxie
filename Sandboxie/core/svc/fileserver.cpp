@@ -27,7 +27,7 @@
 #include "common/my_version.h"
 #include "common/win32_ntddk.h"
 #include "common/defines.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "msgids.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -20,7 +20,7 @@
 
 #include "stdafx.h"
 
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 
 typedef BOOL (*P_OpenProcessToken)(HANDLE ProcessHandle, DWORD DesiredAccess, PHANDLE phTokenOut);
 
@@ -127,16 +127,16 @@ BOOL SboxHostDll_OpenProcessToken(HANDLE ProcessHandle, DWORD DesiredAccess, PHA
     return bRet;
 }
 
-BOOLEAN InitHook( HINSTANCE hSbieDll )
+BOOLEAN InitHook( HINSTANCE hSbDll )
 {
-    if (hSbieDll)
+    if (hSbDll)
     {
         HMODULE hAdvapi32 = GetModuleHandle(L"Advapi32.dll");
 
         void *OpenProcessToken = (P_OpenProcessToken)GetProcAddress(hAdvapi32, "OpenProcessToken");
 
         if (OpenProcessToken)
-            SBIEDLL_HOOK(SboxHostDll_, OpenProcessToken);
+            SBDLL_HOOK(SboxHostDll_, OpenProcessToken);
     }
     return TRUE;
 }

@@ -734,13 +734,13 @@ extern  P_LoadString                __sys_LoadStringW;
 //extern         P_D3D11CreateDevice    D3D11CreateDevice;
 
 //---------------------------------------------------------------------------
-// SBIEDLL_HOOK_GUI
+// SBDLL_HOOK_GUI
 //---------------------------------------------------------------------------
 
 
-#define SBIEDLL_HOOK_GUI(proc)                              \
+#define SBDLL_HOOK_GUI(proc)                              \
     *(ULONG_PTR *)&__sys_##proc = (ULONG_PTR)               \
-        SbieDll_Hook(#proc, __sys_##proc, Gui_##proc);      \
+        SbDll_Hook(#proc, __sys_##proc, Gui_##proc);      \
     if (! __sys_##proc) return FALSE;
 
 

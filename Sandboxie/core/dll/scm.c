@@ -375,13 +375,13 @@ static const WCHAR *_TrustedInstaller = L"TrustedInstaller";
 
 
 //---------------------------------------------------------------------------
-// SBIEDLL_HOOK_SCM
+// SBDLL_HOOK_SCM
 //---------------------------------------------------------------------------
 
 
-#define SBIEDLL_HOOK_SCM(proc)                              \
+#define SBDLL_HOOK_SCM(proc)                              \
     *(ULONG_PTR *)&__sys_##proc = (ULONG_PTR)               \
-        SbieDll_Hook(#proc, __sys_##proc, Scm_##proc);      \
+        SbDll_Hook(#proc, __sys_##proc, Scm_##proc);      \
     if (! __sys_##proc) return FALSE;
 
 
@@ -533,79 +533,79 @@ _FX BOOLEAN Scm_Init_AdvApi(HMODULE module)
     // hook event log functions
     //
 
-    SBIEDLL_HOOK_SCM(RegisterEventSourceA);
-    SBIEDLL_HOOK_SCM(RegisterEventSourceW);
+    SBDLL_HOOK_SCM(RegisterEventSourceA);
+    SBDLL_HOOK_SCM(RegisterEventSourceW);
 
-    SBIEDLL_HOOK_SCM(DeregisterEventSource);
+    SBDLL_HOOK_SCM(DeregisterEventSource);
 
-    SBIEDLL_HOOK_SCM(ReportEventA);
-    SBIEDLL_HOOK_SCM(ReportEventW);
+    SBDLL_HOOK_SCM(ReportEventA);
+    SBDLL_HOOK_SCM(ReportEventW);
 
-    SBIEDLL_HOOK_SCM(CloseEventLog);
+    SBDLL_HOOK_SCM(CloseEventLog);
 
     //
     // hook SCM functions
     //
 
-    SBIEDLL_HOOK_SCM(OpenSCManagerA);
-    SBIEDLL_HOOK_SCM(OpenSCManagerW);
+    SBDLL_HOOK_SCM(OpenSCManagerA);
+    SBDLL_HOOK_SCM(OpenSCManagerW);
 
-    SBIEDLL_HOOK_SCM(OpenServiceA);
-    SBIEDLL_HOOK_SCM(OpenServiceW);
+    SBDLL_HOOK_SCM(OpenServiceA);
+    SBDLL_HOOK_SCM(OpenServiceW);
 
-    SBIEDLL_HOOK_SCM(CloseServiceHandle);
+    SBDLL_HOOK_SCM(CloseServiceHandle);
 
-    SBIEDLL_HOOK_SCM(QueryServiceStatus);
-    SBIEDLL_HOOK_SCM(QueryServiceStatusEx);
+    SBDLL_HOOK_SCM(QueryServiceStatus);
+    SBDLL_HOOK_SCM(QueryServiceStatusEx);
 
-    SBIEDLL_HOOK_SCM(QueryServiceConfigA);
-    SBIEDLL_HOOK_SCM(QueryServiceConfigW);
-    SBIEDLL_HOOK_SCM(QueryServiceConfig2A);
-    SBIEDLL_HOOK_SCM(QueryServiceConfig2W);
+    SBDLL_HOOK_SCM(QueryServiceConfigA);
+    SBDLL_HOOK_SCM(QueryServiceConfigW);
+    SBDLL_HOOK_SCM(QueryServiceConfig2A);
+    SBDLL_HOOK_SCM(QueryServiceConfig2W);
 
-    SBIEDLL_HOOK_SCM(EnumServicesStatusA);
-    SBIEDLL_HOOK_SCM(EnumServicesStatusW);
-    SBIEDLL_HOOK_SCM(EnumServicesStatusExA);
-    SBIEDLL_HOOK_SCM(EnumServicesStatusExW);
+    SBDLL_HOOK_SCM(EnumServicesStatusA);
+    SBDLL_HOOK_SCM(EnumServicesStatusW);
+    SBDLL_HOOK_SCM(EnumServicesStatusExA);
+    SBDLL_HOOK_SCM(EnumServicesStatusExW);
 
-    SBIEDLL_HOOK_SCM(QueryServiceLockStatusA);
-    SBIEDLL_HOOK_SCM(QueryServiceLockStatusW);
+    SBDLL_HOOK_SCM(QueryServiceLockStatusA);
+    SBDLL_HOOK_SCM(QueryServiceLockStatusW);
 
-    SBIEDLL_HOOK_SCM(GetServiceDisplayNameA);
-    SBIEDLL_HOOK_SCM(GetServiceDisplayNameW);
+    SBDLL_HOOK_SCM(GetServiceDisplayNameA);
+    SBDLL_HOOK_SCM(GetServiceDisplayNameW);
 
-    SBIEDLL_HOOK_SCM(GetServiceKeyNameA);
-    SBIEDLL_HOOK_SCM(GetServiceKeyNameW);
+    SBDLL_HOOK_SCM(GetServiceKeyNameA);
+    SBDLL_HOOK_SCM(GetServiceKeyNameW);
 
-    SBIEDLL_HOOK_SCM(EnumDependentServicesA);
-    SBIEDLL_HOOK_SCM(EnumDependentServicesW);
+    SBDLL_HOOK_SCM(EnumDependentServicesA);
+    SBDLL_HOOK_SCM(EnumDependentServicesW);
 
-    SBIEDLL_HOOK_SCM(QueryServiceObjectSecurity);
-    SBIEDLL_HOOK_SCM(SetServiceObjectSecurity);
+    SBDLL_HOOK_SCM(QueryServiceObjectSecurity);
+    SBDLL_HOOK_SCM(SetServiceObjectSecurity);
 
-    SBIEDLL_HOOK_SCM(LockServiceDatabase);
-    SBIEDLL_HOOK_SCM(UnlockServiceDatabase);
+    SBDLL_HOOK_SCM(LockServiceDatabase);
+    SBDLL_HOOK_SCM(UnlockServiceDatabase);
 
-    SBIEDLL_HOOK_SCM(CreateServiceA);
-    SBIEDLL_HOOK_SCM(CreateServiceW);
+    SBDLL_HOOK_SCM(CreateServiceA);
+    SBDLL_HOOK_SCM(CreateServiceW);
 
-    SBIEDLL_HOOK_SCM(ChangeServiceConfigA);
-    SBIEDLL_HOOK_SCM(ChangeServiceConfigW);
+    SBDLL_HOOK_SCM(ChangeServiceConfigA);
+    SBDLL_HOOK_SCM(ChangeServiceConfigW);
 
-    SBIEDLL_HOOK_SCM(ChangeServiceConfig2A);
-    SBIEDLL_HOOK_SCM(ChangeServiceConfig2W);
+    SBDLL_HOOK_SCM(ChangeServiceConfig2A);
+    SBDLL_HOOK_SCM(ChangeServiceConfig2W);
 
-    SBIEDLL_HOOK_SCM(DeleteService);
+    SBDLL_HOOK_SCM(DeleteService);
 
-    SBIEDLL_HOOK_SCM(StartServiceA);
-    SBIEDLL_HOOK_SCM(StartServiceW);
+    SBDLL_HOOK_SCM(StartServiceA);
+    SBDLL_HOOK_SCM(StartServiceW);
 
-    SBIEDLL_HOOK_SCM(StartServiceCtrlDispatcherA);
-    SBIEDLL_HOOK_SCM(StartServiceCtrlDispatcherW);
+    SBDLL_HOOK_SCM(StartServiceCtrlDispatcherA);
+    SBDLL_HOOK_SCM(StartServiceCtrlDispatcherW);
 
-    SBIEDLL_HOOK_SCM(SetServiceStatus);
+    SBDLL_HOOK_SCM(SetServiceStatus);
 
-    SBIEDLL_HOOK_SCM(ControlService);
+    SBDLL_HOOK_SCM(ControlService);
 
     Scm_Notify_Init(module);
 
@@ -656,7 +656,7 @@ BOOLEAN Scm_HookRegisterServiceCtrlHandler(void)
 
             void *__sys_RegisterServiceCtrlHandlerHelp = (void *)AddrW;
 
-            SBIEDLL_HOOK_SCM(RegisterServiceCtrlHandlerHelp);
+            SBDLL_HOOK_SCM(RegisterServiceCtrlHandlerHelp);
 
             HookedRegisterServiceCtrlHandler = TRUE;
         }
@@ -670,10 +670,10 @@ BOOLEAN Scm_HookRegisterServiceCtrlHandler(void)
 
     if (! HookedRegisterServiceCtrlHandler) {
 
-        SBIEDLL_HOOK_SCM(RegisterServiceCtrlHandlerA);
-        SBIEDLL_HOOK_SCM(RegisterServiceCtrlHandlerW);
-        SBIEDLL_HOOK_SCM(RegisterServiceCtrlHandlerExA);
-        SBIEDLL_HOOK_SCM(RegisterServiceCtrlHandlerExW);
+        SBDLL_HOOK_SCM(RegisterServiceCtrlHandlerA);
+        SBDLL_HOOK_SCM(RegisterServiceCtrlHandlerW);
+        SBDLL_HOOK_SCM(RegisterServiceCtrlHandlerExA);
+        SBDLL_HOOK_SCM(RegisterServiceCtrlHandlerExW);
     }
 
     return TRUE;
@@ -886,7 +886,7 @@ _FX BOOLEAN Scm_IsBoxedService(const WCHAR *ServiceName)
 
     Dll_Free(names);
 
-    if (SbieDll_CheckStringInList(ServiceName, NULL, L"SandboxService"))
+    if (SbDll_CheckStringInList(ServiceName, NULL, L"SandboxService"))
         found = TRUE;
 
     /*
@@ -992,7 +992,7 @@ _FX WCHAR *Scm_GetAllServices(void)
     req.type_filter = SERVICE_TYPE_ALL;
     req.state_filter = SERVICE_STATE_ALL;
 
-    rpl = (SERVICE_LIST_RPL *)SbieDll_CallServer(&req.h);
+    rpl = (SERVICE_LIST_RPL *)SbDll_CallServer(&req.h);
     if (rpl && rpl->h.status == 0) {
         true_names = rpl->names;
         free_true_names = FALSE;
@@ -1188,11 +1188,11 @@ _FX int Scm_Start_Sppsvc()
 }
 
 //---------------------------------------------------------------------------
-// SbieDll_IsBoxedService
+// SbDll_IsBoxedService
 //---------------------------------------------------------------------------
 
 
-_FX BOOLEAN SbieDll_IsBoxedService(HANDLE hService)
+_FX BOOLEAN SbDll_IsBoxedService(HANDLE hService)
 {
     WCHAR *ServiceName = Scm_GetHandleName(hService);
     if (! ServiceName)
@@ -1217,11 +1217,11 @@ _FX void Scm_DiscardKeyCache(const WCHAR *ServiceName)
 
 
 //---------------------------------------------------------------------------
-// SbieDll_CheckProcessLocalSystem
+// SbDll_CheckProcessLocalSystem
 //---------------------------------------------------------------------------
 
 
-_FX BOOL SbieDll_CheckProcessLocalSystem(HANDLE ProcessHandle)
+_FX BOOL SbDll_CheckProcessLocalSystem(HANDLE ProcessHandle)
 {
     BOOL IsLocalSystem = FALSE;
 

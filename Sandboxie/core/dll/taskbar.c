@@ -224,7 +224,7 @@ _FX BOOLEAN Taskbar_Init(HMODULE module)
     }
 
     if (SHGetPropertyStoreForWindow) {
-        SBIEDLL_HOOK(Taskbar_,SHGetPropertyStoreForWindow);
+        SBDLL_HOOK(Taskbar_,SHGetPropertyStoreForWindow);
     }
 
     return TRUE;
@@ -252,11 +252,11 @@ _FX BOOLEAN Taskbar_Init_2(HMODULE module)
             module, "GetCurrentProcessExplicitAppUserModelID");
 
     if (SetCurrentProcessExplicitAppUserModelID) {
-        SBIEDLL_HOOK(Taskbar_,SetCurrentProcessExplicitAppUserModelID);
+        SBDLL_HOOK(Taskbar_,SetCurrentProcessExplicitAppUserModelID);
     }
 
     if (GetCurrentProcessExplicitAppUserModelID) {
-        SBIEDLL_HOOK(Taskbar_,GetCurrentProcessExplicitAppUserModelID);
+        SBDLL_HOOK(Taskbar_,GetCurrentProcessExplicitAppUserModelID);
     }
 
     return TRUE;
@@ -349,7 +349,7 @@ _FX BOOLEAN Taskbar_ShouldOverrideAppUserModelId(void)
         NtPath = File_TranslateDosToNtPath(DosPath);
         if (NtPath) {
 
-            ULONG mp_flags = SbieDll_MatchPath(L'f', NtPath);
+            ULONG mp_flags = SbDll_MatchPath(L'f', NtPath);
             if (PATH_IS_OPEN(mp_flags)) {
 
                 _dohook = FALSE;
@@ -696,16 +696,16 @@ _FX void Taskbar_GetProgramName(WCHAR **name, WCHAR **path)
 
     _path = Dll_Alloc((wcslen(Ldr_ImageTruePath) + 4) * sizeof(WCHAR));
     wcscpy(_path, Ldr_ImageTruePath);
-    SbieDll_TranslateNtToDosPath(_path);
+    SbDll_TranslateNtToDosPath(_path);
 
     hFile = CreateFile(_path, GENERIC_READ, FILE_SHARE_VALID_FLAGS,
                        NULL, OPEN_EXISTING, 0, NULL);
     if (hFile != INVALID_HANDLE_VALUE) {
         BOOLEAN IsBoxedPath;
         WCHAR *path1 = Dll_Alloc(8192);
-        NTSTATUS status = SbieDll_GetHandlePath(hFile, path1, &IsBoxedPath);
+        NTSTATUS status = SbDll_GetHandlePath(hFile, path1, &IsBoxedPath);
         if (NT_SUCCESS(status) && IsBoxedPath) {
-            SbieDll_TranslateNtToDosPath(path1);
+            SbDll_TranslateNtToDosPath(path1);
             Dll_Free(_path);
             _path = path1;
         } else
@@ -742,7 +742,7 @@ _FX WCHAR *Taskbar_GetStartExeCommand(const WCHAR *args)
 
     SbieApi_QueryConf(
         NULL, L"TaskbarProgram", 0, command + 1, MAX_PATH * sizeof(WCHAR));
-    SbieDll_TranslateNtToDosPath(command + 1);
+    SbDll_TranslateNtToDosPath(command + 1);
     wcscat(command, L"\" ");
 
 #else ! CUSTOM_APPUSERMODELID

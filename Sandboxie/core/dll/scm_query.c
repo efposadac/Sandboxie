@@ -764,7 +764,7 @@ _FX void *Scm_QueryServiceByName(
                    + (u.req.name_len + 1) * sizeof(WCHAR);
     u.req.h.msgid = MSGID_SERVICE_QUERY;
 
-    rpl = (SERVICE_QUERY_RPL *)SbieDll_CallServer(&u.req.h);
+    rpl = (SERVICE_QUERY_RPL *)SbDll_CallServer(&u.req.h);
 
     if (rpl) {
         error = rpl->h.status;

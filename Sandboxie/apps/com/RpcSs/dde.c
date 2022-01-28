@@ -22,7 +22,7 @@
 
 #include <windows.h>
 #include <dde.h>
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/defines.h"
 #include "common/my_version.h"
 

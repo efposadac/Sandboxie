@@ -204,7 +204,7 @@ _FX void WaitForDebugger(SBIELOW_DATA *data)
 
 #define MAX_FUNC_SIZE 0x76
 
-//Note any change to this function requires the same modification to the same function in sbiedll: see dllhook.c (findChromeTarget)
+//Note any change to this function requires the same modification to the same function in sbdll: see dllhook.c (findChromeTarget)
 ULONGLONG * findChromeTarget(unsigned char* addr)
 {
     int i = 0;

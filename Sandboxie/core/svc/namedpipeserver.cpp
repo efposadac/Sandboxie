@@ -24,7 +24,7 @@
 #include "namedpipeserver.h"
 #include "namedpipewire.h"
 #include "misc.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "core/drv/api_defs.h"
 #include "common/defines.h"
 

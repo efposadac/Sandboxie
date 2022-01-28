@@ -378,7 +378,7 @@ int CProcListCtrl::InsertBoxRow(
     //
     //
 
-    WCHAR *BoxNameText = SbieDll_FormatMessage1(MSG_3515, BoxName);
+    WCHAR *BoxNameText = SbDll_FormatMessage1(MSG_3515, BoxName);
 
     lvi.mask = LVIF_IMAGE | LVIF_TEXT | LVIF_PARAM;
     lvi.iImage = IconIndex;
@@ -390,7 +390,7 @@ int CProcListCtrl::InsertBoxRow(
 
     if (IconIndex != m_imgEmpty) {
 
-        WCHAR *ActiveText = SbieDll_FormatMessage0(MSG_3516);
+        WCHAR *ActiveText = SbDll_FormatMessage0(MSG_3516);
 
         lvi.iItem = ListIndex;
         lvi.iSubItem = 1;

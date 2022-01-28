@@ -36,7 +36,7 @@
 
 bool DriverAssist::InjectLow_Init()
 {
-	ULONG errlvl = SbieDll_InjectLow_InitHelper();
+	ULONG errlvl = SbDll_InjectLow_InitHelper();
     if (errlvl != 0) {
         LogEvent(MSG_9234, 0x9241, errlvl);
         return false;
@@ -89,7 +89,7 @@ void DriverAssist::InjectLow(void *_msg)
     sbieLow.bNoConsole = SbieApi_QueryConfBool(boxname, L"NoSecurityIsolation", FALSE) || SbieApi_QueryConfBool(boxname, L"NoSandboxieConsole", FALSE);
     // NoSbieCons END
 
-	errlvl = SbieDll_InjectLow(hProcess, sbieLow.init_flags, TRUE);
+	errlvl = SbDll_InjectLow(hProcess, sbieLow.init_flags, TRUE);
 	if(errlvl != 0)
 		goto finish;
 

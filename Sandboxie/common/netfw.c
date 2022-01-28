@@ -464,17 +464,17 @@ BOOLEAN NetFw_ParseRule(NETFW_RULE* rule, const WCHAR* found_value)
 
     WCHAR* action_value = NULL;
     ULONG action_len = 0;
-    const WCHAR* tag_list = SbieDll_GetTagValue(found_value, NULL, &action_value, &action_len, L';');
+    const WCHAR* tag_list = SbDll_GetTagValue(found_value, NULL, &action_value, &action_len, L';');
 
 	NetFw_RuleSetBlockAction(rule, _wcsnicmp(action_value, L"Allow", action_len) != 0);
 
     const WCHAR* port_value;
     ULONG port_len;
-    if (SbieDll_FindTagValuePtr(tag_list, L"Port", &port_value, &port_len, L'=', L';')) {
+    if (SbDll_FindTagValuePtr(tag_list, L"Port", &port_value, &port_len, L'=', L';')) {
         for (const WCHAR* port_end = port_value + port_len; port_value < port_end;) {
             const WCHAR* port_str1;
             ULONG port_len1;
-            port_value = SbieDll_GetTagValue(port_value, port_end, &port_str1, &port_len1, L',');
+            port_value = SbDll_GetTagValue(port_value, port_end, &port_str1, &port_len1, L',');
 
             const WCHAR* port_str2 = wcsnchr(port_str1, port_len1, L'-');
             if (port_str2) {
@@ -496,11 +496,11 @@ BOOLEAN NetFw_ParseRule(NETFW_RULE* rule, const WCHAR* found_value)
 
     const WCHAR* ip_value;
     ULONG ip_len;
-    if (SbieDll_FindTagValuePtr(tag_list, L"Address", &ip_value, &ip_len, L'=', L';')) {
+    if (SbDll_FindTagValuePtr(tag_list, L"Address", &ip_value, &ip_len, L'=', L';')) {
         for (const WCHAR* ip_end = ip_value + ip_len; ip_value < ip_end;) {
             const WCHAR* ip_str1;
             ULONG ip_len1;
-            ip_value = SbieDll_GetTagValue(ip_value, ip_end, &ip_str1, &ip_len1, L',');
+            ip_value = SbDll_GetTagValue(ip_value, ip_end, &ip_str1, &ip_len1, L',');
 
             const WCHAR* ip_str2 = wcsnchr(ip_str1, ip_len1, L'-');
             if (ip_str2) {
@@ -526,7 +526,7 @@ BOOLEAN NetFw_ParseRule(NETFW_RULE* rule, const WCHAR* found_value)
 
     WCHAR* prot_value;
     ULONG prot_len;
-    if (SbieDll_FindTagValuePtr(tag_list, L"Protocol", &prot_value, &prot_len, L'=', L';')) {
+    if (SbDll_FindTagValuePtr(tag_list, L"Protocol", &prot_value, &prot_len, L'=', L';')) {
         if (_wcsnicmp(prot_value, L"TCP", prot_len) == 0)
             NetFw_RuleSetProtocol(rule, IPPROTO_TCP);
         else if (_wcsnicmp(prot_value, L"UDP", prot_len) == 0)

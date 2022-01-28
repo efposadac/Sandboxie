@@ -257,7 +257,7 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
     RpcBindingInqAuthClientEx = (P_RpcBindingInqAuthClientEx)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingInqAuthClientExW","RpcBindingInqAuthClientExW");
 
-    SBIEDLL_HOOK(RpcRt_,RpcBindingInqAuthClientEx);
+    SBDLL_HOOK(RpcRt_,RpcBindingInqAuthClientEx);
 
     // these 2 are only used for debugging, so no need to hook
     __sys_UuidToStringW = Ldr_GetProcAddrNew(DllName_rpcrt4, L"UuidToStringW", "UuidToStringW");
@@ -269,32 +269,32 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
     if ( Dll_OsBuild >= 15063) {
         P_RpcStringBindingComposeW RpcStringBindingComposeW = (P_RpcStringBindingComposeW)
             Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcStringBindingComposeW","RpcStringBindingComposeW");
-        SBIEDLL_HOOK(RpcRt_,RpcStringBindingComposeW);
+        SBDLL_HOOK(RpcRt_,RpcStringBindingComposeW);
     }
 
     P_RpcBindingFromStringBindingW RpcBindingFromStringBindingW = (P_RpcBindingFromStringBindingW)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingFromStringBindingW", "RpcBindingFromStringBindingW");
-    SBIEDLL_HOOK(RpcRt_, RpcBindingFromStringBindingW);
+    SBDLL_HOOK(RpcRt_, RpcBindingFromStringBindingW);
 
     P_RpcBindingFromStringBindingA RpcBindingFromStringBindingA = (P_RpcBindingFromStringBindingA)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingFromStringBindingA", "RpcBindingFromStringBindingA");
-    SBIEDLL_HOOK(RpcRt_, RpcBindingFromStringBindingA);
+    SBDLL_HOOK(RpcRt_, RpcBindingFromStringBindingA);
 
     P_RpcBindingCreateW RpcBindingCreateW = (P_RpcBindingCreateW)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingCreateW", "RpcBindingCreateW");
-    SBIEDLL_HOOK(RpcRt_, RpcBindingCreateW);
+    SBDLL_HOOK(RpcRt_, RpcBindingCreateW);
 
     P_RpcBindingCreateA RpcBindingCreateA = (P_RpcBindingCreateA)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingCreateA", "RpcBindingCreateA");
-    SBIEDLL_HOOK(RpcRt_, RpcBindingCreateA);
+    SBDLL_HOOK(RpcRt_, RpcBindingCreateA);
 
     P_RpcBindingCopy RpcBindingCopy = (P_RpcBindingCopy)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingCopy", "RpcBindingCopy");
-    SBIEDLL_HOOK(RpcRt_, RpcBindingCopy);
+    SBDLL_HOOK(RpcRt_, RpcBindingCopy);
 
     P_RpcBindingFree RpcBindingFree = (P_RpcBindingFree)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcBindingFree", "RpcBindingFree");
-    SBIEDLL_HOOK(RpcRt_, RpcBindingFree);
+    SBDLL_HOOK(RpcRt_, RpcBindingFree);
 
 
     __sys_RpcMgmtSetComTimeout = (P_RpcMgmtSetComTimeout)
@@ -310,10 +310,10 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
 #ifdef _WIN64
 
         void* NdrClientCall2 = Ldr_GetProcAddrNew(DllName_rpcrt4, L"NdrClientCall2", "NdrClientCall2");
-        SBIEDLL_HOOK(RpcRt_, NdrClientCall2);
+        SBDLL_HOOK(RpcRt_, NdrClientCall2);
 
         void* NdrClientCall3 = Ldr_GetProcAddrNew(DllName_rpcrt4, L"NdrClientCall3", "NdrClientCall3");
-        SBIEDLL_HOOK(RpcRt_, NdrClientCall3);
+        SBDLL_HOOK(RpcRt_, NdrClientCall3);
 
         //NdrClientCall2(PMIDL_STUB_DESC pStubDescriptor, PFORMAT_STRING pFormat, ...)
         //NdrClientCall3(MIDL_STUBLESS_PROXY_INFO *pProxyInfo, unsigned int nProcNum, void *pReturnValue, ...)
@@ -329,10 +329,10 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
 #else
         
         void*  NdrClientCall = Ldr_GetProcAddrNew(DllName_rpcrt4, L"NdrClientCall", "NdrClientCall");
-        SBIEDLL_HOOK(RpcRt_, NdrClientCall);
+        SBDLL_HOOK(RpcRt_, NdrClientCall);
 
         void* NdrClientCall2 = Ldr_GetProcAddrNew(DllName_rpcrt4, L"NdrClientCall2", "NdrClientCall2");
-        SBIEDLL_HOOK(RpcRt_, NdrClientCall2);
+        SBDLL_HOOK(RpcRt_, NdrClientCall2);
 
         //NdrClientCall(PMIDL_STUB_DESC pStubDescriptor, PFORMAT_STRING pFormat, ...)
         //NdrClientCall2(PMIDL_STUB_DESC pStubDescriptor, PFORMAT_STRING pFormat, ...)
@@ -350,12 +350,12 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
 
     if (g_rpc_client_hooks) {
         void* NdrAsyncClientCall = Ldr_GetProcAddrNew(DllName_rpcrt4, L"NdrAsyncClientCall", "NdrAsyncClientCall");
-        SBIEDLL_HOOK(RpcRt_, NdrAsyncClientCall);
+        SBDLL_HOOK(RpcRt_, NdrAsyncClientCall);
     }
 
     // required for UAC
     void* Ndr64AsyncClientCall = Ldr_GetProcAddrNew(DllName_rpcrt4, L"Ndr64AsyncClientCall", "Ndr64AsyncClientCall");
-    SBIEDLL_HOOK(RpcRt_, Ndr64AsyncClientCall);
+    SBDLL_HOOK(RpcRt_, Ndr64AsyncClientCall);
 
     //NdrAsyncClientCall(PMIDL_STUB_DESC pStubDescriptor, PFORMAT_STRING pFormat, ...)
     //Ndr64AsyncClientCall(MIDL_STUBLESS_PROXY_INFO* pProxyInfo, unsigned int nProcNum, void* pReturnValue, ...) <- uac hook
@@ -368,7 +368,7 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
 
     // required for UAC
     void* NdrAsyncClientCall = Ldr_GetProcAddrNew(DllName_rpcrt4, L"NdrAsyncClientCall", "NdrAsyncClientCall");
-    SBIEDLL_HOOK(RpcRt_, NdrAsyncClientCall);
+    SBDLL_HOOK(RpcRt_, NdrAsyncClientCall);
 
     //NdrAsyncClientCall(PMIDL_STUB_DESC pStubDescriptor, PFORMAT_STRING pFormat, ...) <- uac hook
     //NdrAsyncClientCall2(PMIDL_STUB_DESC pStubDescriptor, PFORMAT_STRING pFormat, ...) -> NdrAsyncClientCall
@@ -382,7 +382,7 @@ _FX BOOLEAN RpcRt_Init(HMODULE module)
     // required for UAC
     P_RpcAsyncCompleteCall RpcAsyncCompleteCall = (P_RpcAsyncCompleteCall)
         Ldr_GetProcAddrNew(DllName_rpcrt4, L"RpcAsyncCompleteCall", "RpcAsyncCompleteCall");
-    SBIEDLL_HOOK(RpcRt_, RpcAsyncCompleteCall);
+    SBDLL_HOOK(RpcRt_, RpcAsyncCompleteCall);
 
     return TRUE;
 }
@@ -478,7 +478,7 @@ _FX NTSTATUS RpcRt_FindModulePreset(
 
         WCHAR* test_value = NULL;
         ULONG test_len = 0;
-        found_value = SbieDll_GetTagValue(found_value, NULL, &test_value, &test_len, L',');
+        found_value = SbDll_GetTagValue(found_value, NULL, &test_value, &test_len, L',');
 
         if (!test_value || !found_value || !*found_value) {
             SbieApi_Log(2207, L"RpcPortBinding");
@@ -556,7 +556,7 @@ WCHAR* GetDynamicLpcPortName(const WCHAR* wszPortId)
     req.h.msgid = MSGID_EPMAPPER_GET_PORT_NAME;
     wcscpy(req.wszPortId, wszPortId);
 
-    rpl = (EPMAPPER_GET_PORT_NAME_RPL*)SbieDll_CallServer(&req.h);
+    rpl = (EPMAPPER_GET_PORT_NAME_RPL*)SbDll_CallServer(&req.h);
 
     WCHAR   wsTraceOptions[4];
     if (SbieApi_QueryConf(NULL, L"IpcTrace", 0, wsTraceOptions, sizeof(wsTraceOptions)) == STATUS_SUCCESS && wsTraceOptions[0] != L'\0')
@@ -713,7 +713,7 @@ _FX ULONG RpcRt_RpcBindingFromStringBindingW(
         // kernel32.dll!AicpCreateBindingHandle
         // kernel32.dll!AicGetPackageActivationTokenForSxS
         // KernelBase.dll!CreateProcessInternalW
-        // SbieDll.dll!Proc_CreateProcessInternalW_RS5
+        // SbDll.dll!Proc_CreateProcessInternalW_RS5
 
         if (RpcRt_TestCallingModule(pRetAddr, pkernel32)) {
             use_RpcMgmtSetComTimeout = TRUE;
@@ -724,7 +724,7 @@ _FX ULONG RpcRt_RpcBindingFromStringBindingW(
     if (CallingModule)
     {
         // get the DLL specific preset if present
-        use_RpcMgmtSetComTimeout = SbieDll_GetSettingsForName_bool(NULL, CallingModule, L"UseRpcMgmtSetComTimeout", use_RpcMgmtSetComTimeout);
+        use_RpcMgmtSetComTimeout = SbDll_GetSettingsForName_bool(NULL, CallingModule, L"UseRpcMgmtSetComTimeout", use_RpcMgmtSetComTimeout);
 
         //
         // check for a "RpcPortBinding" entry 
@@ -735,11 +735,11 @@ _FX ULONG RpcRt_RpcBindingFromStringBindingW(
             
             WCHAR* pwszTempPortName = NULL;
             WCHAR tagValue[96];
-            if (SbieDll_FindTagValue(ModulePreset, L"Resolve", tagValue, sizeof(tagValue), L'=', L',')) {
+            if (SbDll_FindTagValue(ModulePreset, L"Resolve", tagValue, sizeof(tagValue), L'=', L',')) {
                 pwszTempPortName = GetDynamicLpcPortName(tagValue);
             }
             
-            if (!pwszTempPortName && SbieDll_FindTagValue(ModulePreset, L"IpcPort", tagValue, sizeof(tagValue), L'=', L',')) {
+            if (!pwszTempPortName && SbDll_FindTagValue(ModulePreset, L"IpcPort", tagValue, sizeof(tagValue), L'=', L',')) {
                 pwszTempPortName = StoreLpcPortName(tagValue, tagValue);
             }
 
@@ -760,7 +760,7 @@ _FX ULONG RpcRt_RpcBindingFromStringBindingW(
             }
 
             // the "RpcPortBinding" overwrites "UseRpcMgmtSetComTimeout"
-            if (SbieDll_FindTagValue(ModulePreset, L"TimeOut", tagValue, sizeof(tagValue), L'=', L','))
+            if (SbDll_FindTagValue(ModulePreset, L"TimeOut", tagValue, sizeof(tagValue), L'=', L','))
                 use_RpcMgmtSetComTimeout = Config_String2Bool(tagValue, use_RpcMgmtSetComTimeout);
         }
     }
@@ -851,7 +851,7 @@ _FX RPC_STATUS RpcRt_RpcBindingCreateW(
     if (CallingModule)
     {
         // get the DLL specific preset if present
-        use_RpcMgmtSetComTimeout = SbieDll_GetSettingsForName_bool(NULL, CallingModule, L"UseRpcMgmtSetComTimeout", use_RpcMgmtSetComTimeout);
+        use_RpcMgmtSetComTimeout = SbDll_GetSettingsForName_bool(NULL, CallingModule, L"UseRpcMgmtSetComTimeout", use_RpcMgmtSetComTimeout);
 
         //
         // check for a "RpcPortBinding" entry 
@@ -863,17 +863,17 @@ _FX RPC_STATUS RpcRt_RpcBindingCreateW(
             WCHAR tagValue[96];
             if (RPC_PROTSEQ_LRPC == Template->ProtocolSequence && !Template->StringEndpoint)
             {
-                if (SbieDll_FindTagValue(ModulePreset, L"Resolve", tagValue, sizeof(tagValue), L'=', L',')) {
+                if (SbDll_FindTagValue(ModulePreset, L"Resolve", tagValue, sizeof(tagValue), L'=', L',')) {
                     Template->StringEndpoint = GetDynamicLpcPortName(tagValue);
                 }
 
-                if (!Template->StringEndpoint && SbieDll_FindTagValue(ModulePreset, L"IpcPort", tagValue, sizeof(tagValue), L'=', L',')){
+                if (!Template->StringEndpoint && SbDll_FindTagValue(ModulePreset, L"IpcPort", tagValue, sizeof(tagValue), L'=', L',')){
                     Template->StringEndpoint = StoreLpcPortName(tagValue, tagValue);
                 }
             }
 
             // the "RpcPortBinding" overwrites "UseRpcMgmtSetComTimeout"
-            if (SbieDll_FindTagValue(ModulePreset, L"TimeOut", tagValue, sizeof(tagValue), L'=', L','))
+            if (SbDll_FindTagValue(ModulePreset, L"TimeOut", tagValue, sizeof(tagValue), L'=', L','))
                 use_RpcMgmtSetComTimeout = Config_String2Bool(tagValue, use_RpcMgmtSetComTimeout);
         }
     }

@@ -22,11 +22,11 @@
 extern "C" {
 #endif
 
-const WCHAR* SbieDll_GetTagValue(const WCHAR* str, const WCHAR* end, const WCHAR** value, ULONG* len, WCHAR sep);
-typedef BOOLEAN (*SbieDll_TagEnumProc)(const WCHAR* name, ULONG name_len, const WCHAR* value, ULONG value_len, void* param);
-VOID SbieDll_EnumTagValues(const WCHAR* string, SbieDll_TagEnumProc enumProc, void* param, WCHAR eq, WCHAR sep);
-BOOLEAN SbieDll_FindTagValue(const WCHAR* string, const WCHAR* name, WCHAR* value, ULONG value_size, WCHAR eq, WCHAR sep);
-BOOLEAN SbieDll_FindTagValuePtr(const WCHAR* string, const WCHAR* name, const WCHAR** value, ULONG* value_len, WCHAR eq, WCHAR sep);
+const WCHAR* SbDll_GetTagValue(const WCHAR* str, const WCHAR* end, const WCHAR** value, ULONG* len, WCHAR sep);
+typedef BOOLEAN (*SbDll_TagEnumProc)(const WCHAR* name, ULONG name_len, const WCHAR* value, ULONG value_len, void* param);
+VOID SbDll_EnumTagValues(const WCHAR* string, SbDll_TagEnumProc enumProc, void* param, WCHAR eq, WCHAR sep);
+BOOLEAN SbDll_FindTagValue(const WCHAR* string, const WCHAR* name, WCHAR* value, ULONG value_size, WCHAR eq, WCHAR sep);
+BOOLEAN SbDll_FindTagValuePtr(const WCHAR* string, const WCHAR* name, const WCHAR** value, ULONG* value_len, WCHAR eq, WCHAR sep);
 
 #ifdef __cplusplus
 }

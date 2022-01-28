@@ -32,7 +32,7 @@ typedef long NTSTATUS;
 #include "common/win32_ntddk.h"
 
 
-#include "sbiedll.h"
+#include "sbdll.h"
 #include "common/defines.h"
 #include "common/list.h"
 
@@ -358,14 +358,14 @@ BOOLEAN Dll_InitPathList(void);
 
 void Dll_RefreshPathList(void);
 
-ULONG SbieDll_MatchPath(WCHAR path_code, const WCHAR *path);
+ULONG SbDll_MatchPath(WCHAR path_code, const WCHAR *path);
 
-ULONG SbieDll_MatchPath2(WCHAR path_code, const WCHAR *path, BOOLEAN bCheckObjectExists, BOOLEAN bMonitorLog);
+ULONG SbDll_MatchPath2(WCHAR path_code, const WCHAR *path, BOOLEAN bCheckObjectExists, BOOLEAN bMonitorLog);
 
-void SbieDll_GetReadablePaths(WCHAR path_code, LIST **lists);
-void SbieDll_ReleaseFilePathLock();
+void SbDll_GetReadablePaths(WCHAR path_code, LIST **lists);
+void SbDll_ReleaseFilePathLock();
 
-BOOLEAN SbieDll_HasReadableSubPath(WCHAR path_code, const WCHAR* TruePath);
+BOOLEAN SbDll_HasReadableSubPath(WCHAR path_code, const WCHAR* TruePath);
 
 #define PATH_OPEN_FLAG      0x10
 #define PATH_CLOSED_FLAG    0x20

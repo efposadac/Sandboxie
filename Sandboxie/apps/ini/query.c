@@ -24,7 +24,7 @@
 typedef long NTSTATUS;
 
 #include "global.h"
-#include "core/dll/sbiedll.h"
+#include "core/dll/sbdll.h"
 #include "common/win32_ntddk.h"
 
 
@@ -114,7 +114,7 @@ void DoQuerySetting(void)
             break;
 
         if (expand)
-            SbieDll_TranslateNtToDosPath(value);
+            SbDll_TranslateNtToDosPath(value);
 
         printf("%S\n", value);
 
