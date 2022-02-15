@@ -133,7 +133,7 @@ SBIE1213 Impossible de créer l'objet répertoire '%3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Impossible de injecter SbDll %2
+# SBIE1214 Impossible de injecter SbieDll %2
 # .
 
 # 1215;pop;err;01

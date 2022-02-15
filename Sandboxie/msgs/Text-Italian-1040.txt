@@ -133,7 +133,7 @@ SBIE1213 Impossibile creare la cartella oggetto '%3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Impossibile inserire SbDll %2
+# SBIE1214 Impossibile inserire SbieDll %2
 # .
 
 # 1215;pop;err;01

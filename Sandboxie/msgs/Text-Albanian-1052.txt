@@ -133,7 +133,7 @@ SBIE1213 Nuk mund të krijojë direktorinë objekt '%3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Nuk mund të injektojë SbDll %2
+# SBIE1214 Nuk mund të injektojë SbieDll %2
 # .
 
 # 1215;pop;err;01

@@ -133,7 +133,7 @@ SBIE1213 无法创建对象目录 '%3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 无法注入 SbDll %2
+# SBIE1214 无法注入 SbieDll %2
 # .
 
 # 1215;pop;err;01

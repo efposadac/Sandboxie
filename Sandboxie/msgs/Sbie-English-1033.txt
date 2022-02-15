@@ -133,7 +133,7 @@ SBIE1213 Cannot create object directory '%3' %2
 .
 
 # 1214;pop;err;01
-# SBIE1214 Cannot inject SbDll %2
+# SBIE1214 Cannot inject SbieDll %2
 # .
 
 # 1215;pop;err;01

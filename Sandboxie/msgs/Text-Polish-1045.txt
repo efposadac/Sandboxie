@@ -133,7 +133,7 @@ SBIE1213 Nie można utworzyć obiektu katalogu '%3' %2
 .
 
 1214;pop;err;01
-SBIE1214 Nie można wstrzyknąć SbDll %2
+SBIE1214 Nie można wstrzyknąć SbieDll %2
 .
 
 1215;pop;err;01
